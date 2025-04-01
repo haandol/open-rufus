@@ -12,30 +12,26 @@
       <ProductGrid>
         <!-- Pick Up Section -->
         <ProductCard title="Pick up where you left off">
-          <div class="grid grid-cols-2 gap-4">
-            <div class="bg-white rounded-xl p-4 hover:shadow-lg transition-shadow duration-300 border border-gray-100">
-              <div class="aspect-square bg-gray-50 rounded-lg mb-3 p-6 flex items-center justify-center">
-                <img src="/img/products/laptop.png" alt="Laptop" class="w-full h-full object-contain" />
-              </div>
-              <h3 class="text-gray-900 font-medium text-center">MacBook Air M2</h3>
+          <div class="grid grid-cols-2 gap-6">
+            <div class="space-y-2">
+              <img src="/img/products/laptop.png" alt="MacBook Air M2"
+                class="w-full aspect-[4/3] object-cover rounded-lg" />
+              <h3 class="text-lg font-medium">MacBook Air M2</h3>
             </div>
-            <div class="bg-white rounded-xl p-4 hover:shadow-lg transition-shadow duration-300 border border-gray-100">
-              <div class="aspect-square bg-gray-50 rounded-lg mb-3 p-6 flex items-center justify-center">
-                <img src="/img/products/headphones.png" alt="Headphones" class="w-full h-full object-contain" />
-              </div>
-              <h3 class="text-gray-900 font-medium text-center">Sony WH-1000XM5</h3>
+            <div class="space-y-2">
+              <img src="/img/products/headphones.png" alt="Sony WH-1000XM5"
+                class="w-full aspect-[4/3] object-cover rounded-lg" />
+              <h3 class="text-lg font-medium">Sony WH-1000XM5</h3>
             </div>
-            <div class="bg-white rounded-xl p-4 hover:shadow-lg transition-shadow duration-300 border border-gray-100">
-              <div class="aspect-square bg-gray-50 rounded-lg mb-3 p-6 flex items-center justify-center">
-                <img src="/img/products/smartwatch.png" alt="Smartwatch" class="w-full h-full object-contain" />
-              </div>
-              <h3 class="text-gray-900 font-medium text-center">Apple Watch Series 8</h3>
+            <div class="space-y-2">
+              <img src="/img/products/smartwatch.png" alt="Apple Watch Series 8"
+                class="w-full aspect-[4/3] object-cover rounded-lg" />
+              <h3 class="text-lg font-medium">Apple Watch Series 8</h3>
             </div>
-            <div class="bg-white rounded-xl p-4 hover:shadow-lg transition-shadow duration-300 border border-gray-100">
-              <div class="aspect-square bg-gray-50 rounded-lg mb-3 p-6 flex items-center justify-center">
-                <img src="/img/products/tablet.png" alt="Tablet" class="w-full h-full object-contain" />
-              </div>
-              <h3 class="text-gray-900 font-medium text-center">iPad Pro 12.9"</h3>
+            <div class="space-y-2">
+              <img src="/img/products/tablet.png" alt="iPad Pro 12.9&quot;"
+                class="w-full aspect-[4/3] object-cover rounded-lg" />
+              <h3 class="text-lg font-medium">iPad Pro 12.9"</h3>
             </div>
           </div>
           <template #footer>
