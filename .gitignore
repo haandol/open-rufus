@@ -7,6 +7,7 @@ tmp
 
 # dependencies
 node_modules
+.pnpm_store
 
 # IDEs and editors
 /.idea

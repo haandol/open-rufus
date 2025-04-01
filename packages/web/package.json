@@ -18,7 +18,9 @@
   },
   "devDependencies": {
     "@tailwindcss/vite": "^4.0.17",
+    "@types/lodash": "^4.17.16",
     "daisyui": "^5.0.9",
+    "lodash": "^4.17.21",
     "tailwindcss": "^4.0.17"
   }
 }
