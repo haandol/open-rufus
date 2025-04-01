@@ -1,0 +1,139 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+<project-overview>
+  <tech-stack>
+    - Frontend: Nuxt3, TypeScript
+    - UI/Styling: DaisyUI@5 (TailwindCSS), PrimeIcons
+    - State Management: Pinia
+    - Utilities: Lodash
+    - Development Tools: ESLint, Volar
+  </tech-stack>
+
+  <core-principles>
+    - Write clean, maintainable TypeScript code with clear intent
+    - Use functional and declarative patterns over imperative ones
+    - Follow DRY principles through modularization
+    - Extract reusable logic into composables
+    - Prioritize code clarity over premature optimization
+    - Ensure complete implementation (no TODOs or placeholders)
+    - Seek clarification when requirements are unclear
+  </core-principle>
+</project-overview>
+
+<nuxt3-implementation>
+  - Implement Composition API: `<script lang="ts" setup>`
+  - Leverage auto-imports for Vue/Nuxt functions
+  - Utilize VueUse utilities for enhanced functionality
+  - Use appropriate runtime config:
+    - Client-side: `useRuntimeConfig().public`
+  - Manage state with Pinia (use `storeToRefs` for reactivity)
+</nuxt3-implementation>
+
+<error-handling>
+  - Client-side: `throw createError('error message')`
+</error-handling>
+
+<css-and-styling>
+  <core-principles>
+    - Prioritize TailwindCSS for styling in Vue components
+    - Use custom CSS in `<style>` tag only when necessary and in limited capacity
+  </core-principles>
+
+  <component-style-structure>
+    - Template Tag: Only include layout-related Tailwind classes
+      (flex, grid, container, overflow, position, padding, margin, etc.)
+    - Style Tag: Include all non-layout related styles
+      (colors, fonts, borders, shadows, transitions, animations, etc.)
+
+    <example>
+      ```vue
+      <template>
+        <!-- Correct usage: layout-related classes only -->
+        <div class="flex flex-col gap-4 p-5">
+          <!-- Component content -->
+        </div>
+      </template>
+
+      <style>
+      /* Non-layout styles go here */
+      .element {
+        @apply text-blue-500 font-bold border rounded-lg shadow-md;
+      }
+      </style>
+      ```
+    </example>
+  </component-style-structure>
+</css-and-styling>
+
+<data-management>
+  - Component setup: `useFetch` for SSR-compatible data
+  - Event handlers: `$fetch` for client-side requests
+  - Complex operations: `useAsyncData` for multiple API calls
+  - Client-only fetching: Add `server: false` option
+  - Non-critical data: Use `lazy: true` option
+</data-management>
+
+<naming-convention>
+  - Composables: `use[Name]`
+  - Components: PascalCase (`MyComponent.vue`)
+  - Other files: camelCase (`myPage.vue`)
+  - Functions: Named exports preferred
+</naming-convention>
+
+<typescript-implementation>
+  - Maintain consistent TypeScript usage
+  - Prefer interfaces over types
+  - Implement comprehensive type definitions
+  - Leverage type inference appropriately
+</typescript-implementation>
+
+<ui-development>
+  <component-structure>
+    - Utilize DaisyUI components
+    - Template: Layout-focused Tailwind classes
+      (flex, grid, overflow, position)
+    - Style: Visual Tailwind classes
+      (colors, dimensions, spacing)
+    - Design responsively (mobile-first)
+  </component-structure>
+
+  <assets-handling>
+    - Images: `<NuxtImg>` or `<NuxtPicture>`
+      (include width/height)
+    - Icons: Primeicons
+      (e.g., `<i class="pi pi-wallet mr-1"></i>`)
+  </assets-handling>
+</ui-development>
+
+<state-management>
+  - Use Pinia for global state
+  - Maintain reactivity with `storeToRefs`
+  - Implement proper store typing
+  - Follow modular store pattern
+</state-management>
+
+<seo-and-performance>
+  <seo>
+    - Use semantic HTML structure
+    - Maintain proper heading hierarchy
+    - Implement `<NuxtLink>` for internal navigation
+    - Apply lazy loading where appropriate
+  </seo>
+  <performance-optimization>
+    - Optimize component rendering
+    - Implement efficient data fetching
+    - Use proper lazy loading
+    - Minimize bundle size
+    - Follow Vue3 best practices
+  </performance-optimization>
+</seo-and-performance>
+
+<security>
+  - Handle sensitive data server-side
+  - Implement proper authentication
+  - Validate user inputs
+  - Follow security best practices
+</security>
