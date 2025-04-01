@@ -1,4 +1,5 @@
 <template>
+  <TopBanner />
   <Header />
   <main>
     <slot />

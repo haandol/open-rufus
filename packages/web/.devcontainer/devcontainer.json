@@ -23,7 +23,6 @@
         "vunguyentuan.vscode-postcss",
         "PKief.material-icon-theme",
         "aaron-bond.better-comments",
-        "jasonnutter.search-node-modules",
         "shardulm94.trailing-spaces",
         "esbenp.prettier-vscode",
         "YoavBls.pretty-ts-errors",
@@ -36,6 +35,7 @@
       ]
     }
   },
+  "appPort": [3000],
   "mounts": [
     "source=${env:HOME}${env:USERPROFILE}/.aws,target=/root/.aws,type=bind",
     "source=${env:HOME}${env:USERPROFILE}/.ssh,target=/root/.ssh,type=bind"
