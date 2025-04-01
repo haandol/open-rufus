@@ -1,17 +1,33 @@
 <template>
-  <div class="bg-white p-4 rounded">
-    <h2 class="text-xl font-bold mb-4">
-      <slot name="title">Product Section</slot>
-    </h2>
-    <div class="mb-4">
-      <slot>Content goes here</slot>
+  <div class="bg-white p-4 rounded shadow-sm hover:shadow-md transition-shadow">
+    <div class="aspect-square mb-4 overflow-hidden rounded-lg bg-gray-50">
+      <NuxtImg :src="imagePath" :alt="title"
+        class="w-full h-full object-contain hover:scale-105 transition-transform duration-300" />
     </div>
+    <h2 class="text-lg font-semibold mb-2">{{ title }}</h2>
+    <p class="text-gray-600 mb-4 text-sm">{{ description }}</p>
+    <slot></slot>
     <slot name="footer">
-      <a href="#" class="text-blue-600">See more</a>
+      <a :href="link" class="text-blue-600 hover:text-blue-800 text-sm font-medium inline-flex items-center">
+        {{ linkText }}
+        <i class="pi pi-arrow-right ml-1 text-xs"></i>
+      </a>
     </slot>
   </div>
 </template>
 
 <script setup lang="ts">
-// Reusable product card component with customizable content
+interface Props {
+  imagePath: string;
+  title: string;
+  description?: string;
+  link?: string;
+  linkText?: string;
+}
+
+withDefaults(defineProps<Props>(), {
+  description: '',
+  link: '#',
+  linkText: 'See more'
+})
 </script>

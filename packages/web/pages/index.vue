@@ -11,8 +11,7 @@
 
     <ProductGrid>
       <!-- Pick Up Section -->
-      <ProductCard>
-        <template #title>Pick up where you left off</template>
+      <ProductCard image-path="/img/pickup.png" title="Pick up where you left off">
         <div class="grid grid-cols-2 gap-2">
           <div class="bg-gray-200 h-24 flex items-center justify-center">Item 1</div>
           <div class="bg-gray-200 h-24 flex items-center justify-center">Item 2</div>
@@ -25,8 +24,7 @@
       </ProductCard>
 
       <!-- Free International Delivery -->
-      <ProductCard>
-        <template #title>Free international delivery</template>
+      <ProductCard image-path="/img/delivery.png" title="Free international delivery">
         <div class="bg-yellow-200 p-4 rounded flex items-center justify-center h-64">
           <div class="text-xl">Delivery Plane</div>
         </div>
@@ -36,8 +34,7 @@
       </ProductCard>
 
       <!-- Free Shipping Zone -->
-      <ProductCard>
-        <template #title>Free Shipping Zone</template>
+      <ProductCard image-path="/img/shipping.png" title="Free Shipping Zone">
         <div class="bg-gray-200 h-64 flex items-center justify-center">
           Shipping Items
         </div>
@@ -47,30 +44,24 @@
       </ProductCard>
 
       <!-- Shop for Home Essentials -->
-      <ProductCard>
-        <template #title>Shop for your home essentials</template>
-        <div class="grid grid-cols-2 gap-2">
-          <div class="mb-2">
-            <div class="bg-gray-200 h-32 flex items-center justify-center">Cleaning</div>
-            <p class="text-center mt-1">Cleaning Tools</p>
-          </div>
-          <div class="mb-2">
-            <div class="bg-gray-200 h-32 flex items-center justify-center">Storage</div>
-            <p class="text-center mt-1">Home Storage</p>
-          </div>
-          <div class="mb-2">
-            <div class="bg-gray-200 h-32 flex items-center justify-center">Decor</div>
-            <p class="text-center mt-1">Home Decor</p>
-          </div>
-          <div class="mb-2">
-            <div class="bg-gray-200 h-32 flex items-center justify-center">Bedding</div>
-            <p class="text-center mt-1">Bedding</p>
-          </div>
+      <div class="space-y-4">
+        <h2 class="text-2xl font-bold">Shop for your home essentials</h2>
+        <div class="grid grid-cols-2 gap-4">
+          <ProductCard image-path="/img/cleaning-tools.png" title="Cleaning Tools"
+            description="Find everything you need for a spotless home" link="/category/cleaning" />
+          <ProductCard image-path="/img/home-storage.png" title="Home Storage"
+            description="Organize your space with our storage solutions" link="/category/storage" />
+          <ProductCard image-path="/img/home-decor.png" title="Home Decor"
+            description="Beautiful pieces to enhance your living space" link="/category/decor" />
+          <ProductCard image-path="/img/bedding.png" title="Bedding"
+            description="Luxury bedding for a perfect night's sleep" link="/category/bedding" />
         </div>
-        <template #footer>
-          <a href="#" class="text-blue-600">Discover more in Home</a>
-        </template>
-      </ProductCard>
+        <div class="text-center">
+          <a href="/category/home" class="text-blue-600 hover:text-blue-800 font-medium">
+            Discover more in Home
+          </a>
+        </div>
+      </div>
     </ProductGrid>
   </div>
 </template>

@@ -2,6 +2,7 @@
   <!-- Influencer Banner (SiteStripe) -->
   <div class="bg-blue-100 p-2 flex justify-between items-center border-t border-gray-300">
     <div class="text-blue-800 font-bold flex items-center">
+      <NuxtImg src="/img/top-banner.png" alt="Top Banner" class="mr-2 h-6 w-auto" />
       <span class="mr-2">Influencers & Associates</span>
       <span>SiteStripe</span>
     </div>

@@ -11,18 +11,11 @@ export default defineNuxtConfig({
     plugins: [tailwindcss()],
   },
   css: ['@/assets/css/app.css', 'primeicons/primeicons.css'],
-  nitro: {
-    output: {
-      publicDir: path.join(__dirname, 'dist'),
-    },
-  },
 
-  modules: [
-    [
-      '@pinia/nuxt',
-      {
-        autoImports: ['defineStore', 'definePiniaStore', 'acceptHMRUpdate'],
-      },
-    ],
-  ]
+  modules: [[
+    '@pinia/nuxt',
+    {
+      autoImports: ['defineStore', 'definePiniaStore', 'acceptHMRUpdate'],
+    },
+  ], '@nuxt/image']
 })
