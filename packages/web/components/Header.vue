@@ -4,7 +4,9 @@
       <!-- Left side: Logo and Location -->
       <div class="flex items-center">
         <div class="mr-4">
-          <div class="h-8 w-24 bg-white text-black text-xs flex items-center justify-center">Amazon Logo</div>
+          <NuxtLink to="/">
+            <NuxtImg src="/img/amazon-logo.png" alt="Amazon Logo" class="h-8 w-auto object-contain" />
+          </NuxtLink>
         </div>
         <div class="text-sm">
           <div class="flex items-center">

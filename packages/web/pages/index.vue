@@ -11,23 +11,39 @@
 
     <ProductGrid>
       <!-- Pick Up Section -->
-      <ProductCard image-path="/img/pickup.png" title="Pick up where you left off">
-        <div class="grid grid-cols-2 gap-2">
-          <div class="bg-gray-200 h-24 flex items-center justify-center">Item 1</div>
-          <div class="bg-gray-200 h-24 flex items-center justify-center">Item 2</div>
-          <div class="bg-gray-200 h-24 flex items-center justify-center">Item 3</div>
-          <div class="bg-gray-200 h-24 flex items-center justify-center">Item 4</div>
+      <ProductCard title="Pick up where you left off">
+        <div class="grid grid-cols-2 gap-4">
+          <div class="bg-white rounded-xl p-4 hover:shadow-lg transition-shadow duration-300 border border-gray-100">
+            <div class="aspect-square bg-gray-50 rounded-lg mb-3 p-6 flex items-center justify-center">
+              <img src="/img/products/laptop.png" alt="Laptop" class="w-full h-full object-contain" />
+            </div>
+            <h3 class="text-gray-900 font-medium text-center">MacBook Air M2</h3>
+          </div>
+          <div class="bg-white rounded-xl p-4 hover:shadow-lg transition-shadow duration-300 border border-gray-100">
+            <div class="aspect-square bg-gray-50 rounded-lg mb-3 p-6 flex items-center justify-center">
+              <img src="/img/products/headphones.png" alt="Headphones" class="w-full h-full object-contain" />
+            </div>
+            <h3 class="text-gray-900 font-medium text-center">Sony WH-1000XM5</h3>
+          </div>
+          <div class="bg-white rounded-xl p-4 hover:shadow-lg transition-shadow duration-300 border border-gray-100">
+            <div class="aspect-square bg-gray-50 rounded-lg mb-3 p-6 flex items-center justify-center">
+              <img src="/img/products/smartwatch.png" alt="Smartwatch" class="w-full h-full object-contain" />
+            </div>
+            <h3 class="text-gray-900 font-medium text-center">Apple Watch Series 8</h3>
+          </div>
+          <div class="bg-white rounded-xl p-4 hover:shadow-lg transition-shadow duration-300 border border-gray-100">
+            <div class="aspect-square bg-gray-50 rounded-lg mb-3 p-6 flex items-center justify-center">
+              <img src="/img/products/tablet.png" alt="Tablet" class="w-full h-full object-contain" />
+            </div>
+            <h3 class="text-gray-900 font-medium text-center">iPad Pro 12.9"</h3>
+          </div>
         </div>
         <template #footer>
           <a href="#" class="text-blue-600">See more</a>
         </template>
       </ProductCard>
-
       <!-- Free International Delivery -->
       <ProductCard image-path="/img/delivery.png" title="Free international delivery">
-        <div class="bg-yellow-200 p-4 rounded flex items-center justify-center h-64">
-          <div class="text-xl">Delivery Plane</div>
-        </div>
         <template #footer>
           <a href="#" class="text-blue-600">Click here to check eligibility.</a>
         </template>
@@ -35,33 +51,111 @@
 
       <!-- Free Shipping Zone -->
       <ProductCard image-path="/img/shipping.png" title="Free Shipping Zone">
-        <div class="bg-gray-200 h-64 flex items-center justify-center">
-          Shipping Items
-        </div>
         <template #footer>
           <a href="#" class="text-blue-600">Shop now</a>
         </template>
       </ProductCard>
 
       <!-- Shop for Home Essentials -->
-      <div class="space-y-4">
-        <h2 class="text-2xl font-bold">Shop for your home essentials</h2>
-        <div class="grid grid-cols-2 gap-4">
-          <ProductCard image-path="/img/cleaning-tools.png" title="Cleaning Tools"
-            description="Find everything you need for a spotless home" link="/category/cleaning" />
-          <ProductCard image-path="/img/home-storage.png" title="Home Storage"
-            description="Organize your space with our storage solutions" link="/category/storage" />
-          <ProductCard image-path="/img/home-decor.png" title="Home Decor"
-            description="Beautiful pieces to enhance your living space" link="/category/decor" />
-          <ProductCard image-path="/img/bedding.png" title="Bedding"
-            description="Luxury bedding for a perfect night's sleep" link="/category/bedding" />
+      <ProductCard title="Shop for your home essentials">
+        <div class="grid grid-cols-2 gap-6">
+          <div class="space-y-2">
+            <img src="/img/cleaning-tools.png" alt="Cleaning Tools"
+              class="w-full aspect-[4/3] object-cover rounded-lg" />
+            <h3 class="text-lg font-medium">Cleaning Tools</h3>
+          </div>
+          <div class="space-y-2">
+            <img src="/img/home-storage.png" alt="Home Storage" class="w-full aspect-[4/3] object-cover rounded-lg" />
+            <h3 class="text-lg font-medium">Home Storage</h3>
+          </div>
+          <div class="space-y-2">
+            <img src="/img/home-decor.png" alt="Home Decor" class="w-full aspect-[4/3] object-cover rounded-lg" />
+            <h3 class="text-lg font-medium">Home Decor</h3>
+          </div>
+          <div class="space-y-2">
+            <img src="/img/bedding.png" alt="Bedding" class="w-full aspect-[4/3] object-cover rounded-lg" />
+            <h3 class="text-lg font-medium">Bedding</h3>
+          </div>
         </div>
-        <div class="text-center">
-          <a href="/category/home" class="text-blue-600 hover:text-blue-800 font-medium">
+        <template #footer>
+          <NuxtLink to="/category/home" class="text-blue-600 hover:text-blue-800 font-medium">
             Discover more in Home
-          </a>
+          </NuxtLink>
+        </template>
+      </ProductCard>
+
+      <ProductCard image-path="/img/pickup.png" title="Get your game on">
+        <template #footer>
+          <a href="#" class="text-blue-600">See more</a>
+        </template>
+      </ProductCard>
+
+      <!-- Top categories in Kitchen appliances -->
+      <ProductCard title="Top categories in Kitchen appliances">
+        <div class="space-y-4">
+          <div class="space-y-2">
+            <img src="/img/kitchen/cooker.png" alt="Cooker" class="w-full aspect-[16/9] object-cover rounded-lg" />
+            <h3 class="text-lg font-medium">Cooker</h3>
+          </div>
+          <div class="grid grid-cols-3 gap-4">
+            <div class="space-y-2">
+              <img src="/img/kitchen/coffee.png" alt="Coffee" class="w-full aspect-square object-cover rounded-lg" />
+              <h3 class="text-base font-medium">Coffee</h3>
+            </div>
+            <div class="space-y-2">
+              <img src="/img/kitchen/pots.png" alt="Pots and Pans"
+                class="w-full aspect-square object-cover rounded-lg" />
+              <h3 class="text-base font-medium">Pots and Pans</h3>
+            </div>
+            <div class="space-y-2">
+              <img src="/img/kitchen/kettles.png" alt="Kettles" class="w-full aspect-square object-cover rounded-lg" />
+              <h3 class="text-base font-medium">Kettles</h3>
+            </div>
+          </div>
         </div>
-      </div>
+        <template #footer>
+          <a href="/category/kitchen" class="text-blue-600">
+            Explore all products in Kitchen
+          </a>
+        </template>
+      </ProductCard>
+
+      <!-- Fill your basket with joy -->
+      <ProductCard title="Fill your basket with joy">
+        <div class="bg-yellow-300 rounded-lg p-6">
+          <img src="/img/easter.png" alt="Easter Collection" class="w-full aspect-[4/3] object-contain" />
+        </div>
+        <template #footer>
+          <a href="/easter" class="text-blue-600">Shop for Easter</a>
+        </template>
+      </ProductCard>
+
+      <!-- Refresh your space -->
+      <ProductCard title="Refresh your space">
+        <div class="grid grid-cols-2 gap-4">
+          <div class="space-y-2">
+            <img src="/img/refresh/dining.png" alt="Dining" class="w-full aspect-square object-cover rounded-lg" />
+            <h3 class="text-base font-medium">Dining</h3>
+          </div>
+          <div class="space-y-2">
+            <img src="/img/refresh/home.png" alt="Home" class="w-full aspect-square object-cover rounded-lg" />
+            <h3 class="text-base font-medium">Home</h3>
+          </div>
+          <div class="space-y-2">
+            <img src="/img/refresh/kitchen.png" alt="Kitchen" class="w-full aspect-square object-cover rounded-lg" />
+            <h3 class="text-base font-medium">Kitchen</h3>
+          </div>
+          <div class="space-y-2">
+            <img src="/img/refresh/beauty.png" alt="Health and Beauty"
+              class="w-full aspect-square object-cover rounded-lg" />
+            <h3 class="text-base font-medium">Health and Beauty</h3>
+          </div>
+        </div>
+        <template #footer>
+          <a href="/refresh" class="text-blue-600">See more</a>
+        </template>
+      </ProductCard>
+
     </ProductGrid>
   </div>
 </template>
