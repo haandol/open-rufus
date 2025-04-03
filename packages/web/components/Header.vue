@@ -11,6 +11,9 @@
 </template>
 
 <script setup lang="ts">
+const chatStore = useChatStore();
+const { isMinimized } = storeToRefs(chatStore);
+
 const isChatBotVisible = ref(false);
 
 const onClickRufus = () => {
@@ -19,5 +22,6 @@ const onClickRufus = () => {
 
 const onCloseChatBot = () => {
   isChatBotVisible.value = false;
+  isMinimized.value = false;
 };
 </script>

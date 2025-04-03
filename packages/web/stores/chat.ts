@@ -9,6 +9,7 @@ export const useChatStore = defineStore('chat', () => {
   const messages = ref<Message[]>([]);
   const isLoading = ref(false);
   const error = ref<string | null>(null);
+  const isMinimized = ref(false);
 
   async function sendMessage(content: string) {
     if (!content.trim()) return;
@@ -78,11 +79,17 @@ export const useChatStore = defineStore('chat', () => {
     messages.value = [];
   }
 
+  function toggleMinimize() {
+    isMinimized.value = !isMinimized.value;
+  }
+
   return {
     messages,
     isLoading,
     error,
+    isMinimized,
     sendMessage,
-    clearMessages
+    clearMessages,
+    toggleMinimize
   };
 });

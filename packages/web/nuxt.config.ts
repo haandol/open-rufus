@@ -18,10 +18,14 @@ export default defineNuxtConfig({
     },
   },
 
-  modules: [[
+  modules: [
+    '@vueuse/nuxt',
+    [
     '@pinia/nuxt',
     {
-      autoImports: ['defineStore', 'definePiniaStore', 'acceptHMRUpdate'],
-    },
-  ], '@nuxt/image']
+        autoImports: ['defineStore', 'definePiniaStore', 'acceptHMRUpdate'],
+      },
+    ],
+    '@nuxt/image',
+  ],
 })

@@ -1,10 +1,14 @@
 <template>
   <Transition name="slide-fade">
-    <div v-if="isVisible"
-      class="fixed bottom-4 left-4 w-[400px] h-[600px] bg-white rounded-xl shadow-xl flex flex-col z-50">
-      <ChatHeader @close="close" />
-      <ChatContent @suggestion-select="handleSuggestionSelect" />
-      <ChatInput @submit="handleSubmit" />
+    <div v-if="isVisible" :class="[
+      'fixed bottom-4 left-4 bg-white rounded-xl shadow-xl flex flex-col z-50',
+      isMinimized ? 'w-[240px] h-[48px]' : 'w-[400px] h-[600px]'
+    ]">
+      <ChatHeader @close="close" @minimize="handleMinimize" />
+      <template v-if="!isMinimized">
+        <ChatContent @suggestion-select="handleSuggestionSelect" />
+        <ChatInput @submit="handleSubmit" />
+      </template>
     </div>
   </Transition>
 </template>
@@ -19,6 +23,7 @@ const emit = defineEmits<{
 }>();
 
 const chatStore = useChatStore();
+const { isMinimized } = storeToRefs(chatStore);
 
 interface Suggestion {
   text: string;
@@ -27,6 +32,10 @@ interface Suggestion {
 
 const close = () => {
   emit('close');
+};
+
+const handleMinimize = () => {
+  chatStore.toggleMinimize();
 };
 
 const handleSuggestionSelect = (suggestion: Suggestion) => {
@@ -58,5 +67,10 @@ onUnmounted(() => {
 .slide-fade-leave-to {
   transform: translateY(20px);
   opacity: 0;
+}
+
+/* 최소화/최대화 트랜지션을 부드럽게 만들기 위한 스타일 추가 */
+div {
+  transition: width 0.3s ease-out, height 0.3s ease-out;
 }
 </style>

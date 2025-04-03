@@ -11,25 +11,27 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
-    "nuxt": "^3.16.1",
-    "pinia": "^3.0.1",
     "lodash": "^4.17.21",
     "markdown-it": "^14.1.0",
+    "nuxt": "^3.16.1",
+    "pinia": "^3.0.1",
     "primeicons": "^7.0.0"
   },
   "devDependencies": {
-    "@pinia/nuxt": "^0.10.1",
     "@nuxt/image": "^1.10.0",
+    "@pinia/nuxt": "^0.10.1",
     "@tailwindcss/vite": "^4.0.17",
     "@types/lodash": "^4.17.16",
     "@types/markdown-it": "^14.1.2",
     "@types/node": "^22.13.15",
+    "@vueuse/core": "^13.0.0",
+    "@vueuse/nuxt": "^13.0.0",
     "daisyui": "^5.0.9",
-    "postcss": "^8.5.3",
-    "typescript": "^5.8.2",
     "eslint": "^9.23.0",
     "eslint-plugin-nuxt": "^4.0.0",
     "eslint-plugin-vue": "^10.0.0",
-    "tailwindcss": "^4.0.17"
+    "postcss": "^8.5.3",
+    "tailwindcss": "^4.0.17",
+    "typescript": "^5.8.2"
   }
 }
