@@ -5,7 +5,7 @@
       <div class="flex items-center">
         <div class="mr-4">
           <NuxtLink to="/">
-            <NuxtImg src="/img/pace-logo.png" alt="PACE Logo" class="h-8 w-auto object-contain" />
+            <NuxtImg src="/img/pace-logo.jpg" alt="PACE Logo" class="h-8 w-auto object-contain" />
           </NuxtLink>
         </div>
         <div class="text-sm">
