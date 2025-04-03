@@ -67,8 +67,7 @@
         <span>All</span>
       </button>
       <div class="px-2 py-1 bg-white text-black font-semibold rounded-md flex items-center mr-4">
-        <i class="pi pi-bookmark mr-1"></i>
-        <span>Rufus</span>
+        <NuxtLink to="/" @click="onClickRufus"><i class="pi pi-comments mr-1"></i>Rufus</NuxtLink>
       </div>
       <div class="flex items-center space-x-4">
         <span>Free Shipping Zone</span>
@@ -83,4 +82,17 @@
       </div>
     </div>
   </div>
+  <ChatBot :is-visible="isChatBotVisible" @close="onCloseChatBot" />
 </template>
+
+<script setup lang="ts">
+const isChatBotVisible = ref(false);
+
+const onClickRufus = () => {
+  isChatBotVisible.value = true;
+};
+
+const onCloseChatBot = () => {
+  isChatBotVisible.value = false;
+};
+</script>

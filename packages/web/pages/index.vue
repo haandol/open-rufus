@@ -74,7 +74,7 @@
             </div>
           </div>
           <template #footer>
-            <NuxtLink to="/category/home" class="text-blue-600 hover:text-blue-800 font-medium">
+            <NuxtLink to="/" class="text-blue-600 hover:text-blue-800 font-medium">
               Discover more in Home
             </NuxtLink>
           </template>
