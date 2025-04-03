@@ -10,11 +10,7 @@
 </template>
 
 <script setup lang="ts">
-import ChatHeader from './ChatHeader.vue';
-import ChatContent from './ChatContent.vue';
-import ChatInput from './ChatInput.vue';
-
-const props = defineProps<{
+defineProps<{
   isVisible: boolean
 }>();
 
