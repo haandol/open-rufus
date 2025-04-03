@@ -18,6 +18,8 @@ const emit = defineEmits<{
   (e: 'close'): void
 }>();
 
+const chatStore = useChatStore();
+
 interface Suggestion {
   text: string;
   highlighted?: boolean;
@@ -28,14 +30,19 @@ const close = () => {
 };
 
 const handleSuggestionSelect = (suggestion: Suggestion) => {
-  console.log('Selected suggestion:', suggestion);
-  // 여기에 선택된 제안에 대한 처리 로직을 추가하세요
+  // Suggestion is already handled in ChatContent component
+  console.log('Selected suggestion:', suggestion.text);
 };
 
 const handleSubmit = (text: string) => {
   console.log('Submitted text:', text);
-  // 여기에 제출된 텍스트에 대한 처리 로직을 추가하세요
+  // The actual message sending is handled in the ChatInput component
 };
+
+// Clear messages when the component is unmounted
+onUnmounted(() => {
+  chatStore.clearMessages();
+});
 </script>
 
 <style>

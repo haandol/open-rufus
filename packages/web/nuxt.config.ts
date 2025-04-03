@@ -12,6 +12,12 @@ export default defineNuxtConfig({
   },
   css: ['@/assets/css/app.css', 'primeicons/primeicons.css'],
 
+  runtimeConfig: {
+    public: {
+      apiUrl: 'http://localhost:8000',
+    },
+  },
+
   modules: [[
     '@pinia/nuxt',
     {

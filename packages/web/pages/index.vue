@@ -155,10 +155,28 @@
 
       </ProductGrid>
     </div>
+
+    <!-- Chat bot toggle button -->
+    <button @click="toggleChat"
+      class="fixed bottom-6 right-6 bg-orange-500 hover:bg-orange-600 text-white rounded-full w-14 h-14 flex items-center justify-center shadow-lg transition-all z-40">
+      <i class="pi pi-comments text-xl" v-if="!isChatVisible"></i>
+      <i class="pi pi-times text-xl" v-else></i>
+    </button>
+
+    <!-- Chat bot component -->
+    <ChatBot :is-visible="isChatVisible" @close="isChatVisible = false" />
   </div>
 </template>
 
 <script lang="ts" setup>
+import ChatBot from '~/components/chat/Bot.vue';
+
+const isChatVisible = ref(false);
+
+const toggleChat = () => {
+  isChatVisible.value = !isChatVisible.value;
+};
+
 useHead({
   title: 'PACE - Online Shopping',
   meta: [
