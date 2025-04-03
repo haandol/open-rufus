@@ -1,13 +1,13 @@
 <template>
   <div class="w-full">
-    <MainBanner />
+    <BannerMain />
 
     <div class="max-w-[1500px] mx-auto px-4">
-      <NoticeBar>
+      <BarNotice>
         <template #link>
           <a href="#" class="text-blue-600">Please click here to learn more.</a>
         </template>
-      </NoticeBar>
+      </BarNotice>
 
       <ProductGrid>
         <!-- Pick Up Section -->
