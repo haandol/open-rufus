@@ -1,0 +1,44 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+<rules>
+  <llm>
+    - When writing LLM related code, please read the [101-langchain.mdc](mdc:.cursor/rules/101-langchain.mdc)
+  </llm>
+  <python>
+    - Follow the Python coding standards outlined in [003-python.mdc](mdc:.cursor/rules/003-python.mdc)
+  </python>
+  <communication>
+    - Follow the emoji and communication guidelines in [001-communication.mdc](mdc:.cursor/rules/001-communication.mdc)
+  </communication>
+</rules>
+
+<project-overview>
+  <goal>
+    - This project is Open Rufus Chatbot API.
+  </goal>
+
+  <features>
+    - Streaming/Invoke Chat API
+    - Semantic Cache
+    - Prompt Caching
+    - Image multi-modal Chat
+    - Opensearch RAG Q&A Chat
+    - Healthcheck
+  </features>
+
+  <tech-stacks>
+    - Python 3.13
+    - FastAPI
+    - Amazon Bedrock Claude 3 Sonnet for text and image processing
+    - Amazon Bedrock Cohere Embeds 3 for embedding
+    - LangChain for LLM
+    - Opensearch
+  </tech-stacks>
+
+  <file-structure>
+    - Follow the file organization in [002-file-structure.mdc](mdc:.cursor/rules/002-file-structure.mdc)
+  </file-structure>
+</project-overview>
