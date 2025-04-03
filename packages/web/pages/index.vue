@@ -160,9 +160,9 @@
 
 <script lang="ts" setup>
 useHead({
-  title: 'Amazon - Online Shopping',
+  title: 'PACE - Online Shopping',
   meta: [
-    { name: 'description', content: 'Shop online for electronics, computers, clothing, toys, books, and more on Amazon.' }
+    { name: 'description', content: 'Shop online for electronics, computers, clothing, toys, books, and more on PACE.' }
   ]
 })
 </script>

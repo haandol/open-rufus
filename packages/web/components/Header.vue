@@ -5,7 +5,7 @@
       <div class="flex items-center">
         <div class="mr-4">
           <NuxtLink to="/">
-            <NuxtImg src="/img/amazon-logo.png" alt="Amazon Logo" class="h-8 w-auto object-contain" />
+            <NuxtImg src="/img/pace-logo.png" alt="PACE Logo" class="h-8 w-auto object-contain" />
           </NuxtLink>
         </div>
         <div class="text-sm">
@@ -26,7 +26,7 @@
             <span class="text-sm">All</span>
             <i class="pi pi-chevron-down ml-1"></i>
           </div>
-          <input type="text" placeholder="Search Amazon" class="px-4 py-2 flex-1 text-black" />
+          <input type="text" placeholder="Search PACE" class="px-4 py-2 flex-1 text-black" />
           <button class="bg-yellow-400 px-4 py-2 rounded-r-lg">
             <i class="pi pi-search text-black"></i>
           </button>
@@ -74,8 +74,6 @@
         <span>Today's Deals</span>
         <span>Customer Service</span>
         <span>Buy Again</span>
-        <span>Dong-...</span>
-        <span>'s Amazon.com</span>
         <span>Browsing History</span>
         <span>Sell</span>
         <span>Gift Cards</span>
