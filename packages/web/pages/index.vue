@@ -2,7 +2,7 @@
   <div class="w-full">
     <BannerMain />
 
-    <div class="max-w-[1500px] mx-auto px-4 relative -mt-20 md:-mt-32">
+    <div class="max-w-[1500px] mx-auto px-4 relative -mt-60">
       <BarNotice>
         <template #link>
           <a href="#" class="text-blue-600">Please click here to learn more.</a>
