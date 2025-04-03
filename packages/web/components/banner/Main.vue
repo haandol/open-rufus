@@ -1,10 +1,10 @@
 <template>
-  <div class="relative bg-gray-50">
+  <div class="w-full bg-gray-50">
     <div class="max-w-[1500px] mx-auto relative px-4">
       <!-- Main Banner Content -->
       <div class="relative h-[280px] md:h-[400px] rounded-lg overflow-hidden bg-gray-100">
-        <div class="w-full flex items-center justify-center">
-          <NuxtImg src="/img/main-banner.jpg" alt="Free Shipping Zone Products" />
+        <div class="w-full h-full flex items-center justify-center">
+          <NuxtImg src="/img/main-banner.jpg" alt="Free Shipping Zone Products" class="w-full h-full object-cover" />
         </div>
       </div>
 
