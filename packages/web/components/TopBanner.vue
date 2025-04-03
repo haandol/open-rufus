@@ -1,5 +1,4 @@
 <template>
-  <!-- Influencer Banner (SiteStripe) -->
   <div class="p-2 flex justify-between items-center border-t border-gray-300 bg-cover bg-center bg-no-repeat"
     :style="{ backgroundImage: 'url(/img/top-banner.png)' }">
     <div class="flex items-center">
@@ -9,7 +8,3 @@
     </div>
   </div>
 </template>
-
-<script setup lang="ts">
-// Banner component for Influencers & Associates SiteStripe
-</script>

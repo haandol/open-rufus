@@ -3,7 +3,3 @@
     <slot></slot>
   </div>
 </template>
-
-<script setup lang="ts">
-// Product grid layout for displaying multiple product cards
-</script>

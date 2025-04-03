@@ -8,7 +8,3 @@
     </p>
   </div>
 </template>
-
-<script setup lang="ts">
-// Notice bar component with customizable message and link
-</script>

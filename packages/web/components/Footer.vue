@@ -43,7 +43,3 @@
     </div>
   </footer>
 </template>
-
-<script setup lang="ts">
-// Footer component with site links and copyright information
-</script>

@@ -84,7 +84,3 @@
     </div>
   </div>
 </template>
-
-<script setup lang="ts">
-// Header component with main navigation
-</script>

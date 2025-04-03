@@ -18,11 +18,3 @@
     </div>
   </div>
 </template>
-
-<script setup lang="ts">
-// Banner navigation logic can be added here if needed
-</script>
-
-<style scoped>
-/* Add any additional custom styles if needed */
-</style>

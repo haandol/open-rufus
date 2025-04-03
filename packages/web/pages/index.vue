@@ -167,6 +167,4 @@ useHead({
 })
 </script>
 
-<style>
-/* Add custom styles if needed beyond Tailwind classes */
-</style>
+<style lang="postcss" scoped></style>

@@ -5,10 +5,8 @@
   "image": "mcr.microsoft.com/devcontainers/typescript-node:1-22-bookworm",
   "features": {
     "ghcr.io/devcontainers/features/aws-cli:1": {},
-    "ghcr.io/mikaello/devcontainer-features/modern-shell-utils:1": {},
     "ghcr.io/devcontainers/features/sshd:1": {},
-    "ghcr.io/devcontainers-community/npm-features/prettier:1": {},
-    "ghcr.io/georgofenbeck/features/lazygit-linuxbinary:1": {}
+    "ghcr.io/mikaello/devcontainer-features/modern-shell-utils:2": {}
   },
   "customizations": {
     "vscode": {
@@ -30,12 +28,10 @@
         "christian-kohler.npm-intellisense",
         "dbaeumer.vscode-eslint",
         "ClemensPeters.format-json",
-        "oderwat.indent-rainbow",
-        "ChaitanyaShahare.lazygit"
+        "oderwat.indent-rainbow"
       ]
     }
   },
-  "appPort": [3000],
   "mounts": [
     "source=${env:HOME}${env:USERPROFILE}/.aws,target=/root/.aws,type=bind",
     "source=${env:HOME}${env:USERPROFILE}/.ssh,target=/root/.ssh,type=bind"
