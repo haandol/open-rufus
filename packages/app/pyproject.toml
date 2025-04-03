@@ -1,0 +1,16 @@
+[project]
+name = "app"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "awscli>=1.37.12",
+    "boto3>=1.36.12",
+    "faiss-cpu>=1.8.0",
+    "fastapi>=0.115.12",
+    "langchain>=0.3.17",
+    "langchain-aws>=0.2.12",
+    "python-dotenv>=1.0.1",
+    "uvicorn>=0.34.0",
+]
