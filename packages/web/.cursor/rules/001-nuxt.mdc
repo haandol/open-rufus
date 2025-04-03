@@ -32,6 +32,31 @@ alwaysApply: true
   - Manage state with Pinia (use `storeToRefs` for reactivity)
 </nuxt3-implementation>
 
+<components>
+  <core-principals>
+    - Component files must use PascalCase (e.g., `BaseButton.vue`)
+    - Directory names become part of the component name, explained in <nested-structure>
+    - Components are auto-imported without explicit import statements
+    - Can use either PascalCase or kebab-case in templates (`<BaseButton>` or `<base-button>`)
+  </core-principals>
+  <basic-structure>
+    ```
+    components/
+      ├── Button.vue         -> <Button/>
+      └── UserCard.vue       -> <UserCard/>
+    ```
+  </basic-structure>
+  <nested-structure>
+    ```
+    components/
+      ├── ui/
+      │   └── Button.vue     -> <UiButton/>
+      └── forms/
+          └── Input.vue      -> <FormsInput/>
+    ```
+  </nested-structure>
+</components>
+
 <error-handling>
   - Client-side: `throw createError('error message')`
 </error-handling>
