@@ -12,5 +12,6 @@ dependencies = [
     "langchain>=0.3.17",
     "langchain-aws>=0.2.12",
     "python-dotenv>=1.0.1",
+    "structlog>=25.2.0",
     "uvicorn>=0.34.0",
 ]
