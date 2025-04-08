@@ -29,14 +29,16 @@ def get_llm_service():
         LLMService: LLM service instance
     """
     return LLMService(
-        model=os.getenv("MODEL_NAME"),
+        model=os.getenv("MODEL_NAME", "us.anthropic.claude-3-7-sonnet-20250219-v1:0"),
         temperature=MODEL_TEMPERATURE,
-        max_tokens=MODEL_MAX_TOKENS
+        max_tokens=MODEL_MAX_TOKENS,
     )
 
 
 @app.post("/chat")
-async def chat(request: ChatRequest, llm_service: LLMService = Depends(get_llm_service)):
+async def chat(
+    request: ChatRequest, llm_service: LLMService = Depends(get_llm_service)
+):
     """
     handle chat request
 

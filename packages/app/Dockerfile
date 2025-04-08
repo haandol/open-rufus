@@ -24,4 +24,4 @@ COPY env/dev.env /app/.env
 ENTRYPOINT []
 
 ENV PATH="/app/.venv/bin:$PATH"
-CMD ["uv", "run", "--", "chainlit", "run", "app.py"]
+CMD ["uv", "run", "--", "uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]

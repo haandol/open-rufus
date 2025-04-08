@@ -70,6 +70,9 @@ export class ChatbotApp extends Construct {
             }
           ),
           command: [
+            "uv",
+            "run",
+            "--",
             "uvicorn",
             "main:app",
             "--host",
@@ -81,7 +84,7 @@ export class ChatbotApp extends Construct {
           secrets,
         },
         healthCheck: {
-          command: ["CMD-SHELL", "curl -f http://localhost:8000/ || exit 1"],
+          command: ["CMD-SHELL", "curl -f http://localhost:8000/health || exit 1"],
         },
         runtimePlatform: {
           cpuArchitecture: ecs.CpuArchitecture.X86_64,
