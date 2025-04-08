@@ -1,6 +1,6 @@
 <mxfile host="Electron" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/26.2.2 Chrome/134.0.6998.178 Electron/35.1.2 Safari/537.36" version="26.2.2" pages="2">
   <diagram name="serverless" id="wtxiz8nrKSm240LwYTof">
-    <mxGraphModel dx="1839" dy="687" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    <mxGraphModel dx="1599" dy="521" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -125,7 +125,7 @@
           <mxGeometry x="520" y="360" width="78" height="78" as="geometry" />
         </mxCell>
         <mxCell id="PsaITgbuVJGiTN4fDYda-102" value="Amazon S3&lt;div&gt;SPA Web Bucket&lt;/div&gt;" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#7AA116;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.bucket;labelBackgroundColor=default;" vertex="1" parent="1">
-          <mxGeometry x="202.08000000000004" y="198" width="76.92" height="80" as="geometry" />
+          <mxGeometry x="202.08000000000004" y="199" width="76.92" height="80" as="geometry" />
         </mxCell>
         <mxCell id="PsaITgbuVJGiTN4fDYda-114" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="PsaITgbuVJGiTN4fDYda-103" target="PsaITgbuVJGiTN4fDYda-56">
           <mxGeometry relative="1" as="geometry" />
@@ -172,7 +172,7 @@
     </mxGraphModel>
   </diagram>
   <diagram id="tR-Rt3LG2o3J_GeX6hOp" name="ecs">
-    <mxGraphModel dx="1880" dy="716" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    <mxGraphModel dx="2151" dy="904" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
