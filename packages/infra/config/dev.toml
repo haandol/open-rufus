@@ -11,7 +11,7 @@ callbackUrls = ["http://localhost:8000/auth/oauth/aws-cognito/callback"]
 
 [chatbot]
 tableName = "chat-history"
-allowIpList = ["127.0.0.1/32", "39.115.51.141/32"]
+allowIpList = ["127.0.0.1/32"]
 
 [external.itemSearch]
 indexName = "item-search"
