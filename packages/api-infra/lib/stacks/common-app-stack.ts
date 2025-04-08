@@ -44,7 +44,7 @@ export class CommonAppStack extends cdk.Stack {
     });
 
     // setup http api
-    this.externalHttpAPI = this.createHttpApi();
+    this.externalApi = this.createHttpApi();
   }
 
   private newECSCluster(vpc: ec2.IVpc): ecs.Cluster {

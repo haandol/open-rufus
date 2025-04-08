@@ -48,7 +48,6 @@ export class ChatbotApp extends Construct {
         cluster: props.cluster,
         loadBalancer: props.loadBalancer,
         sslPolicy: elbv2.SslPolicy.RECOMMENDED,
-        redirectHTTP: true,
         taskSubnets: {
           subnetType: ec2.SubnetType.PRIVATE_WITH_EGRESS,
         },
