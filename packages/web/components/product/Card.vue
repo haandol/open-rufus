@@ -2,7 +2,7 @@
   <div class="bg-white p-4 rounded shadow-sm hover:shadow-md transition-shadow h-full flex flex-col">
     <h2 class="text-lg font-semibold mb-2">{{ title }}</h2>
     <div v-if="imagePath" class="aspect-square mb-4 overflow-hidden rounded-lg bg-gray-50">
-      <NuxtImg :src="imagePath" :alt="title" loading="lazy"
+      <img :src="imagePath" :alt="title" loading="lazy"
         class="w-full h-full object-contain hover:scale-105 transition-transform duration-300" />
     </div>
     <p v-if="description" class="text-gray-600 mb-4 text-sm">{{ description }}</p>

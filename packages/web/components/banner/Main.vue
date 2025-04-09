@@ -4,7 +4,7 @@
       <!-- Main Banner Content -->
       <div class="relative h-[600px] rounded-lg overflow-hidden bg-gray-100">
         <div class="w-full h-full flex items-center justify-center">
-          <NuxtImg src="/img/main-banner.jpg" alt="Free Shipping Zone Products" class="w-full h-full object-cover"
+          <img src="/img/main-banner.jpg" alt="Free Shipping Zone Products" class="w-full h-full object-cover"
             loading="lazy" />
         </div>
       </div>

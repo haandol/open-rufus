@@ -32,6 +32,5 @@ export default defineNuxtConfig({
         autoImports: ["defineStore", "definePiniaStore", "acceptHMRUpdate"],
       },
     ],
-    "@nuxt/image",
   ],
 });

@@ -126,8 +126,7 @@ alwaysApply: true
   </component-structure>
 
   <assets-handling>
-    - Images: `<NuxtImg>` or `<NuxtPicture>`
-      (include width/height)
+    - Images: `<img>` for SSG (Static Site Generation)
     - Icons: Primeicons
       (e.g., `<i class="pi pi-wallet mr-1"></i>`)
   </assets-handling>
