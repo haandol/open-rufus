@@ -83,7 +83,7 @@ export class WebappWAF extends Construct {
           statement: {
             byteMatchStatement: {
               fieldToMatch: {
-                singleHeader: { name: props.cfSecretHeaderName },
+                singleHeader: { Name: props.cfSecretHeaderName },
               },
               positionalConstraint: "EXACTLY",
               searchString: props.cfSecretHeaderValue,
