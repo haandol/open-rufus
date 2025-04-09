@@ -17,7 +17,11 @@ interface IConfig {
   };
   chatbot: {
     tableName: string;
+  };
+  cloudfront: {
     allowIpList: string[];
+    secretHeaderName: string;
+    secretHeaderValue: string;
   };
   external: {
     itemSearch: {
@@ -32,7 +36,7 @@ interface IConfig {
 }
 
 const cfg = toml.parse(
-  fs.readFileSync(path.resolve(__dirname, "..", ".toml"), "utf-8"),
+  fs.readFileSync(path.resolve(__dirname, "..", ".toml"), "utf-8")
 );
 console.log("loaded config", JSON.stringify(cfg, null, 2));
 
@@ -56,7 +60,16 @@ const schema = joi
     chatbot: joi
       .object({
         tableName: joi.string().required(),
-        allowIpList: joi.array().items(joi.string().ip({ cidr: "required" })).required(),
+      })
+      .required(),
+    cloudfront: joi
+      .object({
+        allowIpList: joi
+          .array()
+          .items(joi.string().ip({ cidr: "required" }))
+          .required(),
+        secretHeaderName: joi.string().required(),
+        secretHeaderValue: joi.string().required(),
       })
       .required(),
     external: joi

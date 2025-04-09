@@ -12,6 +12,7 @@ import { Construct } from "constructs";
 export interface IProps {
   readonly cluster: ecs.ICluster;
   readonly loadBalancer: elbv2.IApplicationLoadBalancer;
+  readonly loadBalancerSecurityGroup: ec2.ISecurityGroup;
   readonly chatbotTableName: string;
   readonly authApiKey: string;
   readonly itemRecApiHost: string;
@@ -26,11 +27,23 @@ export class ChatbotApp extends Construct {
 
     // create app service
     const envVars = this.createEnvVars(props);
-    this.service = this.createAlbFargateService(props, envVars);
+    const serviceSecurityGroup = this.createServiceSecurityGroup(props);
+    this.service = this.createAlbFargateService(props, serviceSecurityGroup, envVars);
+  }
+
+  private createServiceSecurityGroup(props: IProps): ec2.SecurityGroup {
+    const securityGroup = new ec2.SecurityGroup(this, "ServiceSecurityGroup", {
+      vpc: props.cluster.vpc,
+      allowAllOutbound: true,
+    });
+    securityGroup.addIngressRule(ec2.Peer.securityGroupId(props.loadBalancerSecurityGroup.securityGroupId), ec2.Port.tcp(8000), "Allow inbound ALB traffic");
+    securityGroup.addIngressRule(ec2.Peer.ipv4(props.cluster.vpc.vpcCidrBlock), ec2.Port.tcp(80), "Allow inbound VPC traffic");
+    return securityGroup;
   }
 
   private createAlbFargateService(
     props: IProps,
+    serviceSecurityGroup: ec2.SecurityGroup,
     envVars: { [key: string]: ssm.IStringParameter }
   ): ApplicationLoadBalancedFargateService {
     const executionRole = this.createExecutionRole();
@@ -57,6 +70,7 @@ export class ChatbotApp extends Construct {
         cloudMapOptions: {
           name: "chatbot-app",
         },
+        securityGroups: [serviceSecurityGroup],
         taskImageOptions: {
           taskRole,
           executionRole,

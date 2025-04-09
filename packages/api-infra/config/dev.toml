@@ -6,12 +6,16 @@ stage = "Dev"
 # vpcId = "vpc-xyz"
 
 [auth]
-apiKey = "98566d541fa1cf9c0e3940395855fe21"
+apiKey = "98566d541fa1cf9c0e3940395855fe21" # replace with your own
 callbackUrls = ["http://localhost:8000/auth/oauth/aws-cognito/callback"]
 
 [chatbot]
 tableName = "chatbot"
+
+[cloudfront]
 allowIpList = ["127.0.0.1/32"]
+secretHeaderName = "x-cloudfront-secret-key"
+secretHeaderValue = "f22f34134f5d34fd536e4965aa0baf51" # replace with your own
 
 [external.itemSearch]
 indexName = "item-search"

@@ -11,6 +11,8 @@ interface IProps extends cdk.StackProps {
   readonly vpc: ec2.IVpc;
   readonly tableName: string;
   readonly allowIpList: string[];
+  readonly cfSecretHeaderName: string;
+  readonly cfSecretHeaderValue: string;
 }
 
 export class CommonAppStack extends cdk.Stack {
@@ -18,8 +20,8 @@ export class CommonAppStack extends cdk.Stack {
   readonly chatbotTable: dynamodb.ITable;
   // ecs fargate service
   readonly cluster: ecs.ICluster;
-  readonly securityGroup: ec2.ISecurityGroup;
   readonly loadBalancer: elbv2.IApplicationLoadBalancer;
+  readonly loadBalancerSecurityGroup: ec2.ISecurityGroup;
   // external api
   readonly externalApi: apigw.IHttpApi;
 
@@ -31,11 +33,15 @@ export class CommonAppStack extends cdk.Stack {
 
     // setup ECS fargate service
     this.cluster = this.newECSCluster(props.vpc);
-    this.securityGroup = this.newSecurityGroup(props.vpc, props.allowIpList);
-    this.loadBalancer = this.newALB(props.vpc);
+    this.loadBalancerSecurityGroup = this.newSecurityGroup(props.vpc);
+    this.loadBalancer = this.newALB(props.vpc, this.loadBalancerSecurityGroup);
 
     // setup WAF
-    const waf = new WebappWAF(this, "WebappWAF");
+    const waf = new WebappWAF(this, "WebappWAF", {
+      allowIpList: props.allowIpList,
+      cfSecretHeaderName: props.cfSecretHeaderName,
+      cfSecretHeaderValue: props.cfSecretHeaderValue,
+    });
     new WebACLAssociation(this, "WebACLAssociation", {
       resourceArn: this.loadBalancer.loadBalancerArn,
       webAclArn: waf.webAcl.attrArn,
@@ -59,15 +65,16 @@ export class CommonAppStack extends cdk.Stack {
     return cluster;
   }
 
-  private newSecurityGroup(vpc: ec2.IVpc, allowIpList: string[]): ec2.SecurityGroup {
+  private newSecurityGroup(vpc: ec2.IVpc): ec2.SecurityGroup {
     const securityGroup = new ec2.SecurityGroup(this, "SecurityGroup", {
       vpc,
       allowAllOutbound: true,
     });
-    securityGroup.addIngressRule(ec2.Peer.ipv4(vpc.vpcCidrBlock), ec2.Port.tcp(80), "Allow inbound VPC traffic");
-    allowIpList.forEach((ip) => {
-      securityGroup.addIngressRule(ec2.Peer.ipv4(ip), ec2.Port.tcp(80), "Allow inbound HTTP traffic");
-    });
+    securityGroup.addIngressRule(
+      ec2.Peer.ipv4(vpc.vpcCidrBlock),
+      ec2.Port.tcp(80),
+      "Allow inbound VPC traffic"
+    );
     return securityGroup;
   }
 
@@ -105,7 +112,10 @@ export class CommonAppStack extends cdk.Stack {
     return table;
   }
 
-  private newALB(vpc: ec2.IVpc): elbv2.IApplicationLoadBalancer {
+  private newALB(
+    vpc: ec2.IVpc,
+    securityGroup: ec2.ISecurityGroup
+  ): elbv2.IApplicationLoadBalancer {
     const ns = this.node.tryGetContext("ns") as string;
     return new elbv2.ApplicationLoadBalancer(this, "ALB", {
       loadBalancerName: `${ns}CommonAppALB`,
@@ -114,7 +124,8 @@ export class CommonAppStack extends cdk.Stack {
         subnetType: ec2.SubnetType.PUBLIC,
       },
       internetFacing: true,
-      securityGroup: this.securityGroup,
+      wafFailOpen: true, // NOTE: CloudFront 에서만 트래픽을 받는 것을 WAF 에서 제어하고 있기 때문에 fail open
+      securityGroup,
     });
   }
 
