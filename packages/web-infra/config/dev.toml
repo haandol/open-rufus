@@ -1,0 +1,7 @@
+[app]
+ns = "OpenRufusWebInfra"
+stage = "Dev"
+
+[repository]
+path = "haandol/open-rufus"
+branch = "main"
