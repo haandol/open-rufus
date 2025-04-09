@@ -14,4 +14,6 @@ const app = new cdk.App({
 new FrontendStack(app, `${Config.app.ns}FrontendStack`, {
   repositoryPath: Config.repository.path,
   repositoryBranch: Config.repository.branch,
+  secretHeaderName: Config.cloudfront.secretHeaderName,
+  secretHeaderValue: Config.cloudfront.secretHeaderValue,
 });

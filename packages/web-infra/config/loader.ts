@@ -8,6 +8,10 @@ interface IConfig {
     ns: string;
     stage: string;
   };
+  cloudfront: {
+    secretHeaderName: string;
+    secretHeaderValue: string;
+  };
   repository: {
     path: string;
     branch: string;
@@ -25,6 +29,12 @@ const schema = joi
       ns: joi.string().required(),
       stage: joi.string().required(),
     }),
+    cloudfront: joi
+      .object({
+        secretHeaderName: joi.string().required(),
+        secretHeaderValue: joi.string().required(),
+      })
+      .required(),
     repository: joi
       .object({
         path: joi.string(),

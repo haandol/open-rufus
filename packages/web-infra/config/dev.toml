@@ -2,6 +2,10 @@
 ns = "OpenRufusWebInfra"
 stage = "Dev"
 
+[cloudfront]
+secretHeaderName = "x-cloudfront-secret"
+secretHeaderValue = "1234567890"
+
 [repository]
 path = "haandol/open-rufus"
 branch = "main"

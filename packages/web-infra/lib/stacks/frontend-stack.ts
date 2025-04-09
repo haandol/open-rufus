@@ -7,6 +7,8 @@ import { Cloudfront } from "../constructs/cloudfront";
 interface Props extends cdk.StackProps {
   repositoryPath: string;
   repositoryBranch: string;
+  secretHeaderName: string;
+  secretHeaderValue: string;
 }
 
 export class FrontendStack extends cdk.Stack {
@@ -30,6 +32,8 @@ export class FrontendStack extends cdk.Stack {
 
     new Cloudfront(this, `${ns}Cloudfront`, {
       bucket,
+      secretHeaderName: props.secretHeaderName,
+      secretHeaderValue: props.secretHeaderValue,
     });
   }
 }

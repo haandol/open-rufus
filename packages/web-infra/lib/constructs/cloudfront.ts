@@ -6,6 +6,8 @@ import * as origins from "aws-cdk-lib/aws-cloudfront-origins";
 
 interface Props {
   bucket: s3.IBucket;
+  secretHeaderName: string;
+  secretHeaderValue: string;
 }
 
 export class Cloudfront extends Construct {
@@ -18,10 +20,15 @@ export class Cloudfront extends Construct {
 
     const cfDist = new cloudfront.Distribution(this, `${ns}Distribution`, {
       defaultBehavior: {
-        origin: origins.S3BucketOrigin.withOriginAccessControl(props.bucket),
+        origin: origins.S3BucketOrigin.withOriginAccessControl(props.bucket, {
+          customHeaders: {
+            [props.secretHeaderName]: props.secretHeaderValue,
+          },
+        }),
         allowedMethods: cloudfront.AllowedMethods.ALLOW_GET_HEAD,
         cachedMethods: cloudfront.CachedMethods.CACHE_GET_HEAD,
         viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
+        originRequestPolicy: cloudfront.OriginRequestPolicy.ALL_VIEWER,
       },
       errorResponses: [
         {
