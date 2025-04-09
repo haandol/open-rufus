@@ -64,6 +64,7 @@ export class CommonAppStack extends cdk.Stack {
       vpc,
       allowAllOutbound: true,
     });
+    securityGroup.addIngressRule(ec2.Peer.ipv4(vpc.vpcCidrBlock), ec2.Port.tcp(80), "Allow inbound VPC traffic");
     allowIpList.forEach((ip) => {
       securityGroup.addIngressRule(ec2.Peer.ipv4(ip), ec2.Port.tcp(80), "Allow inbound HTTP traffic");
     });
