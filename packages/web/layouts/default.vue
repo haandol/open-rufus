@@ -1,7 +1,7 @@
 <template>
   <BannerTop />
   <Header />
-  <main>
+  <main class="h-auto min-h-[80vh]">
     <slot />
   </main>
   <Footer />
