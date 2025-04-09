@@ -10,10 +10,10 @@
       </div>
 
       <!-- Navigation Arrows -->
-      <button class="absolute left-0 top-1/3 -translate-y-1/2 bg-white rounded-full p-3 shadow-md hover:bg-gray-100">
+      <button class="absolute left-1 top-1/4 -translate-y-1/2 bg-white rounded-full p-3 shadow-md hover:bg-gray-100">
         <i class="pi pi-chevron-left text-xl"></i>
       </button>
-      <button class="absolute right-0 top-1/3 -translate-y-1/2 bg-white rounded-full p-3 shadow-md hover:bg-gray-100">
+      <button class="absolute right-1 top-1/4 -translate-y-1/2 bg-white rounded-full p-3 shadow-md hover:bg-gray-100">
         <i class="pi pi-chevron-right text-xl"></i>
       </button>
     </div>
