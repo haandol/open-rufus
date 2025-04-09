@@ -33,7 +33,10 @@ export class CommonAppStack extends cdk.Stack {
 
     // setup ECS fargate service
     this.cluster = this.newECSCluster(props.vpc);
-    this.loadBalancerSecurityGroup = this.newSecurityGroup(props.vpc);
+    this.loadBalancerSecurityGroup = this.newSecurityGroup(
+      props.vpc,
+      props.allowIpList
+    );
     this.loadBalancer = this.newALB(props.vpc, this.loadBalancerSecurityGroup);
 
     // setup WAF
@@ -65,7 +68,10 @@ export class CommonAppStack extends cdk.Stack {
     return cluster;
   }
 
-  private newSecurityGroup(vpc: ec2.IVpc): ec2.SecurityGroup {
+  private newSecurityGroup(
+    vpc: ec2.IVpc,
+    allowIpList: string[]
+  ): ec2.SecurityGroup {
     const securityGroup = new ec2.SecurityGroup(this, "SecurityGroup", {
       vpc,
       allowAllOutbound: true,
@@ -75,6 +81,18 @@ export class CommonAppStack extends cdk.Stack {
       ec2.Port.tcp(80),
       "Allow inbound VPC traffic"
     );
+    securityGroup.addIngressRule(
+      ec2.Peer.prefixList("pl-82a045eb"),
+      ec2.Port.tcp(80),
+      "Allow inbound traffic from CloudFront"
+    );
+    allowIpList.forEach((ip) => {
+      securityGroup.addIngressRule(
+        ec2.Peer.ipv4(ip),
+        ec2.Port.tcp(80),
+        "Allow inbound traffic from specific IP"
+      );
+    });
     return securityGroup;
   }
 
@@ -124,7 +142,6 @@ export class CommonAppStack extends cdk.Stack {
         subnetType: ec2.SubnetType.PUBLIC,
       },
       internetFacing: true,
-      wafFailOpen: true, // NOTE: CloudFront 에서만 트래픽을 받는 것을 WAF 에서 제어하고 있기 때문에 fail open
       securityGroup,
     });
   }
