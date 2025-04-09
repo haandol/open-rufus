@@ -25,6 +25,8 @@ jobs:
           cd ./packages/web
           yarn install
           yarn generate
+        env:
+          API_URL: ${{ secrets.API_URL }}
       - name: Upload to S3
         uses: aws-actions/configure-aws-credentials@v4
         with:
