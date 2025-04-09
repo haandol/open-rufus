@@ -1,0 +1,44 @@
+name: Deploy to S3 and Invalidate CloudFront
+
+on:
+  push:
+    paths:
+      - 'packages/web/**'
+    branches:
+      - main
+
+jobs:
+  sync-and-invalidate:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Install dependencies
+        run: |
+          cd ./packages/web
+          cp env/dev.env .env
+          yarn install
+          yarn generate
+      - name: Upload to S3
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-region: 'ap-northeast-2'
+          role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
+          role-session-name: GithubAction
+      - name: Sync files to S3
+        run: |
+          echo $PWD
+          echo ls
+          aws s3 sync ./packages/web/dist s3://${{ secrets.BUCKET_NAME }} --delete
+        env:
+          BUCKET_NAME: your-bucket-name
+      - name: Invalidate CloudFront cache
+        run: |
+          aws cloudfront create-invalidation --distribution-id ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }} --paths "/*"
