@@ -10,7 +10,7 @@ apiKey = "98566d541fa1cf9c0e3940395855fe21"
 callbackUrls = ["http://localhost:8000/auth/oauth/aws-cognito/callback"]
 
 [chatbot]
-tableName = "chat-history"
+tableName = "chatbot"
 allowIpList = ["127.0.0.1/32"]
 
 [external.itemSearch]
