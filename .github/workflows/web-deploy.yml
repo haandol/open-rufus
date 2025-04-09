@@ -3,7 +3,7 @@ name: Deploy to S3 and Invalidate CloudFront
 on:
   push:
     paths:
-      - 'packages/web/**'
+      - "packages/web/**"
     branches:
       - main
 
@@ -23,13 +23,12 @@ jobs:
       - name: Install dependencies
         run: |
           cd ./packages/web
-          cp env/dev.env .env
           yarn install
           yarn generate
       - name: Upload to S3
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          aws-region: 'ap-northeast-2'
+          aws-region: "ap-northeast-2"
           role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
           role-session-name: GithubAction
       - name: Sync files to S3
@@ -37,8 +36,6 @@ jobs:
           echo $PWD
           echo ls
           aws s3 sync ./packages/web/dist s3://${{ secrets.BUCKET_NAME }} --delete
-        env:
-          BUCKET_NAME: your-bucket-name
       - name: Invalidate CloudFront cache
         run: |
           aws cloudfront create-invalidation --distribution-id ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }} --paths "/*"
