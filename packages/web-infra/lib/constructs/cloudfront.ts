@@ -19,6 +19,7 @@ export class Cloudfront extends Construct {
     const ns = this.node.tryGetContext("ns") as string;
 
     const cfDist = new cloudfront.Distribution(this, `${ns}Distribution`, {
+      defaultRootObject: "index.html",
       defaultBehavior: {
         origin: origins.S3BucketOrigin.withOriginAccessControl(props.bucket, {
           customHeaders: {
@@ -28,7 +29,6 @@ export class Cloudfront extends Construct {
         allowedMethods: cloudfront.AllowedMethods.ALLOW_GET_HEAD,
         cachedMethods: cloudfront.CachedMethods.CACHE_GET_HEAD,
         viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
-        originRequestPolicy: cloudfront.OriginRequestPolicy.ALL_VIEWER,
       },
       errorResponses: [
         {
