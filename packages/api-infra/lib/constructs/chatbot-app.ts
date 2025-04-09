@@ -47,7 +47,6 @@ export class ChatbotApp extends Construct {
       {
         cluster: props.cluster,
         loadBalancer: props.loadBalancer,
-        sslPolicy: elbv2.SslPolicy.RECOMMENDED,
         taskSubnets: {
           subnetType: ec2.SubnetType.PRIVATE_WITH_EGRESS,
         },
@@ -108,6 +107,10 @@ export class ChatbotApp extends Construct {
       targetUtilizationPercent: 80,
     });
 
+    // configure health check
+    service.targetGroup.configureHealthCheck({
+      path: "/health",
+    });
     // enable sticky session - alb managed cookie
     service.targetGroup.enableCookieStickiness(cdk.Duration.days(1));
 

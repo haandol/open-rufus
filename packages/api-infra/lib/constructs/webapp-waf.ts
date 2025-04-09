@@ -1,15 +1,11 @@
 import * as wafv2 from "aws-cdk-lib/aws-wafv2";
 import { Construct } from "constructs";
 
-interface IProps {
-  allowIpList: string[];
-}
-
 export class WebappWAF extends Construct {
   public readonly webAcl: wafv2.CfnWebACL;
   public readonly cidrAllowRanges: string[];
 
-  constructor(scope: Construct, id: string, props: IProps) {
+  constructor(scope: Construct, id: string) {
     super(scope, id);
 
     const awsManagedRules: wafv2.CfnWebACL.RuleProperty = {
@@ -30,29 +26,6 @@ export class WebappWAF extends Construct {
       },
     };
 
-    const allowedIpSet = new wafv2.CfnIPSet(this, "AllowedIpSet", {
-      addresses: props.allowIpList,
-      ipAddressVersion: "IPV4",
-      scope: "REGIONAL",
-    });
-    const allowIpRuleSet: wafv2.CfnWebACL.RuleProperty = {
-      name: "AllowIpRuleSet",
-      priority: 3,
-      statement: {
-        ipSetReferenceStatement: {
-          arn: allowedIpSet.attrArn,
-        },
-      },
-      visibilityConfig: {
-        cloudWatchMetricsEnabled: true,
-        sampledRequestsEnabled: true,
-        metricName: "allowIp",
-      },
-      action: {
-        allow: {},
-      },
-    };
-
     this.webAcl = new wafv2.CfnWebACL(this, "WebACL", {
       defaultAction: {
         block: {},
@@ -63,7 +36,7 @@ export class WebappWAF extends Construct {
         metricName: "webACL",
         sampledRequestsEnabled: true,
       },
-      rules: [awsManagedRules, allowIpRuleSet],
+      rules: [awsManagedRules],
     });
   }
 }

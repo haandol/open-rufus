@@ -31,13 +31,11 @@ export class CommonAppStack extends cdk.Stack {
 
     // setup ECS fargate service
     this.cluster = this.newECSCluster(props.vpc);
-    this.securityGroup = this.newSecurityGroup(props.vpc);
+    this.securityGroup = this.newSecurityGroup(props.vpc, props.allowIpList);
     this.loadBalancer = this.newALB(props.vpc);
 
     // setup WAF
-    const waf = new WebappWAF(this, "WebappWAF", {
-      allowIpList: props.allowIpList,
-    });
+    const waf = new WebappWAF(this, "WebappWAF");
     new WebACLAssociation(this, "WebACLAssociation", {
       resourceArn: this.loadBalancer.loadBalancerArn,
       webAclArn: waf.webAcl.attrArn,
@@ -61,10 +59,15 @@ export class CommonAppStack extends cdk.Stack {
     return cluster;
   }
 
-  private newSecurityGroup(vpc: ec2.IVpc): ec2.SecurityGroup {
-    return new ec2.SecurityGroup(this, "SecurityGroup", {
+  private newSecurityGroup(vpc: ec2.IVpc, allowIpList: string[]): ec2.SecurityGroup {
+    const securityGroup = new ec2.SecurityGroup(this, "SecurityGroup", {
       vpc,
+      allowAllOutbound: true,
     });
+    allowIpList.forEach((ip) => {
+      securityGroup.addIngressRule(ec2.Peer.ipv4(ip), ec2.Port.tcp(80), "Allow inbound HTTP traffic");
+    });
+    return securityGroup;
   }
 
   private newChatbotTable(tableName: string): dynamodb.Table {
@@ -107,8 +110,9 @@ export class CommonAppStack extends cdk.Stack {
       loadBalancerName: `${ns}CommonAppALB`,
       vpc,
       vpcSubnets: {
-        subnetType: ec2.SubnetType.PRIVATE_WITH_EGRESS,
+        subnetType: ec2.SubnetType.PUBLIC,
       },
+      internetFacing: true,
       securityGroup: this.securityGroup,
     });
   }
