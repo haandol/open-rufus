@@ -6,6 +6,7 @@ on:
       - "packages/web/**"
     branches:
       - main
+  workflow_dispatch:
 
 jobs:
   sync-and-invalidate:

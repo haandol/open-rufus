@@ -80,18 +80,18 @@ export class CommonAppStack extends cdk.Stack {
     });
     securityGroup.addIngressRule(
       ec2.Peer.ipv4(vpc.vpcCidrBlock),
-      ec2.Port.tcp(80),
+      ec2.Port.tcp(443),
       "Allow inbound VPC traffic"
     );
     securityGroup.addIngressRule(
       ec2.Peer.prefixList("pl-82a045eb"),
-      ec2.Port.tcp(80),
+      ec2.Port.tcp(443),
       "Allow inbound traffic from CloudFront"
     );
     allowIpList.forEach((ip) => {
       securityGroup.addIngressRule(
         ec2.Peer.ipv4(ip),
-        ec2.Port.tcp(80),
+        ec2.Port.tcp(443),
         "Allow inbound traffic from specific IP"
       );
     });

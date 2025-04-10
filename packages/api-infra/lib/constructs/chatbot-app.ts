@@ -55,7 +55,7 @@ export class ChatbotApp extends Construct {
     );
     securityGroup.addIngressRule(
       ec2.Peer.ipv4(props.cluster.vpc.vpcCidrBlock),
-      ec2.Port.tcp(80),
+      ec2.Port.tcp(443),
       "Allow inbound VPC traffic"
     );
     return securityGroup;
