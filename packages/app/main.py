@@ -35,7 +35,7 @@ def get_llm_service():
     )
 
 
-@app.post("/chat")
+@app.post("/api/chat")
 async def chat(
     request: ChatRequest, llm_service: LLMService = Depends(get_llm_service)
 ):

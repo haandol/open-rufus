@@ -2,9 +2,12 @@
 ns = "OpenRufusWebInfra"
 stage = "Dev"
 
+[alb]
+arn = "YOUR_ALB_ARN"
+
 [cloudfront]
 secretHeaderName = "x-cloudfront-secret"
-secretHeaderValue = "1234567890"
+secretHeaderValue = "YOUR_SECRET_VALUE"
 
 [repository]
 path = "haandol/open-rufus"

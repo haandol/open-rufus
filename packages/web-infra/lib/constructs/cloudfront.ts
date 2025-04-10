@@ -3,9 +3,11 @@ import { Construct } from "constructs";
 import * as s3 from "aws-cdk-lib/aws-s3";
 import * as cloudfront from "aws-cdk-lib/aws-cloudfront";
 import * as origins from "aws-cdk-lib/aws-cloudfront-origins";
+import * as elbv2 from "aws-cdk-lib/aws-elasticloadbalancingv2";
 
 interface Props {
   bucket: s3.IBucket;
+  albArn: string;
   secretHeaderName: string;
   secretHeaderValue: string;
 }
@@ -18,17 +20,45 @@ export class Cloudfront extends Construct {
 
     const ns = this.node.tryGetContext("ns") as string;
 
+    const alb = elbv2.ApplicationLoadBalancer.fromLookup(this, "Alb", {
+      loadBalancerArn: props.albArn,
+    });
+
+    const albOrigin = new origins.LoadBalancerV2Origin(alb, {
+      protocolPolicy: cloudfront.OriginProtocolPolicy.HTTPS_ONLY,
+      customHeaders: {
+        [props.secretHeaderName]: props.secretHeaderValue,
+      },
+    });
+
+    const s3Origin = origins.S3BucketOrigin.withOriginAccessControl(
+      props.bucket,
+      {
+        customHeaders: {
+          [props.secretHeaderName]: props.secretHeaderValue,
+        },
+      }
+    );
+
     const cfDist = new cloudfront.Distribution(this, `${ns}Distribution`, {
       defaultRootObject: "index.html",
       defaultBehavior: {
-        origin: origins.S3BucketOrigin.withOriginAccessControl(props.bucket, {
-          customHeaders: {
-            [props.secretHeaderName]: props.secretHeaderValue,
-          },
-        }),
+        origin: s3Origin,
         allowedMethods: cloudfront.AllowedMethods.ALLOW_GET_HEAD,
         cachedMethods: cloudfront.CachedMethods.CACHE_GET_HEAD,
         viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
+      },
+      additionalBehaviors: {
+        "/api/*": {
+          origin: albOrigin,
+          allowedMethods: cloudfront.AllowedMethods.ALLOW_ALL,
+          cachedMethods: cloudfront.CachedMethods.CACHE_GET_HEAD,
+          cachePolicy: cloudfront.CachePolicy.CACHING_DISABLED,
+          viewerProtocolPolicy:
+            cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
+          originRequestPolicy:
+            cloudfront.OriginRequestPolicy.ALL_VIEWER_EXCEPT_HOST_HEADER,
+        },
       },
       errorResponses: [
         {

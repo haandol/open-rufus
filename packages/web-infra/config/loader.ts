@@ -12,6 +12,9 @@ interface IConfig {
     secretHeaderName: string;
     secretHeaderValue: string;
   };
+  alb: {
+    arn: string;
+  };
   repository: {
     path: string;
     branch: string;
@@ -28,6 +31,9 @@ const schema = joi
     app: joi.object({
       ns: joi.string().required(),
       stage: joi.string().required(),
+    }),
+    alb: joi.object({
+      arn: joi.string().required(),
     }),
     cloudfront: joi
       .object({
