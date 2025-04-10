@@ -8,12 +8,11 @@ interface IConfig {
     ns: string;
     stage: "Dev" | "Prod";
   };
+  auth: {
+    callbackUrls: string[];
+  };
   vpc?: {
     vpcId?: string;
-  };
-  auth: {
-    apiKey: string;
-    callbackUrls: string[];
   };
   cert: {
     recordName: string;
@@ -28,16 +27,6 @@ interface IConfig {
   cloudfront: {
     secretHeaderName: string;
     secretHeaderValue: string;
-  };
-  external: {
-    itemSearch: {
-      indexName: string;
-      endpoint: string;
-    };
-    itemRec: {
-      indexName: string;
-      endpoint: string;
-    };
   };
 }
 
@@ -54,15 +43,16 @@ const schema = joi
         stage: joi.string().valid("Dev", "Prod").required(),
       })
       .required(),
+    auth: joi
+      .object({
+        callbackUrls: joi.array().items(joi.string()).required(),
+      })
+      .required(),
     vpc: joi
       .object({
         vpcId: joi.string().optional(),
       })
       .optional(),
-    auth: joi.object({
-      apiKey: joi.string().required(),
-      callbackUrls: joi.array().items(joi.string()).required(),
-    }),
     cert: joi
       .object({
         recordName: joi.string().required(),
@@ -84,22 +74,6 @@ const schema = joi
       .object({
         secretHeaderName: joi.string().required(),
         secretHeaderValue: joi.string().required(),
-      })
-      .required(),
-    external: joi
-      .object({
-        itemSearch: joi
-          .object({
-            indexName: joi.string().required(),
-            endpoint: joi.string().required(),
-          })
-          .required(),
-        itemRec: joi
-          .object({
-            indexName: joi.string().required(),
-            endpoint: joi.string().required(),
-          })
-          .required(),
       })
       .required(),
   })

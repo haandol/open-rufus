@@ -22,11 +22,3 @@ allowIpList = []                               # CIDR block notation. e.g. [127.
 [cloudfront]
 secretHeaderName = "x-cloudfront-secret-key"
 secretHeaderValue = "YOUR_SECRET_HEADER_VALUE" # same as web-infra
-
-[external.itemSearch]
-indexName = "item-search"
-endpoint = "https://YOUR_ITEM_SEARCH_API_ENDPOINT"
-
-[external.itemRec]
-indexName = "item-rec"
-endpoint = "https://YOUR_ITEM_REC_API_ENDPOINT"

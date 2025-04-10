@@ -22,9 +22,6 @@ export interface IProps {
     certificateArn: string;
   };
   readonly chatbotTableName: string;
-  readonly authApiKey: string;
-  readonly itemRecApiHost: string;
-  readonly itemSearchApiHost: string;
 }
 
 export class ChatbotApp extends Construct {
@@ -290,24 +287,6 @@ export class ChatbotApp extends Construct {
         description: "Chatbot table name",
         parameterName: `${ns}ChatbotTableName`,
         stringValue: props.chatbotTableName,
-        tier: ssm.ParameterTier.STANDARD,
-      }),
-      AUTH_API_KEY: new ssm.StringParameter(this, "AuthApiKey", {
-        description: "Auth api key",
-        parameterName: `${ns}AuthApiKey`,
-        stringValue: props.authApiKey,
-        tier: ssm.ParameterTier.STANDARD,
-      }),
-      ITEM_REC_API_HOST: new ssm.StringParameter(this, "ItemRecApiHost", {
-        description: "Item rec api host",
-        parameterName: `${ns}ItemRecApiHost`,
-        stringValue: props.itemRecApiHost,
-        tier: ssm.ParameterTier.STANDARD,
-      }),
-      ITEM_SEARCH_API_HOST: new ssm.StringParameter(this, "ItemSearchApiHost", {
-        description: "Item search api host",
-        parameterName: `${ns}ItemSearchApiHost`,
-        stringValue: props.itemSearchApiHost,
         tier: ssm.ParameterTier.STANDARD,
       }),
     };
