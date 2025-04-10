@@ -5,6 +5,8 @@ import * as ecs from "aws-cdk-lib/aws-ecs";
 import * as iam from "aws-cdk-lib/aws-iam";
 import * as elbv2 from "aws-cdk-lib/aws-elasticloadbalancingv2";
 import * as ssm from "aws-cdk-lib/aws-ssm";
+import * as acm from "aws-cdk-lib/aws-certificatemanager";
+import * as route53 from "aws-cdk-lib/aws-route53";
 import { Platform } from "aws-cdk-lib/aws-ecr-assets";
 import { ApplicationLoadBalancedFargateService } from "aws-cdk-lib/aws-ecs-patterns";
 import { Construct } from "constructs";
@@ -13,6 +15,12 @@ export interface IProps {
   readonly cluster: ecs.ICluster;
   readonly loadBalancer: elbv2.IApplicationLoadBalancer;
   readonly loadBalancerSecurityGroup: ec2.ISecurityGroup;
+  readonly cert: {
+    recordName: string;
+    domainName: string;
+    hostedZoneId: string;
+    certificateArn: string;
+  };
   readonly chatbotTableName: string;
   readonly authApiKey: string;
   readonly itemRecApiHost: string;
@@ -28,7 +36,11 @@ export class ChatbotApp extends Construct {
     // create app service
     const envVars = this.createEnvVars(props);
     const serviceSecurityGroup = this.createServiceSecurityGroup(props);
-    this.service = this.createAlbFargateService(props, serviceSecurityGroup, envVars);
+    this.service = this.createAlbFargateService(
+      props,
+      serviceSecurityGroup,
+      envVars
+    );
   }
 
   private createServiceSecurityGroup(props: IProps): ec2.SecurityGroup {
@@ -36,8 +48,16 @@ export class ChatbotApp extends Construct {
       vpc: props.cluster.vpc,
       allowAllOutbound: true,
     });
-    securityGroup.addIngressRule(ec2.Peer.securityGroupId(props.loadBalancerSecurityGroup.securityGroupId), ec2.Port.tcp(8000), "Allow inbound ALB traffic");
-    securityGroup.addIngressRule(ec2.Peer.ipv4(props.cluster.vpc.vpcCidrBlock), ec2.Port.tcp(80), "Allow inbound VPC traffic");
+    securityGroup.addIngressRule(
+      ec2.Peer.securityGroupId(props.loadBalancerSecurityGroup.securityGroupId),
+      ec2.Port.tcp(8000),
+      "Allow inbound ALB traffic"
+    );
+    securityGroup.addIngressRule(
+      ec2.Peer.ipv4(props.cluster.vpc.vpcCidrBlock),
+      ec2.Port.tcp(80),
+      "Allow inbound VPC traffic"
+    );
     return securityGroup;
   }
 
@@ -54,12 +74,30 @@ export class ChatbotApp extends Construct {
       return acc;
     }, {} as { [key: string]: ecs.Secret });
 
+    const certificate = acm.Certificate.fromCertificateArn(
+      this,
+      "Cert",
+      props.cert.certificateArn
+    );
+    const domainZone = route53.HostedZone.fromHostedZoneAttributes(
+      this,
+      "HostedZone",
+      {
+        hostedZoneId: props.cert.hostedZoneId,
+        zoneName: props.cert.domainName,
+      }
+    );
+
     const service = new ApplicationLoadBalancedFargateService(
       this,
       "AlbFargateService",
       {
         cluster: props.cluster,
         loadBalancer: props.loadBalancer,
+        certificate,
+        domainZone,
+        sslPolicy: elbv2.SslPolicy.RECOMMENDED_TLS,
+        redirectHTTP: true,
         taskSubnets: {
           subnetType: ec2.SubnetType.PRIVATE_WITH_EGRESS,
         },
@@ -96,7 +134,10 @@ export class ChatbotApp extends Construct {
           secrets,
         },
         healthCheck: {
-          command: ["CMD-SHELL", "curl -f http://localhost:8000/health || exit 1"],
+          command: [
+            "CMD-SHELL",
+            "curl -f http://localhost:8000/health || exit 1",
+          ],
         },
         runtimePlatform: {
           cpuArchitecture: ecs.CpuArchitecture.X86_64,
@@ -239,7 +280,9 @@ export class ChatbotApp extends Construct {
     return role;
   }
 
-  private createEnvVars(props: IProps): { [key: string]: ssm.IStringParameter}  {
+  private createEnvVars(props: IProps): {
+    [key: string]: ssm.IStringParameter;
+  } {
     const ns = this.node.tryGetContext("ns") as string;
 
     return {

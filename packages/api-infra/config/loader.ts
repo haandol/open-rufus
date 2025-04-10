@@ -15,11 +15,17 @@ interface IConfig {
     apiKey: string;
     callbackUrls: string[];
   };
+  cert: {
+    recordName: string;
+    domainName: string;
+    hostedZoneId: string;
+    certificateArn: string;
+  };
   chatbot: {
     tableName: string;
+    allowIpList: string[];
   };
   cloudfront: {
-    allowIpList: string[];
     secretHeaderName: string;
     secretHeaderValue: string;
   };
@@ -57,17 +63,25 @@ const schema = joi
       apiKey: joi.string().required(),
       callbackUrls: joi.array().items(joi.string()).required(),
     }),
+    cert: joi
+      .object({
+        recordName: joi.string().required(),
+        domainName: joi.string().required(),
+        hostedZoneId: joi.string().required(),
+        certificateArn: joi.string().required(),
+      })
+      .required(),
     chatbot: joi
       .object({
         tableName: joi.string().required(),
-      })
-      .required(),
-    cloudfront: joi
-      .object({
         allowIpList: joi
           .array()
           .items(joi.string().ip({ cidr: "required" }))
           .required(),
+      })
+      .required(),
+    cloudfront: joi
+      .object({
         secretHeaderName: joi.string().required(),
         secretHeaderValue: joi.string().required(),
       })

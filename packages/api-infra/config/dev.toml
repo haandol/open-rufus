@@ -6,16 +6,22 @@ stage = "Dev"
 # vpcId = "vpc-xyz"
 
 [auth]
-apiKey = "98566d541fa1cf9c0e3940395855fe21" # replace with your own
+apiKey = "YOUR_API_KEY"                                                  # generate random 32 length api key
 callbackUrls = ["http://localhost:8000/auth/oauth/aws-cognito/callback"]
+
+[cert]
+recordName = "YOUR_PREFIX"                        # e.g. myapi
+domainName = "YOUR_DOMAIN_NAME"                   # e.g. example.com
+hostedZoneId = "YOUR_ROUTE53_HOSTED_ZONE_ID"
+certificateArn = "YOUR_CERTIFICATION_MANAGER_ARN"
 
 [chatbot]
 tableName = "chatbot"
+allowIpList = []                               # CIDR block notation. e.g. [127.0.0.1/32]
 
 [cloudfront]
-allowIpList = ["127.0.0.1/32"]
 secretHeaderName = "x-cloudfront-secret-key"
-secretHeaderValue = "f22f34134f5d34fd536e4965aa0baf51" # replace with your own
+secretHeaderValue = "YOUR_SECRET_HEADER_VALUE" # same as web-infra
 
 [external.itemSearch]
 indexName = "item-search"

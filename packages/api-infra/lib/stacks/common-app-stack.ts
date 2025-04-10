@@ -11,8 +11,10 @@ interface IProps extends cdk.StackProps {
   readonly vpc: ec2.IVpc;
   readonly tableName: string;
   readonly allowIpList: string[];
-  readonly cfSecretHeaderName: string;
-  readonly cfSecretHeaderValue: string;
+  readonly cloudfront: {
+    secretHeaderName: string;
+    secretHeaderValue: string;
+  };
 }
 
 export class CommonAppStack extends cdk.Stack {
@@ -42,8 +44,8 @@ export class CommonAppStack extends cdk.Stack {
     // setup WAF
     const waf = new WebappWAF(this, "WebappWAF", {
       allowIpList: props.allowIpList,
-      cfSecretHeaderName: props.cfSecretHeaderName,
-      cfSecretHeaderValue: props.cfSecretHeaderValue,
+      cfSecretHeaderName: props.cloudfront.secretHeaderName,
+      cfSecretHeaderValue: props.cloudfront.secretHeaderValue,
     });
     new WebACLAssociation(this, "WebACLAssociation", {
       resourceArn: this.loadBalancer.loadBalancerArn,

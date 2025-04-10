@@ -35,9 +35,8 @@ const vpcStack = new VpcStack(app, `${Config.app.ns}Vpc`, {
 const commonAppStack = new CommonAppStack(app, `${Config.app.ns}CommonApp`, {
   vpc: vpcStack.vpc,
   tableName: Config.chatbot.tableName,
-  allowIpList: Config.cloudfront.allowIpList,
-  cfSecretHeaderName: Config.cloudfront.secretHeaderName,
-  cfSecretHeaderValue: Config.cloudfront.secretHeaderValue,
+  allowIpList: Config.chatbot.allowIpList,
+  cloudfront: Config.cloudfront,
   env: {
     account: process.env.CDK_DEFAULT_ACCOUNT,
     region: process.env.CDK_DEFAULT_REGION,
@@ -49,6 +48,7 @@ const chatbotAppStack = new ChatbotAppStack(app, `${Config.app.ns}ChatbotApp`, {
   cluster: commonAppStack.cluster,
   loadBalancer: commonAppStack.loadBalancer,
   loadBalancerSecurityGroup: commonAppStack.loadBalancerSecurityGroup,
+  cert: Config.cert,
   authApiKey: Config.auth.apiKey,
   itemRecApiHost: Config.external.itemRec.endpoint,
   itemSearchApiHost: Config.external.itemSearch.endpoint,

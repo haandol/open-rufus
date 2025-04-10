@@ -9,6 +9,12 @@ interface IProps extends cdk.StackProps {
   cluster: ecs.ICluster;
   loadBalancer: elbv2.IApplicationLoadBalancer;
   loadBalancerSecurityGroup: ec2.ISecurityGroup;
+  cert: {
+    recordName: string;
+    domainName: string;
+    hostedZoneId: string;
+    certificateArn: string;
+  };
   authApiKey: string;
   itemRecApiHost: string;
   itemSearchApiHost: string;
@@ -23,6 +29,7 @@ export class ChatbotAppStack extends cdk.Stack {
       cluster: props.cluster,
       loadBalancer: props.loadBalancer,
       loadBalancerSecurityGroup: props.loadBalancerSecurityGroup,
+      cert: props.cert,
       authApiKey: props.authApiKey,
       itemRecApiHost: props.itemRecApiHost,
       itemSearchApiHost: props.itemSearchApiHost,
