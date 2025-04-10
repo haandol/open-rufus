@@ -1,6 +1,13 @@
-# Open Rufus Streaming Chatbot API
+# Chatbot Backend (packages/app)
 
-This is a chat API service that provides a streaming response in a streaming manner. It uses the Amazon Bedrock Claude 3 Sonnet model to provide a natural chat experience 🤖✨
+이 패키지는 OpenRufus 프로젝트의 백엔드 애플리케이션입니다.
+
+- **프레임워크:** FastAPI
+- **주요 기능:**
+    - Server-Sent Events (SSE)를 이용한 실시간 채팅 스트리밍
+    - DynamoDB와 연동하여 채팅 데이터 저장 및 조회
+    - Bedrock Converse API를 활용한 챗봇 응답 생성
+- **배포:** AWS ECS 클러스터에서 컨테이너로 실행됩니다.
 
 ## Features
 
