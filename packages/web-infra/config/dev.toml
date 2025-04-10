@@ -2,8 +2,8 @@
 ns = "OpenRufusWebInfra"
 stage = "Dev"
 
-[alb]
-arn = "YOUR_ALB_ARN"
+[api]
+uri = "API_URL" # e.g. example.com
 
 [cloudfront]
 secretHeaderName = "x-cloudfront-secret"

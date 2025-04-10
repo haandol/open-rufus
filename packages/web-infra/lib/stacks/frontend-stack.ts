@@ -5,11 +5,11 @@ import { GithubOIDC } from "../constructs/github-oidc";
 import { Cloudfront } from "../constructs/cloudfront";
 
 interface Props extends cdk.StackProps {
+  apiUri: string;
   repositoryPath: string;
   repositoryBranch: string;
   secretHeaderName: string;
   secretHeaderValue: string;
-  albArn: string;
 }
 
 export class FrontendStack extends cdk.Stack {
@@ -33,7 +33,7 @@ export class FrontendStack extends cdk.Stack {
 
     new Cloudfront(this, `${ns}Cloudfront`, {
       bucket,
-      albArn: props.albArn,
+      apiUri: props.apiUri,
       secretHeaderName: props.secretHeaderName,
       secretHeaderValue: props.secretHeaderValue,
     });

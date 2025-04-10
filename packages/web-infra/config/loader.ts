@@ -8,12 +8,12 @@ interface IConfig {
     ns: string;
     stage: string;
   };
+  api: {
+    uri: string;
+  };
   cloudfront: {
     secretHeaderName: string;
     secretHeaderValue: string;
-  };
-  alb: {
-    arn: string;
   };
   repository: {
     path: string;
@@ -32,9 +32,11 @@ const schema = joi
       ns: joi.string().required(),
       stage: joi.string().required(),
     }),
-    alb: joi.object({
-      arn: joi.string().required(),
-    }),
+    api: joi
+      .object({
+        uri: joi.string().required(),
+      })
+      .required(),
     cloudfront: joi
       .object({
         secretHeaderName: joi.string().required(),

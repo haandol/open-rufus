@@ -239,37 +239,6 @@ export class WebappWAF extends Construct {
         },
       };
 
-    // Block Invalid CloudFront Header
-    const blockInvalidCloudFrontHeader: wafv2.CfnWebACL.RuleProperty = {
-      name: "BlockInvalidCloudFrontHeader",
-      priority: 30,
-      statement: {
-        notStatement: {
-          statement: {
-            byteMatchStatement: {
-              fieldToMatch: {
-                singleHeader: { Name: props.cfSecretHeaderName },
-              },
-              positionalConstraint: "EXACTLY",
-              searchString: props.cfSecretHeaderValue,
-              textTransformations: [
-                {
-                  priority: 0,
-                  type: "NONE",
-                },
-              ],
-            },
-          },
-        },
-      },
-      visibilityConfig: {
-        cloudWatchMetricsEnabled: true,
-        metricName: "BlockInvalidCloudFrontHeader",
-        sampledRequestsEnabled: true,
-      },
-      action: { block: {} },
-    };
-
     // Block AWSManagedRulesCommonRuleSet
     const awsCommonRuleSet: wafv2.CfnWebACL.RuleProperty = {
       name: "AWS-AWSManagedRulesCommonRuleSet",
@@ -323,7 +292,7 @@ export class WebappWAF extends Construct {
     });
     const allowIpListRuleSet: wafv2.CfnWebACL.RuleProperty = {
       name: "AllowIpListRuleSet",
-      priority: 100,
+      priority: 80,
       statement: {
         ipSetReferenceStatement: {
           arn: ipSet.attrArn,
@@ -339,12 +308,39 @@ export class WebappWAF extends Construct {
       },
     };
 
+    // Alow Invalid CloudFront Header
+    const allowInvalidCloudFrontHeader: wafv2.CfnWebACL.RuleProperty = {
+      name: "AllowInvalidCloudFrontHeader",
+      priority: 100,
+      statement: {
+        byteMatchStatement: {
+          fieldToMatch: {
+            singleHeader: { Name: props.cfSecretHeaderName },
+          },
+          positionalConstraint: "EXACTLY",
+          searchString: props.cfSecretHeaderValue,
+          textTransformations: [
+            {
+              priority: 0,
+              type: "NONE",
+            },
+          ],
+        },
+      },
+      visibilityConfig: {
+        cloudWatchMetricsEnabled: true,
+        metricName: "AllowInvalidCloudFrontHeader",
+        sampledRequestsEnabled: true,
+      },
+      action: { allow: {} },
+    };
+
     return [
       awsManagedRulesAmazonIpReputationList,
-      blockInvalidCloudFrontHeader,
       awsCommonRuleSet,
       awsManagedRulesKnownBadInputsRuleSet,
       allowIpListRuleSet,
+      allowInvalidCloudFrontHeader,
     ];
   }
 }

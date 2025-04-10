@@ -3,11 +3,10 @@ import { Construct } from "constructs";
 import * as s3 from "aws-cdk-lib/aws-s3";
 import * as cloudfront from "aws-cdk-lib/aws-cloudfront";
 import * as origins from "aws-cdk-lib/aws-cloudfront-origins";
-import * as elbv2 from "aws-cdk-lib/aws-elasticloadbalancingv2";
 
 interface Props {
+  apiUri: string;
   bucket: s3.IBucket;
-  albArn: string;
   secretHeaderName: string;
   secretHeaderValue: string;
 }
@@ -20,11 +19,7 @@ export class Cloudfront extends Construct {
 
     const ns = this.node.tryGetContext("ns") as string;
 
-    const alb = elbv2.ApplicationLoadBalancer.fromLookup(this, "Alb", {
-      loadBalancerArn: props.albArn,
-    });
-
-    const albOrigin = new origins.LoadBalancerV2Origin(alb, {
+    const apiHttpOrigin = new origins.HttpOrigin(props.apiUri, {
       protocolPolicy: cloudfront.OriginProtocolPolicy.HTTPS_ONLY,
       customHeaders: {
         [props.secretHeaderName]: props.secretHeaderValue,
@@ -50,7 +45,7 @@ export class Cloudfront extends Construct {
       },
       additionalBehaviors: {
         "/api/*": {
-          origin: albOrigin,
+          origin: apiHttpOrigin,
           allowedMethods: cloudfront.AllowedMethods.ALLOW_ALL,
           cachedMethods: cloudfront.CachedMethods.CACHE_GET_HEAD,
           cachePolicy: cloudfront.CachePolicy.CACHING_DISABLED,
