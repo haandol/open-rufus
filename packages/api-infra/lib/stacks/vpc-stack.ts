@@ -1,7 +1,7 @@
 import * as cdk from "aws-cdk-lib";
+import * as nag from "cdk-nag";
 import * as ec2 from "aws-cdk-lib/aws-ec2";
 import { LogGroup, RetentionDays } from "aws-cdk-lib/aws-logs";
-import * as nag from "cdk-nag";
 import { Construct, IConstruct } from "constructs";
 
 interface IProps extends cdk.StackProps {

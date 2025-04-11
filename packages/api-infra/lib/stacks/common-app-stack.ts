@@ -3,7 +3,6 @@ import * as dynamodb from "aws-cdk-lib/aws-dynamodb";
 import * as ec2 from "aws-cdk-lib/aws-ec2";
 import * as ecs from "aws-cdk-lib/aws-ecs";
 import * as elbv2 from "aws-cdk-lib/aws-elasticloadbalancingv2";
-import * as apigw from "aws-cdk-lib/aws-apigatewayv2";
 import { Construct } from "constructs";
 import { WebappWAF, WebACLAssociation } from "../constructs/webapp-waf";
 
@@ -24,8 +23,6 @@ export class CommonAppStack extends cdk.Stack {
   readonly cluster: ecs.ICluster;
   readonly loadBalancer: elbv2.IApplicationLoadBalancer;
   readonly loadBalancerSecurityGroup: ec2.ISecurityGroup;
-  // external api
-  readonly externalApi: apigw.IHttpApi;
 
   constructor(scope: Construct, id: string, props: IProps) {
     super(scope, id, props);
@@ -51,9 +48,6 @@ export class CommonAppStack extends cdk.Stack {
       resourceArn: this.loadBalancer.loadBalancerArn,
       webAclArn: waf.webAcl.attrArn,
     });
-
-    // setup http api
-    this.externalApi = this.createHttpApi();
   }
 
   private newECSCluster(vpc: ec2.IVpc): ecs.Cluster {
@@ -146,35 +140,5 @@ export class CommonAppStack extends cdk.Stack {
       internetFacing: true,
       securityGroup,
     });
-  }
-
-  private createHttpApi(): apigw.HttpApi {
-    const ns = this.node.tryGetContext("ns") as string;
-
-    const api = new apigw.HttpApi(this, "HttpApi", {
-      apiName: `${ns}Api`,
-      corsPreflight: {
-        allowOrigins: ["*"],
-        allowMethods: [
-          apigw.CorsHttpMethod.POST,
-          apigw.CorsHttpMethod.GET,
-          apigw.CorsHttpMethod.PUT,
-          apigw.CorsHttpMethod.DELETE,
-          apigw.CorsHttpMethod.OPTIONS,
-        ],
-        allowHeaders: [
-          "Authorization",
-          "Content-Type",
-          "X-Amzn-Trace-Id",
-          "X-Requested-With",
-        ],
-        allowCredentials: false,
-        maxAge: cdk.Duration.hours(1),
-      },
-    });
-    new cdk.CfnOutput(this, "HttpApiUrl", {
-      value: api.apiEndpoint,
-    });
-    return api;
   }
 }
