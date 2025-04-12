@@ -51,7 +51,12 @@ async def chat(
     Returns:
         Union[StreamingResponse, ChatResponse]: response object
     """
-    return await handle_chat_request(request.messages, request.stream, chat_service)
+    return await handle_chat_request(
+        request.recent_history,
+        request.user_message_content,
+        request.stream,
+        chat_service,
+    )
 
 
 @app.get("/health")

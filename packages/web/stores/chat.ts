@@ -6,7 +6,7 @@ interface Message {
 export const useChatStore = defineStore("chat", () => {
   const config = useRuntimeConfig();
 
-  const messages = ref<Message[]>([]);
+  const recentHistory = ref<Message[]>([]);
   const isLoading = ref(false);
   const error = ref<string | null>(null);
   const isMinimized = ref(false);
@@ -15,7 +15,6 @@ export const useChatStore = defineStore("chat", () => {
     if (!content.trim()) return;
 
     // Add user message
-    messages.value.push({ role: "user", content });
     isLoading.value = true;
     error.value = null;
 
@@ -26,7 +25,8 @@ export const useChatStore = defineStore("chat", () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          messages: messages.value,
+          recent_history: recentHistory.value,
+          user_message: content,
           stream: true,
         }),
       });
@@ -40,8 +40,9 @@ export const useChatStore = defineStore("chat", () => {
       let assistantMessage = "";
 
       // Create a temporary assistant message
-      messages.value.push({ role: "assistant", content: "" });
-      const assistantIndex = messages.value.length - 1;
+      recentHistory.value.push({ role: "user", content });
+      recentHistory.value.push({ role: "assistant", content: "" });
+      const assistantIndex = recentHistory.value.length - 1;
 
       while (true) {
         const { value, done } = await reader.read();
@@ -57,7 +58,7 @@ export const useChatStore = defineStore("chat", () => {
               if (data.content && data.content[0].text) {
                 assistantMessage += data.content[0].text;
                 // Update the last message content
-                messages.value[assistantIndex].content = assistantMessage;
+                recentHistory.value[assistantIndex].content = assistantMessage;
               }
             } catch (e) {
               console.error("JSON 파싱 오류:", e);
@@ -76,7 +77,7 @@ export const useChatStore = defineStore("chat", () => {
   }
 
   function clearMessages() {
-    messages.value = [];
+    recentHistory.value = [];
   }
 
   function toggleMinimize() {
@@ -84,7 +85,7 @@ export const useChatStore = defineStore("chat", () => {
   }
 
   return {
-    messages,
+    recentHistory,
     isLoading,
     error,
     isMinimized,
