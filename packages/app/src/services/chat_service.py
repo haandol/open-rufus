@@ -6,7 +6,7 @@ from typing import List, AsyncGenerator, Optional
 from langchain_aws import ChatBedrockConverse
 from langchain.schema import BaseMessage, SystemMessage, HumanMessage
 
-from src.constant import SYSTEM_PROMPT
+from src.prompts.chat import SYSTEM_PROMPT
 
 
 class ChatService:
