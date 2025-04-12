@@ -46,7 +46,7 @@ const chatbotAppStack = new ChatbotAppStack(app, `${Config.app.ns}ChatbotApp`, {
   loadBalancer: commonAppStack.loadBalancer,
   loadBalancerSecurityGroup: commonAppStack.loadBalancerSecurityGroup,
   cert: Config.cert,
-  chatbotTableName: Config.chatbot.tableName,
+  chatbot: Config.chatbot,
   env: {
     account: process.env.CDK_DEFAULT_ACCOUNT,
     region: process.env.CDK_DEFAULT_REGION,
