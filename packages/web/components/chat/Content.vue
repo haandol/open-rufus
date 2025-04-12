@@ -40,7 +40,7 @@
           </div>
         </div>
         <div class="ml-3 bg-gray-100 px-4 py-2 rounded-lg max-w-[80%]">
-          {{ message.content }}
+          <div v-html="md.render(message.content)"></div>
         </div>
       </div>
     </div>
@@ -62,6 +62,10 @@
 </template>
 
 <script setup lang="ts">
+import markdownit from 'markdown-it'
+
+const md = markdownit()
+
 const chatStore = useChatStore();
 
 const { messages, isLoading, error } = storeToRefs(chatStore);
@@ -119,5 +123,15 @@ const handleSuggestionSelect = (suggestion: Suggestion) => {
   50% {
     opacity: 0.5;
   }
+}
+
+.ml-3 ul {
+  list-style: disc;
+  margin-left: 0.5rem;
+  padding-left: 0.5rem;
+}
+
+.ml-3 li {
+  display: list-item;
 }
 </style>

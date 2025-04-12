@@ -2,7 +2,7 @@
   <Transition name="slide-fade">
     <div v-if="isVisible" :class="[
       'fixed bottom-4 left-4 bg-white rounded-xl shadow-xl flex flex-col z-50',
-      isMinimized ? 'w-[240px] h-[48px]' : 'w-[400px] h-[600px]'
+      isMinimized ? 'w-[240px] h-[48px]' : 'w-[440px] h-[600px]'
     ]">
       <ChatHeader @close="close" @minimize="handleMinimize" />
       <template v-if="!isMinimized">

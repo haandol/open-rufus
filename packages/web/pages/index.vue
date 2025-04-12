@@ -184,5 +184,3 @@ useHead({
   ]
 })
 </script>
-
-<style lang="postcss" scoped></style>

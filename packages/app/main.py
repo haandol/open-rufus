@@ -1,6 +1,8 @@
 import os
 
 from dotenv import load_dotenv
+load_dotenv()
+
 from fastapi import FastAPI, Depends
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -8,8 +10,11 @@ from src.utils.models import ChatRequest
 from src.handlers.chat_handler import handle_chat_request
 from src.services.chat_service import ChatService
 from src.constant import MODEL_TEMPERATURE, MODEL_MAX_TOKENS
+from src.utils.logger import logger
 
-load_dotenv()
+MODEL_NAME = os.getenv("MODEL_NAME")
+assert MODEL_NAME, "MODEL_NAME is not set"
+logger.info("Using model", model_name=MODEL_NAME)
 
 app = FastAPI(title="Open Rufus Chatbot API")
 
@@ -29,8 +34,7 @@ def get_chat_service():
         ChatService: chat service instance
     """
     return ChatService(
-        model=os.getenv(
-            "MODEL_NAME", "us.anthropic.claude-3-7-sonnet-20250219-v1:0"),
+        model=MODEL_NAME,
         temperature=MODEL_TEMPERATURE,
         max_tokens=MODEL_MAX_TOKENS,
     )
