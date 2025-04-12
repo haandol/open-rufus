@@ -6,7 +6,7 @@ interface Message {
 export const useChatStore = defineStore("chat", () => {
   const config = useRuntimeConfig();
 
-  const recentHistory = ref<Message[]>([]);
+  const messages = ref<Message[]>([]);
   const isLoading = ref(false);
   const error = ref<string | null>(null);
   const isMinimized = ref(false);
@@ -25,8 +25,8 @@ export const useChatStore = defineStore("chat", () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          recent_history: recentHistory.value,
-          user_message: content,
+          recent_history: messages.value,
+          user_message_content: content,
           stream: true,
         }),
       });
@@ -40,9 +40,9 @@ export const useChatStore = defineStore("chat", () => {
       let assistantMessage = "";
 
       // Create a temporary assistant message
-      recentHistory.value.push({ role: "user", content });
-      recentHistory.value.push({ role: "assistant", content: "" });
-      const assistantIndex = recentHistory.value.length - 1;
+      messages.value.push({ role: "user", content });
+      messages.value.push({ role: "assistant", content: "" });
+      const assistantIndex = messages.value.length - 1;
 
       while (true) {
         const { value, done } = await reader.read();
@@ -58,7 +58,7 @@ export const useChatStore = defineStore("chat", () => {
               if (data.content && data.content[0].text) {
                 assistantMessage += data.content[0].text;
                 // Update the last message content
-                recentHistory.value[assistantIndex].content = assistantMessage;
+                messages.value[assistantIndex].content = assistantMessage;
               }
             } catch (e) {
               console.error("JSON 파싱 오류:", e);
@@ -77,7 +77,7 @@ export const useChatStore = defineStore("chat", () => {
   }
 
   function clearMessages() {
-    recentHistory.value = [];
+    messages.value = [];
   }
 
   function toggleMinimize() {
@@ -85,7 +85,7 @@ export const useChatStore = defineStore("chat", () => {
   }
 
   return {
-    recentHistory,
+    messages,
     isLoading,
     error,
     isMinimized,
