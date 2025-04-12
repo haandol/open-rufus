@@ -17,6 +17,7 @@ certificateArn = "YOUR_CERTIFICATION_MANAGER_ARN"
 
 [chatbot]
 tableName = "chatbot"
+modelName = "us.anthropic.claude-3-5-haiku-20241022-v1:0"
 allowIpList = []                               # CIDR block notation. e.g. [127.0.0.1/32]
 
 [cloudfront]

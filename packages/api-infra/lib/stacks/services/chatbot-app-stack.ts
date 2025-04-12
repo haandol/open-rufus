@@ -15,7 +15,10 @@ interface IProps extends cdk.StackProps {
     hostedZoneId: string;
     certificateArn: string;
   };
-  chatbotTableName: string;
+  chatbot: {
+    tableName: string;
+    modelName: string;
+  };
 }
 
 export class ChatbotAppStack extends cdk.Stack {
@@ -27,7 +30,7 @@ export class ChatbotAppStack extends cdk.Stack {
       loadBalancer: props.loadBalancer,
       loadBalancerSecurityGroup: props.loadBalancerSecurityGroup,
       cert: props.cert,
-      chatbotTableName: props.chatbotTableName,
+      chatbot: props.chatbot,
     });
   }
 }

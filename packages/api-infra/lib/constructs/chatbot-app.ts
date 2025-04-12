@@ -21,7 +21,10 @@ export interface IProps {
     hostedZoneId: string;
     certificateArn: string;
   };
-  readonly chatbotTableName: string;
+  readonly chatbot: {
+    tableName: string;
+    modelName: string;
+  };
 }
 
 export class ChatbotApp extends Construct {
@@ -266,10 +269,10 @@ export class ChatbotApp extends Construct {
         ],
         resources: [
           `arn:aws:dynamodb:*:${cdk.Stack.of(this).account}:table/${
-            props.chatbotTableName
+            props.chatbot.tableName
           }`,
           `arn:aws:dynamodb:*:${cdk.Stack.of(this).account}:table/${
-            props.chatbotTableName
+            props.chatbot.tableName
           }/index/*`,
         ],
       })
@@ -286,7 +289,13 @@ export class ChatbotApp extends Construct {
       CHATBOT_TABLE_NAME: new ssm.StringParameter(this, "ChatbotTableName", {
         description: "Chatbot table name",
         parameterName: `${ns}ChatbotTableName`,
-        stringValue: props.chatbotTableName,
+        stringValue: props.chatbot.tableName,
+        tier: ssm.ParameterTier.STANDARD,
+      }),
+      MODEL_NAME: new ssm.StringParameter(this, "ModelName", {
+        description: "Bedrock model name",
+        parameterName: `${ns}ModelName`,
+        stringValue: props.chatbot.modelName,
         tier: ssm.ParameterTier.STANDARD,
       }),
     };
