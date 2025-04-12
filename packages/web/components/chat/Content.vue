@@ -4,7 +4,7 @@
     <div v-if="messages.length === 0" class="flex items-start mb-4">
       <div class="flex-shrink-0">
         <div class="w-6 h-6 rounded-full bg-orange-500 flex items-center justify-center">
-          <i class="pi pi-comments text-white text-xs"></i>
+          <img src="/img/chat-profile.png" alt="Chat profile" class="w-4 h-4" />
         </div>
       </div>
       <div class="ml-3">
@@ -36,7 +36,7 @@
       <div v-else class="flex items-start">
         <div class="flex-shrink-0">
           <div class="w-6 h-6 rounded-full bg-orange-500 flex items-center justify-center">
-            <i class="pi pi-comments text-white text-xs"></i>
+            <img src="/img/chat-profile.png" alt="Chat profile" class="w-4 h-4" />
           </div>
         </div>
         <div class="ml-3 bg-gray-100 px-4 py-2 rounded-lg max-w-[80%]">
