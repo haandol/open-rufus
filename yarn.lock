@@ -2384,26 +2384,6 @@ autoprefixer@^10.4.21:
     picocolors "^1.1.1"
     postcss-value-parser "^4.2.0"
 
-aws-cdk-lib@2.187.0:
-  version "2.187.0"
-  resolved "https://registry.yarnpkg.com/aws-cdk-lib/-/aws-cdk-lib-2.187.0.tgz#7b76246abb77cd305cdf2cd00c4f32f9eb38cf67"
-  integrity sha512-OrAWin+LD5sZhRF5cWuEYEkmC/sxxlgcAasCpfzeRsj6yDImwmeQsaKhM7xqzZQBInog6ZbN6oFZYiWEGJMSIA==
-  dependencies:
-    "@aws-cdk/asset-awscli-v1" "^2.2.229"
-    "@aws-cdk/asset-node-proxy-agent-v6" "^2.1.0"
-    "@aws-cdk/cloud-assembly-schema" "^41.0.0"
-    "@balena/dockerignore" "^1.0.2"
-    case "1.6.3"
-    fs-extra "^11.3.0"
-    ignore "^5.3.2"
-    jsonschema "^1.5.0"
-    mime-types "^2.1.35"
-    minimatch "^3.1.2"
-    punycode "^2.3.1"
-    semver "^7.7.1"
-    table "^6.9.0"
-    yaml "1.10.2"
-
 aws-cdk-lib@2.188.0:
   version "2.188.0"
   resolved "https://registry.yarnpkg.com/aws-cdk-lib/-/aws-cdk-lib-2.188.0.tgz#d61ff9b841c1cf0eda368fd22557b8d87b562b06"
@@ -2424,12 +2404,25 @@ aws-cdk-lib@2.188.0:
     table "^6.9.0"
     yaml "1.10.2"
 
-aws-cdk@2.1006.0:
-  version "2.1006.0"
-  resolved "https://registry.yarnpkg.com/aws-cdk/-/aws-cdk-2.1006.0.tgz#21fd99184c5b0eea3c5c384fd5c5209e78569508"
-  integrity sha512-6qYnCt4mBN+3i/5F+FC2yMETkDHY/IL7gt3EuqKVPcaAO4jU7oXfVSlR60CYRkZWL4fnAurUV14RkJuJyVG/IA==
-  optionalDependencies:
-    fsevents "2.3.2"
+aws-cdk-lib@2.189.0:
+  version "2.189.0"
+  resolved "https://registry.yarnpkg.com/aws-cdk-lib/-/aws-cdk-lib-2.189.0.tgz#b5964f1686215834b9f8497c131901c120355147"
+  integrity sha512-B5Uha7uRntOAyuKfU0eFtxij3ZVTzGAbetw5qaXlURa68wsWpKlU72/OyKugB6JYkhjCZkSTVVBxd1pVTosxEw==
+  dependencies:
+    "@aws-cdk/asset-awscli-v1" "^2.2.229"
+    "@aws-cdk/asset-node-proxy-agent-v6" "^2.1.0"
+    "@aws-cdk/cloud-assembly-schema" "^41.0.0"
+    "@balena/dockerignore" "^1.0.2"
+    case "1.6.3"
+    fs-extra "^11.3.0"
+    ignore "^5.3.2"
+    jsonschema "^1.5.0"
+    mime-types "^2.1.35"
+    minimatch "^3.1.2"
+    punycode "^2.3.1"
+    semver "^7.7.1"
+    table "^6.9.0"
+    yaml "1.10.2"
 
 aws-cdk@2.1007.0:
   version "2.1007.0"
@@ -2706,7 +2699,7 @@ case@1.6.3:
   resolved "https://registry.yarnpkg.com/case/-/case-1.6.3.tgz#0a4386e3e9825351ca2e6216c60467ff5f1ea1c9"
   integrity sha512-mzDSXIPaFwVDvZAHqZ9VlbyF4yyXRuX6IvB06WvPYkqJVO24kX1PPhv9bfpKNFZyxYFmmgo03HUiD8iklmJYRQ==
 
-cdk-nag@^2.35.66:
+cdk-nag@^2.35.68:
   version "2.35.68"
   resolved "https://registry.yarnpkg.com/cdk-nag/-/cdk-nag-2.35.68.tgz#3b8c76cf5de6aa96211cac6062d98c43ec7f5c71"
   integrity sha512-B5pWiM/q7+LXCU8G92i1yrhTKXgW9iUEB/gUjD9jTmpkXB8gdVJgayUSj8P6CogYg94vQrXiVsLgpu641Tv7Sw==
@@ -7105,7 +7098,7 @@ type-fest@^4.18.2, type-fest@^4.38.0:
   resolved "https://registry.yarnpkg.com/type-fest/-/type-fest-4.39.1.tgz#7521f6944e279abaf79cf60cfbc4823f4858083e"
   integrity sha512-uW9qzd66uyHYxwyVBYiwS4Oi0qZyUqwjU+Oevr6ZogYiXt99EOYtwvzMSLw1c3lYo2HzJsep/NB23iEVEgjG/w==
 
-typescript@^5.8.3, typescript@~5.8.2, typescript@~5.8.3:
+typescript@^5.8.3, typescript@~5.8.3:
   version "5.8.3"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-5.8.3.tgz#92f8a3e5e3cf497356f4178c34cd65a7f5e8440e"
   integrity sha512-p1diW6TqL9L07nNxvRMM7hMMw4c5XOo/1ibL4aAIGmSAt9slTE1Xgw5KWuof2uTOvCg9BY7ZRi+GaF+7sfgPeQ==
