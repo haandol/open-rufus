@@ -14,10 +14,14 @@ RUN apt-get update && \
 RUN curl -LsSf https://astral.sh/uv/install.sh | sh
 ENV PATH="/root/.local/bin/:$PATH"
 
-# copy source code
-COPY . /app
+# install dependencies
+COPY pyproject.toml /app
+COPY uv.lock /app
 RUN uv sync --frozen --no-install-project --no-dev
 
+# copy source code
+COPY main.py /app
+COPY src /app/src
 # copy env
 COPY env/dev.env /app/.env
 
