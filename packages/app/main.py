@@ -6,7 +6,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from src.utils.models import ChatRequest
 from src.handlers.chat_handler import handle_chat_request
-from src.services.llm_service import LLMService
+from src.services.chat_service import ChatService
 from src.constant import MODEL_TEMPERATURE, MODEL_MAX_TOKENS
 
 load_dotenv()
@@ -21,14 +21,14 @@ app.add_middleware(
 )
 
 
-def get_llm_service():
+def get_chat_service():
     """
-    return LLM service instance
+    return chat service instance
 
     Returns:
-        LLMService: LLM service instance
+        ChatService: chat service instance
     """
-    return LLMService(
+    return ChatService(
         model=os.getenv("MODEL_NAME", "us.anthropic.claude-3-7-sonnet-20250219-v1:0"),
         temperature=MODEL_TEMPERATURE,
         max_tokens=MODEL_MAX_TOKENS,
@@ -37,7 +37,7 @@ def get_llm_service():
 
 @app.post("/api/chat")
 async def chat(
-    request: ChatRequest, llm_service: LLMService = Depends(get_llm_service)
+    request: ChatRequest, chat_service: ChatService = Depends(get_chat_service)
 ):
     """
     handle chat request
@@ -49,7 +49,7 @@ async def chat(
     Returns:
         Union[StreamingResponse, ChatResponse]: response object
     """
-    return await handle_chat_request(request.messages, request.stream, llm_service)
+    return await handle_chat_request(request.messages, request.stream, chat_service)
 
 
 @app.get("/health")

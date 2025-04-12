@@ -5,7 +5,7 @@ from fastapi import HTTPException
 from fastapi.responses import StreamingResponse
 
 from src.utils.message_utils import convert_to_langchain_messages
-from src.services.llm_service import LLMService
+from src.services.chat_service import ChatService
 
 
 class ChatResponse:
@@ -14,7 +14,7 @@ class ChatResponse:
 
 
 async def handle_chat_request(
-    messages: List[Dict[str, Any]], stream: bool = True, llm_service: LLMService = None
+    messages: List[Dict[str, Any]], stream: bool = True, chat_service: ChatService = None
 ):
     """
     handle chat request
@@ -22,17 +22,17 @@ async def handle_chat_request(
     Args:
         messages (List[Dict[str, Any]]): chat message list
         stream (bool, optional): whether to stream response. default is True.
-        llm_service (LLMService, optional): LLM service instance
+        chat_service (ChatService, optional): chat service instance
 
     Returns:
         Union[StreamingResponse, ChatResponse]: response object
     """
     langchain_messages = convert_to_langchain_messages(messages)
 
+    # if not streaming, generate complete response
     if not stream:
-        # if not streaming, generate complete response
         try:
-            response_content = await llm_service.generate_complete_response(
+            response_content = await chat_service.generate_complete_response(
                 langchain_messages
             )
             return ChatResponse(content=response_content)
@@ -42,7 +42,7 @@ async def handle_chat_request(
 
     # SSE streaming response
     return StreamingResponse(
-        llm_service.generate_streaming_response(langchain_messages),
+        chat_service.generate_streaming_response(langchain_messages),
         media_type="text/event-stream",
         headers={
             "Cache-Control": "no-cache",
