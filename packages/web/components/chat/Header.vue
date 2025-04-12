@@ -1,8 +1,8 @@
 <template>
   <div class="flex items-center justify-between p-3 bg-white rounded-t-xl">
     <div class="flex items-center">
-      <img src="/img/rufus-logo.png" alt="Rufus" class="w-6 h-6 mr-2" />
-      <span v-if="!isMinimized" class="font-semibold text-gray-800 text-sm">Open Rufus</span>
+      <img src="/img/chat-logo.png" alt="Coco" class="w-6 h-6 mr-2" />
+      <span v-if="!isMinimized" class="font-semibold text-gray-800 text-sm">Open Coco</span>
     </div>
     <div class="flex items-center gap-2">
       <button @click="emit('minimize')" class="text-gray-400 hover:text-gray-600 cursor-pointer">

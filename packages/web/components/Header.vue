@@ -5,7 +5,7 @@
       <HeaderSearch />
       <HeaderActions />
     </div>
-    <HeaderNav @click-rufus="onClickRufus" />
+    <HeaderNav @click-chat="onClickChat" />
   </div>
   <ChatBot :is-visible="isChatBotVisible" @close="onCloseChatBot" />
 </template>
@@ -16,7 +16,7 @@ const { isMinimized } = storeToRefs(chatStore);
 
 const isChatBotVisible = ref(false);
 
-const onClickRufus = () => {
+const onClickChat = () => {
   isChatBotVisible.value = true;
 };
 
