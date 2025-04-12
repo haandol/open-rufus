@@ -1,0 +1,15 @@
+{
+  "name": "api",
+  "root": "packages/app",
+  "sourceRoot": "packages/app",
+  "projectType": "application",
+  "targets": {
+    "dev": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "uv run -- uvicorn main:app --host 0.0.0.0 --port 8000",
+        "cwd": "packages/app"
+      }
+    }
+  }
+}
