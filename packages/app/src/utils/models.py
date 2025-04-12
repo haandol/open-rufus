@@ -7,10 +7,12 @@ class ChatRequest(BaseModel):
     chat request model
 
     Attributes:
-        messages (List[dict]): chat message list
+        recent_history (List[dict]): recent history
+        user_message_content (str): user message content
         stream (bool): whether to stream response (default: True)
     """
-    messages: List[dict]
+    recent_history: List[dict]
+    user_message_content: str
     stream: bool = True
 
 

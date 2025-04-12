@@ -29,7 +29,8 @@ def get_chat_service():
         ChatService: chat service instance
     """
     return ChatService(
-        model=os.getenv("MODEL_NAME", "us.anthropic.claude-3-7-sonnet-20250219-v1:0"),
+        model=os.getenv(
+            "MODEL_NAME", "us.anthropic.claude-3-7-sonnet-20250219-v1:0"),
         temperature=MODEL_TEMPERATURE,
         max_tokens=MODEL_MAX_TOKENS,
     )
@@ -37,7 +38,8 @@ def get_chat_service():
 
 @app.post("/api/chat")
 async def chat(
-    request: ChatRequest, chat_service: ChatService = Depends(get_chat_service)
+    request: ChatRequest,
+    chat_service: ChatService = Depends(get_chat_service),
 ):
     """
     handle chat request
