@@ -6,9 +6,9 @@
   "private": true,
   "dependencies": {},
   "devDependencies": {
-    "nx": "20.7.0",
-    "tslib": "^2.3.0",
-    "typescript": "~5.7.2"
+    "nx": "20.7.2",
+    "tslib": "^2.8.1",
+    "typescript": "~5.8.3"
   },
   "workspaces": [
     "packages/*"
