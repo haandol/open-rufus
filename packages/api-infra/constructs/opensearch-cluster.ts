@@ -30,7 +30,6 @@ export class OpensearchCluster extends Construct {
     securityGroup: ec2.ISecurityGroup
   ): oss.Domain {
     const isProd = this.node.tryGetContext("isProd") as boolean;
-    console.log("isProd", isProd);
 
     const openSearchPolicy = new iam.PolicyStatement({
       effect: iam.Effect.ALLOW,
@@ -39,17 +38,11 @@ export class OpensearchCluster extends Construct {
       resources: ["*"],
     });
 
-    const zoneAwareness: oss.ZoneAwarenessConfig | undefined = isProd
-      ? {
-          enabled: true,
-          availabilityZoneCount: 3,
-        }
-      : undefined;
-
     const domain = new oss.Domain(this, "OpenSearchDomain", {
       vpc,
       vpcSubnets: [{ subnetType: ec2.SubnetType.PRIVATE_WITH_EGRESS }],
       version: oss.EngineVersion.OPENSEARCH_2_17,
+      tlsSecurityPolicy: oss.TLSSecurityPolicy.TLS_1_2,
       nodeToNodeEncryption: true,
       encryptionAtRest: {
         enabled: true,
@@ -61,13 +54,19 @@ export class OpensearchCluster extends Construct {
         volumeType: ec2.EbsDeviceVolumeType.GP3,
       },
       capacity: {
-        masterNodes: isProd ? 1 : 0,
         masterNodeInstanceType: "r7g.large.search",
-        dataNodes: isProd ? 3 : 1,
+        masterNodes: 3,
         dataNodeInstanceType: "r7g.large.search",
+        dataNodes: 3,
+        multiAzWithStandbyEnabled: false,
       },
+      zoneAwareness: {
+        enabled: true,
+        availabilityZoneCount: 3,
+      },
+      enableAutoSoftwareUpdate: true,
+      enableVersionUpgrade: true,
       securityGroups: [securityGroup],
-      zoneAwareness,
       removalPolicy: isProd
         ? cdk.RemovalPolicy.RETAIN
         : cdk.RemovalPolicy.DESTROY,

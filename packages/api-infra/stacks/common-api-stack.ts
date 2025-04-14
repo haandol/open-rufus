@@ -1,15 +1,12 @@
 import * as path from "path";
 import * as cdk from "aws-cdk-lib";
 import { Construct } from "constructs";
-import * as ec2 from "aws-cdk-lib/aws-ec2";
 import * as apigw from "aws-cdk-lib/aws-apigatewayv2";
 import * as authorizers from "aws-cdk-lib/aws-apigatewayv2-authorizers";
 import * as lambda from "aws-cdk-lib/aws-lambda";
 import * as iam from "aws-cdk-lib/aws-iam";
-import { OpensearchCluster } from "../constructs/opensearch-cluster";
 
 interface IProps extends cdk.StackProps {
-  readonly vpc: ec2.IVpc;
   readonly authApiKey: string;
 }
 
@@ -17,8 +14,6 @@ export class CommonAPIStack extends cdk.Stack {
   // http api
   readonly httpApi: apigw.HttpApi;
   readonly authorizer: apigw.IHttpRouteAuthorizer;
-  // opensearch
-  readonly opensearchCluster: OpensearchCluster;
 
   constructor(scope: Construct, id: string, props: IProps) {
     super(scope, id, props);
@@ -26,11 +21,6 @@ export class CommonAPIStack extends cdk.Stack {
     // setup http api
     this.httpApi = this.createHttpApi();
     this.authorizer = this.createAuthorizer(props.authApiKey);
-
-    // setup opensearch
-    this.opensearchCluster = new OpensearchCluster(this, "Opensearch", {
-      vpc: props.vpc,
-    });
   }
 
   private createHttpApi(): apigw.HttpApi {
