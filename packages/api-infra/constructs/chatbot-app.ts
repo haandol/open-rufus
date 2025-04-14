@@ -113,7 +113,7 @@ export class ChatbotApp extends Construct {
           taskRole,
           executionRole,
           image: ecs.ContainerImage.fromAsset(
-            path.join(__dirname, "..", "..", "..", "app"),
+            path.join(__dirname, "..", "..", "app"),
             {
               file: "Dockerfile",
               platform: Platform.LINUX_AMD64,

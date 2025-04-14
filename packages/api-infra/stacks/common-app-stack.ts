@@ -5,7 +5,6 @@ import * as ecs from "aws-cdk-lib/aws-ecs";
 import * as elbv2 from "aws-cdk-lib/aws-elasticloadbalancingv2";
 import { Construct } from "constructs";
 import { WebappWAF, WebACLAssociation } from "../constructs/webapp-waf";
-import { OpensearchCluster } from "../constructs/opensearch-cluster";
 
 interface IProps extends cdk.StackProps {
   readonly vpc: ec2.IVpc;
@@ -24,8 +23,6 @@ export class CommonAppStack extends cdk.Stack {
   readonly cluster: ecs.ICluster;
   readonly loadBalancer: elbv2.IApplicationLoadBalancer;
   readonly loadBalancerSecurityGroup: ec2.ISecurityGroup;
-  // opensearch
-  readonly opensearchCluster: OpensearchCluster;
 
   constructor(scope: Construct, id: string, props: IProps) {
     super(scope, id, props);
@@ -50,11 +47,6 @@ export class CommonAppStack extends cdk.Stack {
     new WebACLAssociation(this, "WebACLAssociation", {
       resourceArn: this.loadBalancer.loadBalancerArn,
       webAclArn: waf.webAcl.attrArn,
-    });
-
-    // setup opensearch
-    this.opensearchCluster = new OpensearchCluster(this, "Opensearch", {
-      vpc: props.vpc,
     });
   }
 

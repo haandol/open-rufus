@@ -3,6 +3,11 @@ import * as path from "path";
 import * as joi from "joi";
 import * as toml from "toml";
 
+interface IExternalConfig {
+  apiKey: string;
+  indexName: string;
+}
+
 interface IConfig {
   app: {
     ns: string;
@@ -28,6 +33,10 @@ interface IConfig {
   cloudfront: {
     secretHeaderName: string;
     secretHeaderValue: string;
+  };
+  external: {
+    itemSearch: IExternalConfig;
+    itemRecommend: IExternalConfig;
   };
 }
 
@@ -76,6 +85,18 @@ const schema = joi
       .object({
         secretHeaderName: joi.string().required(),
         secretHeaderValue: joi.string().required(),
+      })
+      .required(),
+    external: joi
+      .object({
+        itemSearch: joi.object({
+          apiKey: joi.string().required(),
+          indexName: joi.string().required(),
+        }),
+        itemRecommend: joi.object({
+          apiKey: joi.string().required(),
+          indexName: joi.string().required(),
+        }),
       })
       .required(),
   })

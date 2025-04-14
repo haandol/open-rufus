@@ -30,6 +30,7 @@ export class OpensearchCluster extends Construct {
     securityGroup: ec2.ISecurityGroup
   ): oss.Domain {
     const isProd = this.node.tryGetContext("isProd") as boolean;
+    console.log("isProd", isProd);
 
     const openSearchPolicy = new iam.PolicyStatement({
       effect: iam.Effect.ALLOW,
@@ -38,6 +39,13 @@ export class OpensearchCluster extends Construct {
       resources: ["*"],
     });
 
+    const zoneAwareness: oss.ZoneAwarenessConfig | undefined = isProd
+      ? {
+          enabled: true,
+          availabilityZoneCount: 3,
+        }
+      : undefined;
+
     const domain = new oss.Domain(this, "OpenSearchDomain", {
       vpc,
       vpcSubnets: [{ subnetType: ec2.SubnetType.PRIVATE_WITH_EGRESS }],
@@ -45,9 +53,6 @@ export class OpensearchCluster extends Construct {
       nodeToNodeEncryption: true,
       encryptionAtRest: {
         enabled: true,
-      },
-      zoneAwareness: {
-        enabled: isProd,
       },
       enforceHttps: true,
       accessPolicies: [openSearchPolicy],
@@ -62,6 +67,7 @@ export class OpensearchCluster extends Construct {
         dataNodeInstanceType: "r7g.large.search",
       },
       securityGroups: [securityGroup],
+      zoneAwareness,
       removalPolicy: isProd
         ? cdk.RemovalPolicy.RETAIN
         : cdk.RemovalPolicy.DESTROY,

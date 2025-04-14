@@ -1,9 +1,11 @@
 import * as cdk from "aws-cdk-lib";
 import { Config } from "../config/loader";
-import { VpcStack } from "../lib/stacks/vpc-stack";
-import { CommonAppStack } from "../lib/stacks/common-app-stack";
-import { AuthStack } from "../lib/stacks/auth-stack";
-import { ChatbotAppStack } from "../lib/stacks/services/chatbot-app-stack";
+import { VpcStack } from "../stacks/vpc-stack";
+import { CommonAppStack } from "../stacks/common-app-stack";
+import { AuthStack } from "../stacks/auth-stack";
+import { ChatbotAppStack } from "../stacks/services/chatbot-app-stack";
+import { CommonAPIStack } from "../stacks/common-api-stack";
+import { ItemSearchAPIStack } from "../stacks/services/item-search-api-stack";
 
 const app = new cdk.App({
   context: {
@@ -41,6 +43,7 @@ const commonAppStack = new CommonAppStack(app, `${Config.app.ns}CommonApp`, {
 });
 commonAppStack.addDependency(vpcStack);
 
+/* Services */
 const chatbotAppStack = new ChatbotAppStack(app, `${Config.app.ns}ChatbotApp`, {
   cluster: commonAppStack.cluster,
   loadBalancer: commonAppStack.loadBalancer,
@@ -53,6 +56,36 @@ const chatbotAppStack = new ChatbotAppStack(app, `${Config.app.ns}ChatbotApp`, {
   },
 });
 chatbotAppStack.addDependency(commonAppStack);
+
+/* External Services */
+const commonApiStack = new CommonAPIStack(app, `${Config.app.ns}CommonAPI`, {
+  vpc: vpcStack.vpc,
+  authApiKey: Config.external.itemSearch.apiKey,
+  env: {
+    account: process.env.CDK_DEFAULT_ACCOUNT,
+    region: process.env.CDK_DEFAULT_REGION,
+  },
+});
+commonApiStack.addDependency(vpcStack);
+
+const itemSearchAPIStack = new ItemSearchAPIStack(
+  app,
+  `${Config.app.ns}ItemSearchAPI`,
+  {
+    vpc: vpcStack.vpc,
+    osDomain: commonApiStack.opensearchCluster.domain,
+    osSecurityGroup: commonApiStack.opensearchCluster.securityGroup,
+    api: commonApiStack.httpApi,
+    authorizer: commonApiStack.authorizer,
+    indexName: Config.external.itemSearch.indexName,
+    authApiKey: Config.external.itemSearch.apiKey,
+    env: {
+      account: process.env.CDK_DEFAULT_ACCOUNT,
+      region: process.env.CDK_DEFAULT_REGION,
+    },
+  }
+);
+itemSearchAPIStack.addDependency(commonApiStack);
 
 const tags = cdk.Tags.of(app);
 tags.add("namespace", Config.app.ns);
