@@ -43,7 +43,7 @@ const commonAppStack = new CommonAppStack(app, `${Config.app.ns}CommonApp`, {
 });
 commonAppStack.addDependency(vpcStack);
 
-/* Services */
+// Chatbot App
 const chatbotAppStack = new ChatbotAppStack(app, `${Config.app.ns}ChatbotApp`, {
   cluster: commonAppStack.cluster,
   loadBalancer: commonAppStack.loadBalancer,
@@ -57,9 +57,8 @@ const chatbotAppStack = new ChatbotAppStack(app, `${Config.app.ns}ChatbotApp`, {
 });
 chatbotAppStack.addDependency(commonAppStack);
 
-/* External Services */
+// External APIs
 const commonApiStack = new CommonAPIStack(app, `${Config.app.ns}CommonAPI`, {
-  vpc: vpcStack.vpc,
   authApiKey: Config.external.itemSearch.apiKey,
   env: {
     account: process.env.CDK_DEFAULT_ACCOUNT,
@@ -68,13 +67,14 @@ const commonApiStack = new CommonAPIStack(app, `${Config.app.ns}CommonAPI`, {
 });
 commonApiStack.addDependency(vpcStack);
 
+// Item Search API
 const itemSearchAPIStack = new ItemSearchAPIStack(
   app,
   `${Config.app.ns}ItemSearchAPI`,
   {
     vpc: vpcStack.vpc,
-    osDomain: commonApiStack.opensearchCluster.domain,
-    osSecurityGroup: commonApiStack.opensearchCluster.securityGroup,
+    osDomain: commonAppStack.opensearchCluster.domain,
+    osSecurityGroup: commonAppStack.opensearchCluster.securityGroup,
     api: commonApiStack.httpApi,
     authorizer: commonApiStack.authorizer,
     indexName: Config.external.itemSearch.indexName,
@@ -85,6 +85,7 @@ const itemSearchAPIStack = new ItemSearchAPIStack(
     },
   }
 );
+itemSearchAPIStack.addDependency(commonAppStack);
 itemSearchAPIStack.addDependency(commonApiStack);
 
 const tags = cdk.Tags.of(app);
