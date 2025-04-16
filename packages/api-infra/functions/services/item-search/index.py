@@ -64,11 +64,10 @@ def search_item() -> Response:
     items = []
     try:
         s = Search(using=client, index=INDEX_NAME)
-
         if category and name:
             s = s.query(
                 "bool",
-                should=[
+                must=[
                     Q("match", name=name),
                     Q("match", category=category),
                 ],
