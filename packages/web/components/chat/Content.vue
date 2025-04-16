@@ -45,7 +45,7 @@
       </div>
 
       <!-- Tool message with products -->
-      <div v-else-if="message.role === 'tool' && message.content && message.content.length > 0"
+      <div v-else-if="message.role === 'tool' && message.content && message.content.json && message.content.json.products && message.content.json.products.length > 0"
         class="flex items-start">
         <div class="flex-shrink-0">
           <div class="w-6 h-6 rounded-full bg-orange-500 flex items-center justify-center">
@@ -55,8 +55,21 @@
         <div class="ml-3 bg-gray-100 px-4 py-2 rounded-lg max-w-[80%]">
           <h3 class="text-sm font-bold text-gray-700 mb-2">추천 상품:</h3>
           <div class="space-y-2">
-            <ChatProductCard v-for="product in message.content" :key="product.id" :product="product" />
+            <ChatProductCard v-for="product in message.content.json.products" :key="product.id" :product="product" />
           </div>
+        </div>
+      </div>
+      
+      <!-- Tool message with text -->
+      <div v-else-if="message.role === 'tool' && message.content && message.content.text"
+        class="flex items-start">
+        <div class="flex-shrink-0">
+          <div class="w-6 h-6 rounded-full bg-orange-500 flex items-center justify-center">
+            <img src="/img/chat-profile.png" alt="Chat profile" class="w-4 h-4" />
+          </div>
+        </div>
+        <div class="ml-3 bg-gray-100 px-4 py-2 rounded-lg max-w-[80%]">
+          <div v-html="md.render(message.content.text)"></div>
         </div>
       </div>
     </div>

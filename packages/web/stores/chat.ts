@@ -3,6 +3,7 @@ interface Message {
   content: string | any;
   tool_call_id?: string;
   name?: string;
+  tool_calls?: any[];
 }
 
 export const useChatStore = defineStore("chat", () => {
@@ -78,14 +79,42 @@ export const useChatStore = defineStore("chat", () => {
                 return;
               }
 
-              if (data.role === "assistant" && data.content) {
-                assistantMessage += data.content;
-                // Update the last message content
-                messages.value[assistantIndex].content = assistantMessage;
+              if (data.role === "assistant") {
+                if (data.content) {
+                  assistantMessage += data.content;
+                  // Update the last message content
+                  messages.value[assistantIndex].content = assistantMessage;
+                } else if (data.tool_calls) {
+                  messages.value[assistantIndex].tool_calls = data.tool_calls;
+                } else {
+                  console.error("Unknown assistant message:", data);
+                }
               } else if (data.role === "tool") {
+                // AWS Bedrock API 요구사항에 맞는 정확한 형식으로 변경
+                let formattedContent;
+
+                if (Array.isArray(data.content)) {
+                  // 배열인 경우 객체 배열로 변환
+                  formattedContent = {
+                    json: {
+                      products: data.content,
+                    },
+                  };
+                } else if (typeof data.content === "object") {
+                  // 이미 객체인 경우
+                  formattedContent = {
+                    json: data.content,
+                  };
+                } else {
+                  // 문자열이나 다른 타입인 경우
+                  formattedContent = {
+                    text: data.content?.toString() || "",
+                  };
+                }
+
                 messages.value.push({
                   role: "tool",
-                  content: data.content,
+                  content: formattedContent,
                   tool_call_id: data.tool_call_id,
                   name: data.name,
                 });
@@ -93,6 +122,8 @@ export const useChatStore = defineStore("chat", () => {
                 messages.value.push({ role: "assistant", content: "" });
                 assistantIndex = messages.value.length - 1;
                 assistantMessage = "";
+              } else {
+                console.error("Unknown message:", data);
               }
             } catch (e) {
               console.error("JSON 파싱 오류:", e);

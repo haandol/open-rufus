@@ -111,6 +111,7 @@ class ChatService:
                 
             # 도구 호출이 있는 경우 처리
             if ai_message and ai_message.tool_calls:
+                yield f"data: {json.dumps({'role': 'assistant', 'tool_calls': ai_message.tool_calls})}\n\n"
                 # 대화에 AI 메시지 추가 (이미 스트리밍됨)
                 current_messages = messages + [ai_message]
                 
@@ -128,13 +129,19 @@ class ChatService:
                         tool_result = self.tool_dict[tool_name](**tool_args)
                         logger.info(f"Tool result for {tool_name}: {tool_result}")
                         
-                        # 도구 결과 전송
+                        # 도구 결과 전송 - this is for the frontend (keep raw result)
                         yield f"data: {json.dumps({'role': 'tool', 'tool_call_id': tool_call_id, 'name': tool_name, 'content': tool_result})}\n\n"
                         await asyncio.sleep(0)
                         
-                        # 도구 결과 메시지 생성
+                        # 도구 결과 메시지 생성 - Let LangChain handle Bedrock formatting
+                        # Pass string content to ToolMessage
+                        if isinstance(tool_result, (dict, list)):
+                            string_content = json.dumps(tool_result)
+                        else:
+                            string_content = str(tool_result)
+                        
                         tool_message = ToolMessage(
-                            content=str(tool_result) if not isinstance(tool_result, str) else tool_result,
+                            content=string_content, # Pass stringified content
                             tool_call_id=tool_call_id,
                             name=tool_name
                         )
@@ -207,5 +214,19 @@ class ChatService:
             if msg["role"] == "user":
                 langchain_messages.append(HumanMessage(content=msg["content"]))
             elif msg["role"] == "assistant":
-                langchain_messages.append(AIMessage(content=msg["content"]))
+                langchain_messages.append(AIMessage(content=msg["content"], tool_calls=msg.get("tool_calls", [])))
+            elif msg["role"] == "tool":
+                # Format tool result content as string for LangChain ToolMessage
+                content = msg["content"]
+                if isinstance(content, (dict, list)):
+                    string_content = json.dumps(content)
+                else:
+                    string_content = str(content)
+                
+                langchain_messages.append(ToolMessage(
+                    content=string_content, # Pass stringified content
+                    tool_call_id=msg["tool_call_id"],
+                    name=msg["name"]
+                ))
+        logger.info(f"langchain_messages: {langchain_messages}")
         return langchain_messages
