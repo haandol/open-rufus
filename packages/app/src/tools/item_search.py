@@ -50,7 +50,7 @@ def item_search(name: str = "", category: str = "") -> list:
         "limit": 5,
     }
     resp = requests.get(
-        f"{ITEM_SEARCH_API_URL}/v1/search/item",
+        f"{ITEM_SEARCH_API_URL}/v1/search/item/",
         params=params,
         headers=headers,
         verify=False,
