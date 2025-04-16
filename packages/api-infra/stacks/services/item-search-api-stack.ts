@@ -16,7 +16,6 @@ interface IProps extends cdk.StackProps {
   indexName: string;
   api: apigw.IHttpApi;
   authorizer: apigw.IHttpRouteAuthorizer;
-  authApiKey: string;
 }
 
 export class ItemSearchAPIStack extends cdk.Stack {
@@ -27,8 +26,7 @@ export class ItemSearchAPIStack extends cdk.Stack {
       props.vpc,
       props.osSecurityGroup,
       props.osDomain,
-      props.indexName,
-      props.authApiKey
+      props.indexName
     );
     this.registerItemSearchAPIRoutes(props.api, props.authorizer, fn);
 
@@ -50,8 +48,7 @@ export class ItemSearchAPIStack extends cdk.Stack {
     vpc: ec2.IVpc,
     securityGroup: ec2.ISecurityGroup,
     osDomain: oss.IDomain,
-    indexName: string,
-    authApiKey: string
+    indexName: string
   ): lambda.Function {
     const ns = this.node.tryGetContext("ns") as string;
 
@@ -128,7 +125,6 @@ export class ItemSearchAPIStack extends cdk.Stack {
       environment: {
         OPENSEARCH_HOST: `${osDomain.domainEndpoint}`,
         INDEX_NAME: indexName,
-        API_KEY: authApiKey,
       },
       securityGroups: [securityGroup],
       vpc,

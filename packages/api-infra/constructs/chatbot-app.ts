@@ -25,6 +25,10 @@ export interface IProps {
     tableName: string;
     modelName: string;
   };
+  readonly externalApi: {
+    url: string;
+    apiKey: string;
+  };
 }
 
 export class ChatbotApp extends Construct {
@@ -296,6 +300,18 @@ export class ChatbotApp extends Construct {
         description: "Bedrock model name",
         parameterName: `${ns}ModelName`,
         stringValue: props.chatbot.modelName,
+        tier: ssm.ParameterTier.STANDARD,
+      }),
+      ITEM_SEARCH_API_URL: new ssm.StringParameter(this, "ItemSearchApiUrl", {
+        description: "Item search API URL",
+        parameterName: `${ns}ItemSearchApiUrl`,
+        stringValue: props.externalApi.url,
+        tier: ssm.ParameterTier.STANDARD,
+      }),
+      ITEM_SEARCH_API_KEY: new ssm.StringParameter(this, "ItemSearchApiKey", {
+        description: "Item search API key",
+        parameterName: `${ns}ItemSearchApiKey`,
+        stringValue: props.externalApi.apiKey,
         tier: ssm.ParameterTier.STANDARD,
       }),
     };

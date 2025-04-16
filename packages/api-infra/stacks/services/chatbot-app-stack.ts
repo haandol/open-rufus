@@ -19,6 +19,10 @@ interface IProps extends cdk.StackProps {
     tableName: string;
     modelName: string;
   };
+  externalApi: {
+    url: string;
+    apiKey: string;
+  };
 }
 
 export class ChatbotAppStack extends cdk.Stack {
@@ -31,6 +35,7 @@ export class ChatbotAppStack extends cdk.Stack {
       loadBalancerSecurityGroup: props.loadBalancerSecurityGroup,
       cert: props.cert,
       chatbot: props.chatbot,
+      externalApi: props.externalApi,
     });
   }
 }

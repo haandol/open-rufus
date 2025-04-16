@@ -3,9 +3,11 @@ import * as dynamodb from "aws-cdk-lib/aws-dynamodb";
 import * as ec2 from "aws-cdk-lib/aws-ec2";
 import * as ecs from "aws-cdk-lib/aws-ecs";
 import * as elbv2 from "aws-cdk-lib/aws-elasticloadbalancingv2";
+import * as apigw from "aws-cdk-lib/aws-apigatewayv2";
 import { Construct } from "constructs";
 import { WebappWAF, WebACLAssociation } from "../constructs/webapp-waf";
 import { OpensearchCluster } from "../constructs/opensearch-cluster";
+import { HttpAPIGateway } from "../constructs/external-api-gateway";
 
 interface IProps extends cdk.StackProps {
   readonly vpc: ec2.IVpc;
@@ -15,6 +17,7 @@ interface IProps extends cdk.StackProps {
     secretHeaderName: string;
     secretHeaderValue: string;
   };
+  readonly externalApiKey: string;
 }
 
 export class CommonAppStack extends cdk.Stack {
@@ -26,6 +29,8 @@ export class CommonAppStack extends cdk.Stack {
   readonly loadBalancerSecurityGroup: ec2.ISecurityGroup;
   // opensearch
   readonly opensearchCluster: OpensearchCluster;
+  // external api
+  readonly externalApi: HttpAPIGateway;
 
   constructor(scope: Construct, id: string, props: IProps) {
     super(scope, id, props);
@@ -52,9 +57,14 @@ export class CommonAppStack extends cdk.Stack {
       webAclArn: waf.webAcl.attrArn,
     });
 
+    // for external services
     // setup opensearch
     this.opensearchCluster = new OpensearchCluster(this, "Opensearch", {
       vpc: props.vpc,
+    });
+    // setup external api
+    this.externalApi = new HttpAPIGateway(this, "ExternalApi", {
+      authApiKey: props.externalApiKey,
     });
   }
 

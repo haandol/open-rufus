@@ -6,10 +6,10 @@ from langchain_core.tools import StructuredTool
 
 from src.utils.logger import logger
 
-AUTH_API_KEY = os.environ.get("AUTH_API_KEY", None)
-assert AUTH_API_KEY, "AUTH_API_KEY environment variable not set"
-ITEM_API_URL = os.environ.get("ITEM_API_URL", None)
-assert ITEM_API_URL, "ITEM_API_URL environment variable not set"
+ITEM_SEARCH_API_KEY = os.environ.get("ITEM_SEARCH_API_KEY", None)
+assert ITEM_SEARCH_API_KEY, "ITEM_SEARCH_API_KEY environment variable not set"
+ITEM_SEARCH_API_URL = os.environ.get("ITEM_SEARCH_API_URL", None)
+assert ITEM_SEARCH_API_URL, "ITEM_SEARCH_API_URL environment variable not set"
 
 
 class ItemSearchInput(BaseModel):
@@ -42,7 +42,7 @@ def item_search(name: str = "", category: str = "") -> list:
     - name (str): The keyword of item name to search for.
     - category (str): The category of items to search in.
     """
-    headers = {"Authorization": AUTH_API_KEY}
+    headers = {"Authorization": ITEM_SEARCH_API_KEY}
     logger.info(f"Item Searching for [name] {name}, [category] {category.upper()}")
     params = {
         "name": name,
@@ -50,7 +50,7 @@ def item_search(name: str = "", category: str = "") -> list:
         "limit": 5,
     }
     resp = requests.get(
-        str(ITEM_API_URL),
+        f"{ITEM_SEARCH_API_URL}/v1/item/search",
         params=params,
         headers=headers,
         verify=False,

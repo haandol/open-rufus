@@ -25,10 +25,10 @@ secretHeaderName = "x-cloudfront-secret-key"
 secretHeaderValue = "YOUR_SECRET_HEADER_VALUE" # same as web-infra
 
 [external]
-[external.itemSearch]
 apiKey = "YOUR_API_KEY"
+
+[external.itemSearch]
 indexName = "item-search"
 
 [external.itemRecommend]
-apiKey = "YOUR_API_KEY"
 indexName = "item-recommend"

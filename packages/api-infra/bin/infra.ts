@@ -4,7 +4,6 @@ import { VpcStack } from "../stacks/vpc-stack";
 import { CommonAppStack } from "../stacks/common-app-stack";
 import { AuthStack } from "../stacks/auth-stack";
 import { ChatbotAppStack } from "../stacks/services/chatbot-app-stack";
-import { CommonAPIStack } from "../stacks/common-api-stack";
 import { ItemSearchAPIStack } from "../stacks/services/item-search-api-stack";
 
 const app = new cdk.App({
@@ -36,6 +35,7 @@ const commonAppStack = new CommonAppStack(app, `${Config.app.ns}CommonApp`, {
   tableName: Config.chatbot.tableName,
   allowIpList: Config.chatbot.allowIpList,
   cloudfront: Config.cloudfront,
+  externalApiKey: Config.external.apiKey,
   env: {
     account: process.env.CDK_DEFAULT_ACCOUNT,
     region: process.env.CDK_DEFAULT_REGION,
@@ -48,6 +48,10 @@ const chatbotAppStack = new ChatbotAppStack(app, `${Config.app.ns}ChatbotApp`, {
   cluster: commonAppStack.cluster,
   loadBalancer: commonAppStack.loadBalancer,
   loadBalancerSecurityGroup: commonAppStack.loadBalancerSecurityGroup,
+  externalApi: {
+    url: commonAppStack.externalApi.api.apiEndpoint,
+    apiKey: Config.external.apiKey,
+  },
   cert: Config.cert,
   chatbot: Config.chatbot,
   env: {
@@ -58,15 +62,6 @@ const chatbotAppStack = new ChatbotAppStack(app, `${Config.app.ns}ChatbotApp`, {
 chatbotAppStack.addDependency(commonAppStack);
 
 // External APIs
-const commonApiStack = new CommonAPIStack(app, `${Config.app.ns}CommonAPI`, {
-  authApiKey: Config.external.itemSearch.apiKey,
-  env: {
-    account: process.env.CDK_DEFAULT_ACCOUNT,
-    region: process.env.CDK_DEFAULT_REGION,
-  },
-});
-commonApiStack.addDependency(vpcStack);
-
 // Item Search API
 const itemSearchAPIStack = new ItemSearchAPIStack(
   app,
@@ -75,10 +70,9 @@ const itemSearchAPIStack = new ItemSearchAPIStack(
     vpc: vpcStack.vpc,
     osDomain: commonAppStack.opensearchCluster.domain,
     osSecurityGroup: commonAppStack.opensearchCluster.securityGroup,
-    api: commonApiStack.httpApi,
-    authorizer: commonApiStack.authorizer,
+    api: commonAppStack.externalApi.api,
+    authorizer: commonAppStack.externalApi.authorizer,
     indexName: Config.external.itemSearch.indexName,
-    authApiKey: Config.external.itemSearch.apiKey,
     env: {
       account: process.env.CDK_DEFAULT_ACCOUNT,
       region: process.env.CDK_DEFAULT_REGION,
@@ -86,7 +80,6 @@ const itemSearchAPIStack = new ItemSearchAPIStack(
   }
 );
 itemSearchAPIStack.addDependency(commonAppStack);
-itemSearchAPIStack.addDependency(commonApiStack);
 
 const tags = cdk.Tags.of(app);
 tags.add("namespace", Config.app.ns);

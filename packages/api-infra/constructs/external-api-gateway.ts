@@ -8,24 +8,51 @@ import * as lambda from "aws-cdk-lib/aws-lambda";
 import { Construct } from "constructs";
 
 interface IProps {
-  readonly userPool: cognito.UserPool;
   readonly authApiKey: string;
 }
 
 export class HttpAPIGateway extends Construct {
-  readonly api: apigw.IHttpApi;
   readonly authorizer: apigw.IHttpRouteAuthorizer;
+  readonly api: apigw.IHttpApi;
 
   constructor(scope: Construct, id: string, props: IProps) {
     super(scope, id);
 
-    this.authorizer = this.createLambdaAuthorizer(props.authApiKey);
+    this.authorizer = this.createAuthorizer(props.authApiKey);
     this.api = this.createHttpApi();
   }
 
-  private createLambdaAuthorizer(
-    authApiKey: string
-  ): apigw.IHttpRouteAuthorizer {
+  private createHttpApi(): apigw.HttpApi {
+    const ns = this.node.tryGetContext("ns") as string;
+
+    const api = new apigw.HttpApi(this, "ExternalHttpApi", {
+      apiName: `${ns}ExternalApi`,
+      corsPreflight: {
+        allowOrigins: ["*"],
+        allowMethods: [
+          apigw.CorsHttpMethod.POST,
+          apigw.CorsHttpMethod.GET,
+          apigw.CorsHttpMethod.PUT,
+          apigw.CorsHttpMethod.DELETE,
+          apigw.CorsHttpMethod.OPTIONS,
+        ],
+        allowHeaders: [
+          "Authorization",
+          "Content-Type",
+          "X-Amzn-Trace-Id",
+          "X-Requested-With",
+        ],
+        allowCredentials: false,
+        maxAge: cdk.Duration.hours(1),
+      },
+    });
+    new cdk.CfnOutput(this, "ExternalHttpApiUrl", {
+      value: api.apiEndpoint,
+    });
+    return api;
+  }
+
+  private createAuthorizer(authApiKey: string): apigw.IHttpRouteAuthorizer {
     const ns = this.node.tryGetContext("ns") as string;
 
     const layers: lambda.ILayerVersion[] = [
@@ -34,7 +61,7 @@ export class HttpAPIGateway extends Construct {
         "PowertoolsLayer",
         `arn:aws:lambda:${
           cdk.Stack.of(this).region
-        }:017000801446:layer:AWSLambdaPowertoolsPythonV3-python313-x86_64:4`
+        }:017000801446:layer:AWSLambdaPowertoolsPythonV3-python313-x86_64:7`
       ),
     ];
 
@@ -73,35 +100,5 @@ export class HttpAPIGateway extends Construct {
     return new authorizers.HttpLambdaAuthorizer("LambdaAuthorizer", fn, {
       responseTypes: [authorizers.HttpLambdaResponseType.SIMPLE],
     });
-  }
-
-  private createHttpApi(): apigw.HttpApi {
-    const ns = this.node.tryGetContext("ns") as string;
-
-    const api = new apigw.HttpApi(this, "HttpApi", {
-      apiName: `${ns}Api`,
-      corsPreflight: {
-        allowOrigins: ["*"],
-        allowMethods: [
-          apigw.CorsHttpMethod.POST,
-          apigw.CorsHttpMethod.GET,
-          apigw.CorsHttpMethod.PUT,
-          apigw.CorsHttpMethod.DELETE,
-          apigw.CorsHttpMethod.OPTIONS,
-        ],
-        allowHeaders: [
-          "Authorization",
-          "Content-Type",
-          "X-Amzn-Trace-Id",
-          "X-Requested-With",
-        ],
-        allowCredentials: false,
-        maxAge: cdk.Duration.hours(1),
-      },
-    });
-    new cdk.CfnOutput(this, "HttpApiUrl", {
-      value: api.apiEndpoint,
-    });
-    return api;
   }
 }

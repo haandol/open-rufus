@@ -4,7 +4,6 @@ import * as joi from "joi";
 import * as toml from "toml";
 
 interface IExternalConfig {
-  apiKey: string;
   indexName: string;
 }
 
@@ -35,6 +34,7 @@ interface IConfig {
     secretHeaderValue: string;
   };
   external: {
+    apiKey: string;
     itemSearch: IExternalConfig;
     itemRecommend: IExternalConfig;
   };
@@ -89,12 +89,11 @@ const schema = joi
       .required(),
     external: joi
       .object({
+        apiKey: joi.string().required(),
         itemSearch: joi.object({
-          apiKey: joi.string().required(),
           indexName: joi.string().required(),
         }),
         itemRecommend: joi.object({
-          apiKey: joi.string().required(),
           indexName: joi.string().required(),
         }),
       })
