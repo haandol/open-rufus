@@ -7,7 +7,7 @@ from fastapi import FastAPI, Depends
 from fastapi.middleware.cors import CORSMiddleware
 
 from src.utils.models import ChatRequest
-from src.handlers.chat_handler import handle_chat_request
+from adapters.chat_controller import handle_chat_request
 from src.services.chat_service import ChatService
 from src.constant import MODEL_TEMPERATURE, MODEL_MAX_TOKENS
 from src.utils.logger import logger

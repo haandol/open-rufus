@@ -2,12 +2,12 @@
 // README at: https://github.com/devcontainers/templates/tree/main/src/typescript-node
 {
   "name": "Node.js & TypeScript",
-  "image": "mcr.microsoft.com/devcontainers/typescript-node:1-22-bookworm",
+  "image": "mcr.microsoft.com/devcontainers/typescript-node:1-22-bullseye",
   "features": {
     "ghcr.io/devcontainers/features/aws-cli:1": {},
     "ghcr.io/devcontainers/features/sshd:1": {},
     "ghcr.io/mikaello/devcontainer-features/modern-shell-utils:2": {},
-    "ghcr.io/devcontainers/features/node:1": {}
+    "ghcr.io/georgofenbeck/features/lazygit-linuxbinary:1": {}
   },
   "customizations": {
     "vscode": {
@@ -29,7 +29,8 @@
         "christian-kohler.npm-intellisense",
         "dbaeumer.vscode-eslint",
         "ClemensPeters.format-json",
-        "oderwat.indent-rainbow"
+        "oderwat.indent-rainbow",
+        "ChaitanyaShahare.lazygit"
       ]
     }
   },

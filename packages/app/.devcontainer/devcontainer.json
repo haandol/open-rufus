@@ -1,6 +1,6 @@
 {
   "name": "Python 3.13",
-  "image": "mcr.microsoft.com/devcontainers/python:3.13-bookworm",
+  "image": "mcr.microsoft.com/devcontainers/python:3.13-bullseye",
   "features": {
     "ghcr.io/devcontainers/features/aws-cli:1": {},
     "ghcr.io/devcontainers/features/sshd:1": {},
@@ -15,16 +15,22 @@
   "customizations": {
     "vscode": {
       "settings": {
-        "extensions.verifySignature": false
+        "extensions.verifySignature": false,
+        "python.linting.enabled": true,
+        "python.linting.lintOnSave": true,
+        "ruff.enable": true,
+        "editor.formatOnSave": true
       },
       "extensions": [
+        "ms-python.python",
         "PKief.material-icon-theme",
         "aaron-bond.better-comments",
         "shardulm94.trailing-spaces",
         "oderwat.indent-rainbow",
         "ms-azuretools.vscode-docker",
         "oderwat.indent-rainbow",
-        "ChaitanyaShahare.lazygit"
+        "ChaitanyaShahare.lazygit",
+        "charliermarsh.ruff"
       ]
     }
   },
