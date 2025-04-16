@@ -15,21 +15,20 @@ assert ITEM_SEARCH_API_URL, "ITEM_SEARCH_API_URL environment variable not set"
 class ItemSearchInput(BaseModel):
     """
     Input schema for item search operations.
-
-    name and category parameters are only accept English keywords.
+    All parameters must be English keywords.
 
     Attributes:
-        name (str): The keyword of item name to search for.
-        category (str): The category of items to search in.
+        name (str): The keyword of item name to search for, only accept English keywords.
+        category (str): The category of items to search in, only accept English keywords.
     """
 
     name: str = Field(
         title="Name",
-        description="The keyword of item name to search for",
+        description="The keyword of item name to search for, only accept English keywords.",
     )
     category: str = Field(
         title="Category",
-        description="The category of items to search in",
+        description="The category of items to search in, only accept English keywords.",
     )
 
 
@@ -37,10 +36,11 @@ def item_search(name: str = "", category: str = "") -> list:
     """
     Use this tool only for searching items in Coco Retails.
     Searches only for items in the Coco Retails based on the given parameters.
+    All parameters must be English keywords.
 
     ## Tool Parameters
-    - name (str): The keyword of item name to search for.
-    - category (str): The category of items to search in.
+    - name (str): The keyword of item name to search for, only accept English keywords.
+    - category (str): The category of items to search in, only accept English keywords.
     """
     headers = {"Authorization": ITEM_SEARCH_API_KEY}
     logger.info(f"Item Searching for [name] {name}, [category] {category.upper()}")

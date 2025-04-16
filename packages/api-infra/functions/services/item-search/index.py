@@ -4,6 +4,7 @@ from http import HTTPStatus
 
 import boto3
 from opensearchpy import OpenSearch, Search, RequestsHttpConnection, AWSV4SignerAuth
+from opensearchpy.helpers.query import Q
 from aws_lambda_powertools import Logger, Tracer
 from aws_lambda_powertools.logging import correlation_paths
 from aws_lambda_powertools.event_handler import (
@@ -64,9 +65,17 @@ def search_item() -> Response:
     try:
         s = Search(using=client, index=INDEX_NAME)
 
-        if category:
-            s = s.filter("term", category=category)
-        if name:
+        if category and name:
+            s = s.query(
+                "bool",
+                should=[
+                    Q("match", name=name),
+                    Q("match", category=category),
+                ],
+            )
+        elif category:
+            s = s.query("match", category=category)
+        elif name:
             s = s.query("match", name=name)
         result = s[:limit].execute()
         for hit in result:
