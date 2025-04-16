@@ -49,7 +49,7 @@ const chatbotAppStack = new ChatbotAppStack(app, `${Config.app.ns}ChatbotApp`, {
   loadBalancer: commonAppStack.loadBalancer,
   loadBalancerSecurityGroup: commonAppStack.loadBalancerSecurityGroup,
   externalApi: {
-    url: commonAppStack.externalApi.api.apiEndpoint,
+    endpoint: commonAppStack.externalApi.api.apiEndpoint,
     apiKey: Config.external.apiKey,
   },
   cert: Config.cert,

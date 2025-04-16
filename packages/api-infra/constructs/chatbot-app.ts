@@ -26,7 +26,7 @@ export interface IProps {
     modelName: string;
   };
   readonly externalApi: {
-    url: string;
+    endpoint: string;
     apiKey: string;
   };
 }
@@ -305,7 +305,9 @@ export class ChatbotApp extends Construct {
       ITEM_SEARCH_API_URL: new ssm.StringParameter(this, "ItemSearchApiUrl", {
         description: "Item search API URL",
         parameterName: `${ns}ItemSearchApiUrl`,
-        stringValue: props.externalApi.url,
+        stringValue: this.validateAndReplaceEndpoint(
+          props.externalApi.endpoint
+        ),
         tier: ssm.ParameterTier.STANDARD,
       }),
       ITEM_SEARCH_API_KEY: new ssm.StringParameter(this, "ItemSearchApiKey", {
@@ -315,5 +317,12 @@ export class ChatbotApp extends Construct {
         tier: ssm.ParameterTier.STANDARD,
       }),
     };
+  }
+
+  private validateAndReplaceEndpoint(endpoint: string): string {
+    if (!endpoint.startsWith("https://")) {
+      return `https://${endpoint}`;
+    }
+    return endpoint;
   }
 }

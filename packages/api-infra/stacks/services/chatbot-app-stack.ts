@@ -20,7 +20,7 @@ interface IProps extends cdk.StackProps {
     modelName: string;
   };
   externalApi: {
-    url: string;
+    endpoint: string;
     apiKey: string;
   };
 }
