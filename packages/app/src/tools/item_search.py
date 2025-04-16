@@ -42,31 +42,6 @@ def item_search(name: str = "", category: str = "") -> list:
     - name (str): The keyword of item name to search for.
     - category (str): The category of items to search in.
     """
-    return [
-        {
-            "id": 1,
-            "gender": "Men",
-            "masterCategory": "Apparel",
-            "subCategory": "Topwear",
-            "articleType": "Shirts",
-            "baseColour": "Navy Blue",
-            "season": "Fall",
-            "year": 2011,
-        },
-        {
-            "id": 2,
-            "gender": "Men",
-            "masterCategory": "Apparel",
-            "subCategory": "Bottomwear",
-            "articleType": "Jeans",
-            "baseColour": "Blue",
-            "season": "Summer",
-            "year": 2012,
-            "usage": "Casual",
-            "productDisplayName": "Peter England Men Party Blue Jeans",
-        },
-    ]
-
     headers = {"Authorization": AUTH_API_KEY}
     logger.info(f"Item Searching for [name] {name}, [category] {category.upper()}")
     params = {

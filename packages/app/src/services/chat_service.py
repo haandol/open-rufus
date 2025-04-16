@@ -93,7 +93,6 @@ class ChatService:
 
                 if chunk.content:
                     content = ''
-                    logger.info(f"Content: {content}, {type(content)}")
                     if isinstance(chunk.content, list):
                         content_type = chunk.content[0].get('type')
                         if content_type == 'text':
