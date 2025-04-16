@@ -1,20 +1,8 @@
 interface Message {
   role: "user" | "assistant" | "tool";
   content: string | any;
-  products?: Product[];
   tool_call_id?: string;
   name?: string;
-}
-
-interface Product {
-  id: number;
-  name: string;
-  gender: string;
-  category: string;
-  articleType: string;
-  baseColour: string;
-  season: string;
-  year: number;
 }
 
 export const useChatStore = defineStore("chat", () => {
@@ -94,8 +82,7 @@ export const useChatStore = defineStore("chat", () => {
                 assistantMessage += data.content;
                 // Update the last message content
                 messages.value[assistantIndex].content = assistantMessage;
-              } else if (data.role === "tool" && data.content) {
-                // 툴 메시지를 messages에 별도로 저장
+              } else if (data.role === "tool") {
                 messages.value.push({
                   role: "tool",
                   content: data.content,
