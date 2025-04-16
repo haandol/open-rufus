@@ -106,7 +106,7 @@ class ChatService:
                         content = chunk.content.get('text', '')
                     
                     if content:
-                        yield f"data: {json.dumps({'role': 'assistant', 'content': content, 'type': 'thinking'})}\n\n"
+                        yield f"data: {json.dumps({'role': 'assistant', 'content': content})}\n\n"
                         await asyncio.sleep(0)
                 
             # 도구 호출이 있는 경우 처리
@@ -165,7 +165,7 @@ class ChatService:
                             final_content = final_chunk.content.get('text', '')
                         
                         if final_content:
-                            yield f"data: {json.dumps({'role': 'assistant', 'content': final_content, 'type': 'final'})}\n\n"
+                            yield f"data: {json.dumps({'role': 'assistant', 'content': final_content})}\n\n"
                             await asyncio.sleep(0)
 
         except Exception as e:

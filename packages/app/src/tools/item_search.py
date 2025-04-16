@@ -124,4 +124,5 @@ tool = StructuredTool.from_function(
     name="item_search",
     description=item_search.__doc__,
     args_schema=ItemSearchInput,
+    return_direct=True,
 )
