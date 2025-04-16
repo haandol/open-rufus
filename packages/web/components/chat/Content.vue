@@ -41,6 +41,14 @@
         </div>
         <div class="ml-3 bg-gray-100 px-4 py-2 rounded-lg max-w-[80%]">
           <div v-html="md.render(message.content)"></div>
+
+          <!-- 상품 카드 표시 -->
+          <div v-if="message.products && message.products.length > 0" class="mt-4">
+            <h3 class="text-sm font-bold text-gray-700 mb-2">추천 상품:</h3>
+            <div class="space-y-2">
+              <ChatProductCard v-for="product in message.products" :key="product.id" :product="product" />
+            </div>
+          </div>
         </div>
       </div>
     </div>

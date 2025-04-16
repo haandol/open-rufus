@@ -16,5 +16,9 @@ dependencies = [
     "uvicorn>=0.34.0",
 ]
 
+[tool.ruff]
+line-length = 120
+indent-width = 4
+
 [tool.ruff.lint]
 ignore = ["E402"]

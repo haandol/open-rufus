@@ -1,6 +1,18 @@
 interface Message {
   role: "user" | "assistant";
   content: string;
+  products?: Product[];
+}
+
+interface Product {
+  id: number;
+  gender: string;
+  masterCategory: string;
+  subCategory: string;
+  articleType: string;
+  baseColour: string;
+  season: string;
+  year: number;
 }
 
 export const useChatStore = defineStore("chat", () => {
@@ -70,10 +82,34 @@ export const useChatStore = defineStore("chat", () => {
           if (line.startsWith("data: ")) {
             try {
               const data = JSON.parse(line.slice(6));
-              if (data.content && data.content[0].text) {
-                assistantMessage += data.content[0].text;
+              if (data.role === "assistant" && data.content) {
+                console.info("received assistant data: ", JSON.stringify(data));
+                assistantMessage += data.content;
                 // Update the last message content
                 messages.value[assistantIndex].content = assistantMessage;
+              } else if (data.role === "tool" && data.content) {
+                console.info("received tool data: ", JSON.stringify(data));
+
+                // 상품 데이터 처리
+                try {
+                  // 데이터가 JSON 배열 형태의 상품 목록인지 확인
+                  const parsedContent =
+                    typeof data.content === "string"
+                      ? JSON.parse(data.content)
+                      : data.content;
+
+                  if (
+                    Array.isArray(parsedContent) &&
+                    parsedContent.length > 0 &&
+                    "articleType" in parsedContent[0]
+                  ) {
+                    // 상품 데이터 감지
+                    messages.value[assistantIndex].products = parsedContent;
+                    console.info("상품 데이터 감지됨:", parsedContent);
+                  }
+                } catch (parseError) {
+                  console.error("상품 데이터 파싱 오류:", parseError);
+                }
               }
             } catch (e) {
               console.error("JSON 파싱 오류:", e);
