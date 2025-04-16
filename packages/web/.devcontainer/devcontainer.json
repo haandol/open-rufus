@@ -6,7 +6,8 @@
   "features": {
     "ghcr.io/devcontainers/features/aws-cli:1": {},
     "ghcr.io/devcontainers/features/sshd:1": {},
-    "ghcr.io/mikaello/devcontainer-features/modern-shell-utils:2": {}
+    "ghcr.io/mikaello/devcontainer-features/modern-shell-utils:2": {},
+    "ghcr.io/devcontainers/features/node:1": {}
   },
   "customizations": {
     "vscode": {

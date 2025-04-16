@@ -10,6 +10,7 @@ export const useChatStore = defineStore("chat", () => {
   const isLoading = ref(false);
   const error = ref<string | null>(null);
   const isMinimized = ref(false);
+  const showErrorModal = ref(false);
 
   async function sendMessage(content: string) {
     if (!content.trim()) return;
@@ -17,8 +18,13 @@ export const useChatStore = defineStore("chat", () => {
     // Add user message
     isLoading.value = true;
     error.value = null;
+    showErrorModal.value = false;
 
     try {
+      // AbortController for timeout
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 5000); // 5초 타임아웃
+
       const response = await fetch(`${config.public.apiUrl}/api/chat`, {
         method: "POST",
         headers: {
@@ -29,6 +35,7 @@ export const useChatStore = defineStore("chat", () => {
           user_message_content: content,
           stream: true,
         }),
+        signal: controller.signal,
       });
 
       if (!response.ok) {
@@ -44,9 +51,17 @@ export const useChatStore = defineStore("chat", () => {
       messages.value.push({ role: "assistant", content: "" });
       const assistantIndex = messages.value.length - 1;
 
+      let firstTokenReceived = false;
+
       while (true) {
         const { value, done } = await reader.read();
         if (done) break;
+
+        // Clear timeout after receiving first chunk
+        if (!firstTokenReceived) {
+          clearTimeout(timeoutId);
+          firstTokenReceived = true;
+        }
 
         const chunk = decoder.decode(value);
         const lines = chunk.split("\n");
@@ -63,13 +78,19 @@ export const useChatStore = defineStore("chat", () => {
             } catch (e) {
               console.error("JSON 파싱 오류:", e);
               error.value = "응답 처리 중 오류가 발생했습니다.";
+              showErrorModal.value = true;
             }
           }
         }
       }
     } catch (e) {
-      error.value =
-        e instanceof Error ? e.message : "알 수 없는 오류가 발생했습니다.";
+      if (e instanceof DOMException && e.name === "AbortError") {
+        error.value = "요청 시간이 초과되었습니다. 다시 시도해주세요.";
+      } else {
+        error.value =
+          e instanceof Error ? e.message : "알 수 없는 오류가 발생했습니다.";
+      }
+      showErrorModal.value = true;
       console.error("Error:", e);
     } finally {
       isLoading.value = false;
@@ -84,13 +105,19 @@ export const useChatStore = defineStore("chat", () => {
     isMinimized.value = !isMinimized.value;
   }
 
+  function closeErrorModal() {
+    showErrorModal.value = false;
+  }
+
   return {
     messages,
     isLoading,
     error,
     isMinimized,
+    showErrorModal,
     sendMessage,
     clearMessages,
     toggleMinimize,
+    closeErrorModal,
   };
 });

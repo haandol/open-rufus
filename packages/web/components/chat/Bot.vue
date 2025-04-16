@@ -11,6 +11,9 @@
       </template>
     </div>
   </Transition>
+
+  <!-- Error Modal -->
+  <ChatErrorModal :show="showErrorModal" :error-message="error" @close="closeErrorModal" />
 </template>
 
 <script setup lang="ts">
@@ -23,7 +26,7 @@ const emit = defineEmits<{
 }>();
 
 const chatStore = useChatStore();
-const { isMinimized } = storeToRefs(chatStore);
+const { isMinimized, error, showErrorModal } = storeToRefs(chatStore);
 
 interface Suggestion {
   text: string;
@@ -36,6 +39,10 @@ const close = () => {
 
 const handleMinimize = () => {
   chatStore.toggleMinimize();
+};
+
+const closeErrorModal = () => {
+  chatStore.closeErrorModal();
 };
 
 const handleSuggestionSelect = (suggestion: Suggestion) => {
