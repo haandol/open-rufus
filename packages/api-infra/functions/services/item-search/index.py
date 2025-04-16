@@ -63,6 +63,7 @@ def search_item() -> Response:
 
     items = []
     try:
+        logger.info(f"Searching for items with name: {name} and category: {category}")
         s = Search(using=client, index=INDEX_NAME)
         if category and name:
             s = s.query(

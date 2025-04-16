@@ -13,9 +13,9 @@
 
       <!-- 상품 정보 -->
       <div class="flex-1">
-        <div class="text-sm font-bold mb-1">{{ product.gender }}'s {{ product.articleType }}</div>
+        <div class="text-sm font-bold mb-1">{{ product.name }}</div>
         <div class="flex items-center mb-1">
-          <span class="text-xs text-gray-600">{{ product.masterCategory }} / {{ product.subCategory }}</span>
+          <span class="text-xs text-gray-600">{{ product.gender }}'s {{ product.category }}</span>
         </div>
         <div class="flex items-center">
           <div class="w-4 h-4 rounded-full mr-1" :style="`background-color: ${getColorCode(product.baseColour)};`">
@@ -43,9 +43,9 @@
 interface ProductProps {
   product: {
     id: number;
+    name: string;
     gender: string;
-    masterCategory: string;
-    subCategory: string;
+    category: string;
     articleType: string;
     baseColour: string;
     season: string;

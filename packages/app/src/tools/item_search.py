@@ -32,6 +32,7 @@ class ItemSearchInput(BaseModel):
     )
 
 
+# TODO: use hybrid search (e.g embedding) for category
 def item_search(name: str = "", category: str = "") -> list:
     """
     Use this tool only for searching items in Coco Retails.
@@ -41,6 +42,51 @@ def item_search(name: str = "", category: str = "") -> list:
     ## Tool Parameters
     - name (str): The keyword of item name to search for, only accept English keywords.
     - category (str): The category of items to search in, only accept English keywords.
+
+    ## Category Values
+    Category is combined with first and second level categories with a underscore.
+    - First Level Category:
+        - Apparel
+        - Accessories
+        - Footwear
+        - Personal Care
+        - Free Items
+        - Sporting Goods
+        - Home
+    - Second Level Category:
+        - Topwear
+        - Bottomwear
+        - Watches
+        - Socks
+        - Shoes
+        - Belts
+        - Flip Flops
+        - Bags
+        - Innerwear
+        - Sandal
+        - Shoe Accessories
+        - Apparel Set
+        - Headwear
+        - Mufflers
+        - Skin Care
+        - Makeup
+        - Free Gifts
+        - Ties
+        - Accessories
+        - Water Bottle
+        - Eyes
+        - Bath and Body
+        - Gloves
+        - Sports Accessories
+        - Cufflinks
+        - Sports Equipment
+        - Stoles
+        - Hair
+        - Perfumes
+        - Home Furnishing
+        - Umbrellas
+        - Wristbands
+        - Vouchers
     """
     headers = {"Authorization": ITEM_SEARCH_API_KEY}
     logger.info(f"Item Searching for [name] {name}, [category] {category.upper()}")

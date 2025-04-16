@@ -6,9 +6,9 @@ interface Message {
 
 interface Product {
   id: number;
+  name: string;
   gender: string;
-  masterCategory: string;
-  subCategory: string;
+  category: string;
   articleType: string;
   baseColour: string;
   season: string;
