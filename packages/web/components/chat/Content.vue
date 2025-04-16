@@ -103,15 +103,15 @@ interface Suggestion {
 }
 
 const shoppingSuggestions = ref<Suggestion[]>([
-  { text: '단일 보드 컴퓨터 쇼핑 계속하기', highlighted: false },
-  { text: '단일 보드 컴퓨터에는 어떤 액세서리가 추천되나요?', highlighted: true },
-  { text: '미디어 재생에 가장 좋은 단일 보드 컴퓨터는 무엇인가요?', highlighted: true },
-  { text: '머신러닝과 호환되는 단일 보드 컴퓨터는 무엇인가요?', highlighted: true }
+  { text: '여름 캐주얼 의류 추천해주세요', highlighted: false },
+  { text: '직장인 정장 코디 추천해주세요', highlighted: true },
+  { text: '가을 아우터 트렌드는 어떤가요?', highlighted: true },
+  { text: '20대 여성 데일리룩 추천해주세요', highlighted: true }
 ]);
 
 const recommendationSuggestions = ref<Suggestion[]>([
-  { text: '최고의 카운터탑 제빙기', highlighted: true },
-  { text: '반려동물 털에 좋은 최고의 무선청소기', highlighted: true }
+  { text: '여름 휴가에 어울리는 액세서리 추천', highlighted: true },
+  { text: '데이트 코디에 어울리는 가방 추천해주세요', highlighted: true }
 ]);
 
 const emit = defineEmits<{

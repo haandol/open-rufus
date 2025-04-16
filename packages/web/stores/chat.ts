@@ -127,6 +127,12 @@ export const useChatStore = defineStore("chat", () => {
     } finally {
       isLoading.value = false;
     }
+
+    // 마지막 메시지가 빈 문자열이면 제거
+    console.log(messages.value[messages.value.length - 1]);
+    if (messages.value[messages.value.length - 1].content === "") {
+      messages.value.pop();
+    }
   }
 
   function clearMessages() {
