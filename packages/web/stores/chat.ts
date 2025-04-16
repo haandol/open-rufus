@@ -82,7 +82,6 @@ export const useChatStore = defineStore("chat", () => {
           if (line.startsWith("data: ")) {
             try {
               const data = JSON.parse(line.slice(6));
-              console.info("received data: ", JSON.stringify(data));
               if (data.error) {
                 error.value = data.error;
                 showErrorModal.value = true;
@@ -100,7 +99,7 @@ export const useChatStore = defineStore("chat", () => {
                   } else {
                     console.warn("상품 데이터가 없습니다.");
                     messages.value[assistantIndex].content +=
-                      "상품 데이터가 없습니다.";
+                      "\n\n상품 데이터가 없습니다.";
                   }
                 }
               }
