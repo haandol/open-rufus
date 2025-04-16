@@ -1,7 +1,9 @@
 interface Message {
-  role: "user" | "assistant";
-  content: string;
+  role: "user" | "assistant" | "tool";
+  content: string | any;
   products?: Product[];
+  tool_call_id?: string;
+  name?: string;
 }
 
 interface Product {
@@ -61,7 +63,7 @@ export const useChatStore = defineStore("chat", () => {
       // Create a temporary assistant message
       messages.value.push({ role: "user", content });
       messages.value.push({ role: "assistant", content: "" });
-      const assistantIndex = messages.value.length - 1;
+      let assistantIndex = messages.value.length - 1;
 
       let firstTokenReceived = false;
 
@@ -93,15 +95,17 @@ export const useChatStore = defineStore("chat", () => {
                 // Update the last message content
                 messages.value[assistantIndex].content = assistantMessage;
               } else if (data.role === "tool" && data.content) {
-                if (Array.isArray(data.content)) {
-                  if (data.content.length > 0) {
-                    messages.value[assistantIndex].products = data.content;
-                  } else {
-                    console.warn("상품 데이터가 없습니다.");
-                    messages.value[assistantIndex].content +=
-                      "\n\n상품 데이터가 없습니다.";
-                  }
-                }
+                // 툴 메시지를 messages에 별도로 저장
+                messages.value.push({
+                  role: "tool",
+                  content: data.content,
+                  tool_call_id: data.tool_call_id,
+                  name: data.name,
+                });
+
+                messages.value.push({ role: "assistant", content: "" });
+                assistantIndex = messages.value.length - 1;
+                assistantMessage = "";
               }
             } catch (e) {
               console.error("JSON 파싱 오류:", e);

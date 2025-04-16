@@ -93,7 +93,7 @@ def item_search(name: str = "", category: str = "") -> list:
     params = {
         "name": name,
         "category": category.upper(),
-        "limit": 5,
+        "limit": 3,
     }
     resp = requests.get(
         f"{ITEM_SEARCH_API_URL}/v1/search/item/",
@@ -124,5 +124,4 @@ tool = StructuredTool.from_function(
     name="item_search",
     description=item_search.__doc__,
     args_schema=ItemSearchInput,
-    return_direct=True,
 )
