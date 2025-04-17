@@ -1,8 +1,10 @@
 <template>
   <Transition name="slide-fade">
     <div v-if="isVisible" :class="[
-      'fixed bottom-4 left-4 bg-white rounded-xl shadow-xl flex flex-col z-50',
-      isMinimized ? 'w-[240px] h-[48px]' : 'w-[440px] h-[600px]'
+      'fixed bg-white rounded-xl shadow-xl flex flex-col z-50 transition-all duration-300 ease-out',
+      isMinimized
+        ? 'bottom-4 left-4 w-[240px] h-[48px]' // Minimized state: fixed position and size
+        : 'bottom-0 left-0 w-full h-full md:bottom-4 md:left-4 md:w-[440px] md:h-[600px]' // Maximized state: responsive position and size
     ]">
       <ChatHeader @close="close" @minimize="handleMinimize" />
       <template v-if="!isMinimized">
@@ -76,8 +78,10 @@ onUnmounted(() => {
   opacity: 0;
 }
 
-/* 최소화/최대화 트랜지션을 부드럽게 만들기 위한 스타일 추가 */
+/* div transition style is less specific now, replaced by inline transition-all */
+/*
 div {
   transition: width 0.3s ease-out, height 0.3s ease-out;
 }
+*/
 </style>

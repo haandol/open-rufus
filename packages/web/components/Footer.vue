@@ -1,7 +1,8 @@
 <template>
   <footer class="bg-gray-900 text-white p-6">
     <div class="container mx-auto">
-      <div class="grid grid-cols-4 gap-6">
+      <!-- Responsive grid layout -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
         <div>
           <h3 class="font-bold mb-2">Get to Know Us</h3>
           <ul class="space-y-1">
