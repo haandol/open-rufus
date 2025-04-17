@@ -5,10 +5,11 @@ import * as cloudfront from "aws-cdk-lib/aws-cloudfront";
 import * as origins from "aws-cdk-lib/aws-cloudfront-origins";
 
 interface Props {
-  apiUri: string;
-  bucket: s3.IBucket;
-  secretHeaderName: string;
-  secretHeaderValue: string;
+  readonly apiUri: string;
+  readonly bucket: s3.IBucket;
+  readonly secretHeaderName: string;
+  readonly secretHeaderValue: string;
+  readonly webAclArn: string;
 }
 
 export class Cloudfront extends Construct {
@@ -66,6 +67,7 @@ export class Cloudfront extends Construct {
         },
       ],
       comment: ns,
+      webAclId: props.webAclArn,
     });
     this.distribution = cfDist;
 

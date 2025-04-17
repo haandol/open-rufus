@@ -125,16 +125,3 @@ export class CloudfrontWAF extends Construct {
     ];
   }
 }
-
-export class WebACLAssociation extends wafv2.CfnWebACLAssociation {
-  constructor(
-    scope: Construct,
-    id: string,
-    props: wafv2.CfnWebACLAssociationProps
-  ) {
-    super(scope, id, {
-      resourceArn: props.resourceArn,
-      webAclArn: props.webAclArn,
-    });
-  }
-}
