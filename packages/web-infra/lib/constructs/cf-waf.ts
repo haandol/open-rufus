@@ -2,11 +2,10 @@ import * as wafv2 from "aws-cdk-lib/aws-wafv2";
 import { Construct } from "constructs";
 
 interface IProps {
-  readonly cfSecretHeaderName: string;
-  readonly cfSecretHeaderValue: string;
+  readonly allowIpList: string[];
 }
 
-export class WebappWAF extends Construct {
+export class CloudfrontWAF extends Construct {
   public readonly webAcl: wafv2.CfnWebACL;
 
   constructor(scope: Construct, id: string, props: IProps) {
@@ -94,38 +93,35 @@ export class WebappWAF extends Construct {
       },
     };
 
-    // Alow Valid CloudFront Header
-    const allowValidCloudFrontHeader: wafv2.CfnWebACL.RuleProperty = {
-      name: "AllowValidCloudFrontHeader",
-      priority: 90,
+    // AllowIpListRuleSet
+    const ipSet = new wafv2.CfnIPSet(this, "IpSet", {
+      addresses: props.allowIpList,
+      ipAddressVersion: "IPV4",
+      scope: "CLOUDFRONT",
+    });
+    const allowIpListRuleSet: wafv2.CfnWebACL.RuleProperty = {
+      name: "AllowIpListRuleSet",
+      priority: 80,
       statement: {
-        byteMatchStatement: {
-          fieldToMatch: {
-            singleHeader: { Name: props.cfSecretHeaderName },
-          },
-          positionalConstraint: "EXACTLY",
-          searchString: props.cfSecretHeaderValue,
-          textTransformations: [
-            {
-              priority: 0,
-              type: "NONE",
-            },
-          ],
+        ipSetReferenceStatement: {
+          arn: ipSet.attrArn,
         },
       },
       visibilityConfig: {
         cloudWatchMetricsEnabled: true,
-        metricName: "AllowValidCloudFrontHeader",
         sampledRequestsEnabled: true,
+        metricName: "AllowIpList",
       },
-      action: { allow: {} },
+      action: {
+        allow: {},
+      },
     };
 
     return [
       awsManagedRulesAmazonIpReputationList,
       awsCommonRuleSet,
       awsManagedRulesKnownBadInputsRuleSet,
-      allowValidCloudFrontHeader,
+      allowIpListRuleSet,
     ];
   }
 }

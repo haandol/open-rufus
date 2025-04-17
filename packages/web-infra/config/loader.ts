@@ -14,6 +14,7 @@ interface IConfig {
   cloudfront: {
     secretHeaderName: string;
     secretHeaderValue: string;
+    allowIpList: string[];
   };
   repository: {
     path: string;
@@ -41,6 +42,10 @@ const schema = joi
       .object({
         secretHeaderName: joi.string().required(),
         secretHeaderValue: joi.string().required(),
+        allowIpList: joi
+          .array()
+          .items(joi.string().ip({ cidr: "required" }))
+          .required(),
       })
       .required(),
     repository: joi

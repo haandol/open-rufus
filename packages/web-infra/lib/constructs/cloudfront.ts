@@ -12,7 +12,7 @@ interface Props {
 }
 
 export class Cloudfront extends Construct {
-  public readonly distributionId: string;
+  public readonly distribution: cloudfront.IDistribution;
 
   constructor(scope: Construct, id: string, props: Props) {
     super(scope, id);
@@ -67,7 +67,7 @@ export class Cloudfront extends Construct {
       ],
       comment: ns,
     });
-    this.distributionId = cfDist.distributionId;
+    this.distribution = cfDist;
 
     new cdk.CfnOutput(this, `DistId`, {
       exportName: `${ns}DistId`,

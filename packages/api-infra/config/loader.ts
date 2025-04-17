@@ -27,7 +27,6 @@ interface IConfig {
   chatbot: {
     tableName: string;
     modelName: string;
-    allowIpList: string[];
   };
   cloudfront: {
     secretHeaderName: string;
@@ -75,10 +74,6 @@ const schema = joi
       .object({
         tableName: joi.string().required(),
         modelName: joi.string().required(),
-        allowIpList: joi
-          .array()
-          .items(joi.string().ip({ cidr: "required" }))
-          .required(),
       })
       .required(),
     cloudfront: joi

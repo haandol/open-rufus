@@ -3,7 +3,6 @@ import * as dynamodb from "aws-cdk-lib/aws-dynamodb";
 import * as ec2 from "aws-cdk-lib/aws-ec2";
 import * as ecs from "aws-cdk-lib/aws-ecs";
 import * as elbv2 from "aws-cdk-lib/aws-elasticloadbalancingv2";
-import * as apigw from "aws-cdk-lib/aws-apigatewayv2";
 import { Construct } from "constructs";
 import { WebappWAF, WebACLAssociation } from "../constructs/webapp-waf";
 import { OpensearchCluster } from "../constructs/opensearch-cluster";
@@ -12,7 +11,6 @@ import { HttpAPIGateway } from "../constructs/external-api-gateway";
 interface IProps extends cdk.StackProps {
   readonly vpc: ec2.IVpc;
   readonly tableName: string;
-  readonly allowIpList: string[];
   readonly cloudfront: {
     secretHeaderName: string;
     secretHeaderValue: string;
@@ -40,15 +38,11 @@ export class CommonAppStack extends cdk.Stack {
 
     // setup ECS fargate service
     this.cluster = this.newECSCluster(props.vpc);
-    this.loadBalancerSecurityGroup = this.newSecurityGroup(
-      props.vpc,
-      props.allowIpList
-    );
+    this.loadBalancerSecurityGroup = this.newSecurityGroup(props.vpc);
     this.loadBalancer = this.newALB(props.vpc, this.loadBalancerSecurityGroup);
 
     // setup WAF
     const waf = new WebappWAF(this, "WebappWAF", {
-      allowIpList: props.allowIpList,
       cfSecretHeaderName: props.cloudfront.secretHeaderName,
       cfSecretHeaderValue: props.cloudfront.secretHeaderValue,
     });
@@ -82,10 +76,7 @@ export class CommonAppStack extends cdk.Stack {
     return cluster;
   }
 
-  private newSecurityGroup(
-    vpc: ec2.IVpc,
-    allowIpList: string[]
-  ): ec2.SecurityGroup {
+  private newSecurityGroup(vpc: ec2.IVpc): ec2.SecurityGroup {
     const securityGroup = new ec2.SecurityGroup(this, "SecurityGroup", {
       vpc,
       allowAllOutbound: true,
@@ -100,13 +91,6 @@ export class CommonAppStack extends cdk.Stack {
       ec2.Port.tcp(443),
       "Allow inbound traffic from CloudFront"
     );
-    allowIpList.forEach((ip) => {
-      securityGroup.addIngressRule(
-        ec2.Peer.ipv4(ip),
-        ec2.Port.tcp(443),
-        "Allow inbound traffic from specific IP"
-      );
-    });
     return securityGroup;
   }
 

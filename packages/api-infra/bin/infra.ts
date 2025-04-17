@@ -33,7 +33,6 @@ const vpcStack = new VpcStack(app, `${Config.app.ns}Vpc`, {
 const commonAppStack = new CommonAppStack(app, `${Config.app.ns}CommonApp`, {
   vpc: vpcStack.vpc,
   tableName: Config.chatbot.tableName,
-  allowIpList: Config.chatbot.allowIpList,
   cloudfront: Config.cloudfront,
   externalApiKey: Config.external.apiKey,
   env: {

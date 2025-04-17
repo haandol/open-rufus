@@ -17,6 +17,7 @@ new FrontendStack(app, `${Config.app.ns}FrontendStack`, {
   repositoryBranch: Config.repository.branch,
   secretHeaderName: Config.cloudfront.secretHeaderName,
   secretHeaderValue: Config.cloudfront.secretHeaderValue,
+  allowIpList: Config.cloudfront.allowIpList,
   env: {
     account: process.env.CDK_DEFAULT_ACCOUNT,
     region: process.env.CDK_DEFAULT_REGION,

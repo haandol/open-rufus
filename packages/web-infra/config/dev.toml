@@ -6,8 +6,9 @@ stage = "Dev"
 uri = "API_URL" # e.g. example.com
 
 [cloudfront]
-secretHeaderName = "x-cloudfront-secret"
+secretHeaderName = "x-cloudfront-secret-key"
 secretHeaderValue = "YOUR_SECRET_VALUE"
+allowIpList = ["127.0.0.1/32"]
 
 [repository]
 path = "haandol/open-rufus"
