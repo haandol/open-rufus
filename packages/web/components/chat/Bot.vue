@@ -4,7 +4,7 @@
       'fixed bg-white rounded-xl shadow-xl flex flex-col z-50 transition-all duration-300 ease-out',
       isMinimized
         ? 'bottom-4 left-4 w-[240px] h-[48px]' // Minimized state: fixed position and size
-        : 'bottom-0 left-0 w-full h-full md:bottom-4 md:left-4 md:w-[440px] md:h-[600px]' // Maximized state: responsive position and size
+        : 'bottom-4 inset-x-4 h-[calc(100vh-2rem)] md:bottom-4 md:left-4 md:right-auto md:w-[440px] md:h-[600px]' // Maximized state: responsive position and size
     ]">
       <ChatHeader @close="close" @minimize="handleMinimize" />
       <template v-if="!isMinimized">
