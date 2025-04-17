@@ -16,7 +16,7 @@ export class CloudfrontWAF extends Construct {
       defaultAction: {
         block: {},
       },
-      scope: "REGIONAL",
+      scope: "CLOUDFRONT",
       visibilityConfig: {
         cloudWatchMetricsEnabled: true,
         metricName: "WebACL",
