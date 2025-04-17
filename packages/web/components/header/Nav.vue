@@ -9,7 +9,7 @@
       <NuxtLink to="/" @click="onClickChat" class="flex items-center"><i
           class="pi pi-comments mr-1 text-orange-500"></i>Coco</NuxtLink>
     </div>
-    <div class="flex items-center space-x-4">
+    <div class="hidden md:flex items-center space-x-4">
       <span>Free Shipping Zone</span>
       <span>Today's Deals</span>
       <span>Customer Service</span>

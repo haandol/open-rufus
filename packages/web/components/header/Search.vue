@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-1 mx-4">
+  <div class="hidden md:flex flex-1 mx-4">
     <div class="bg-white rounded-lg flex w-full">
       <div class="bg-gray-200 text-black px-3 py-2 rounded-l-lg">
         <span class="text-sm">All</span>

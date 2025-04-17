@@ -2,17 +2,20 @@
   <div class="w-full">
     <BannerMain />
 
-    <div class="max-w-[1500px] mx-auto px-4 relative -mt-60">
-      <BarNotice>
-        <template #link>
-          <a href="#" class="text-blue-600">Please click here to learn more.</a>
-        </template>
-      </BarNotice>
+    <div class="max-w-[1500px] mx-auto px-4 relative -mt-32">
+      <!-- Hide BarNotice on extra-small screens -->
+      <div class="hidden sm:block">
+        <BarNotice>
+          <template #link>
+            <a href="#" class="text-blue-600">Please click here to learn more.</a>
+          </template>
+        </BarNotice>
+      </div>
 
       <ProductGrid>
         <!-- Pick Up Section -->
         <ProductCard title="Pick up where you left off">
-          <div class="grid grid-cols-2 gap-6">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
             <div class="space-y-2">
               <img src="/img/products/laptop.png" alt="MacBook Air M2"
                 class="w-full aspect-[4/3] object-cover rounded-lg" />
@@ -54,7 +57,7 @@
 
         <!-- Shop for Home Essentials -->
         <ProductCard title="Shop for your home essentials">
-          <div class="grid grid-cols-2 gap-6">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
             <div class="space-y-2">
               <img src="/img/cleaning-tools.png" alt="Cleaning Tools"
                 class="w-full aspect-[4/3] object-cover rounded-lg" />
@@ -93,7 +96,7 @@
               <img src="/img/kitchen/cooker.png" alt="Cooker" class="w-full aspect-[16/9] object-cover rounded-lg" />
               <h3 class="text-lg font-medium">Cooker</h3>
             </div>
-            <div class="grid grid-cols-3 gap-4">
+            <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
               <div class="space-y-2">
                 <img src="/img/kitchen/coffee.png" alt="Coffee" class="w-full aspect-square object-cover rounded-lg" />
                 <h3 class="text-base font-medium">Coffee</h3>
@@ -129,7 +132,7 @@
 
         <!-- Refresh your space -->
         <ProductCard title="Refresh your space">
-          <div class="grid grid-cols-2 gap-4">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div class="space-y-2">
               <img src="/img/refresh/dining.png" alt="Dining" class="w-full aspect-square object-cover rounded-lg" />
               <h3 class="text-base font-medium">Dining</h3>

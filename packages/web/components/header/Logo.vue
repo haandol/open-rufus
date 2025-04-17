@@ -5,7 +5,7 @@
         <img src="/img/pace-logo.jpg" alt="PACE Logo" class="h-8 w-auto object-contain" loading="lazy" />
       </NuxtLink>
     </div>
-    <div class="text-sm">
+    <div class="text-sm hidden sm:block">
       <div class="flex items-center">
         <i class="pi pi-map-marker mr-1"></i>
         <div>
