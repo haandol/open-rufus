@@ -42,6 +42,7 @@ export class Cloudfront extends Construct {
         allowedMethods: cloudfront.AllowedMethods.ALLOW_GET_HEAD,
         cachedMethods: cloudfront.CachedMethods.CACHE_GET_HEAD,
         viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
+        originRequestPolicy: cloudfront.OriginRequestPolicy.ALL_VIEWER,
       },
       additionalBehaviors: {
         "/api/*": {
@@ -51,8 +52,7 @@ export class Cloudfront extends Construct {
           cachePolicy: cloudfront.CachePolicy.CACHING_DISABLED,
           viewerProtocolPolicy:
             cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
-          originRequestPolicy:
-            cloudfront.OriginRequestPolicy.ALL_VIEWER_EXCEPT_HOST_HEADER,
+          originRequestPolicy: cloudfront.OriginRequestPolicy.ALL_VIEWER,
         },
       },
       errorResponses: [
