@@ -36,13 +36,11 @@ export class Cloudfront extends Construct {
     );
 
     const cfDist = new cloudfront.Distribution(this, `${ns}Distribution`, {
-      defaultRootObject: "index.html",
       defaultBehavior: {
         origin: s3Origin,
         allowedMethods: cloudfront.AllowedMethods.ALLOW_GET_HEAD,
         cachedMethods: cloudfront.CachedMethods.CACHE_GET_HEAD,
         viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
-        originRequestPolicy: cloudfront.OriginRequestPolicy.ALL_VIEWER,
       },
       additionalBehaviors: {
         "/api/*": {
