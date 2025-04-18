@@ -84,6 +84,13 @@ export class EmbeddingPipeline extends Construct {
         resources: ["*"],
       })
     );
+    // Add permissions to invoke embedding model
+    role.addToPolicy(
+      new iam.PolicyStatement({
+        actions: ["bedrock:InvokeModel"],
+        resources: [props.embeddingModelArn],
+      })
+    );
     // Add permissions to write to X-Ray
     role.addToPolicy(
       new iam.PolicyStatement({
