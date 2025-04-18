@@ -51,6 +51,58 @@ if not client.ping():
   raise ConnectionError("OpenSearch connection check failed")
 logger.info(f"Successfully connected to OpenSearch: {client.info()}")
 
+@tracer.capture_method
+def get_or_create_index(client):
+  """Get or create the index."""
+  logger.warning(f"Index '{INDEX_NAME}' not found. Creating...")
+  index_body = {
+    "settings": {
+      "index": {
+        "knn": True,
+      },
+      "analysis": {
+        "analyzer": {
+          "nori_analyzer": {
+            "type": "custom",
+            "tokenizer": "nori_tokenizer",
+            "filter": ["nori_number", "nori_readingform", "lowercase"]
+          }
+        }
+      }
+    },
+    "mappings": {
+      "properties": {
+        "embedding_vector": {
+          "type": "knn_vector",
+          "dimension": 1024,
+          "method": {
+            "name": "hnsw",
+            "space_type": "cosinesimil",
+            "engine": "nmslib",
+          }
+        },
+        "text": {"type": "text", "analyzer": "nori_analyzer"},
+        "source_bucket": {"type": "keyword"},
+        "source_key": {"type": "keyword"}
+      }
+    }
+  }
+  try:
+    if not client.indices.exists(index=INDEX_NAME):
+      client.indices.create(index=INDEX_NAME, body=index_body)
+      logger.info(f"Index '{INDEX_NAME}' created successfully.")
+  except os_exceptions.RequestError as e:
+    # Handle potential race condition if another instance creates the index
+    if e.error == 'resource_already_exists_exception':
+      logger.warning(f"Index '{INDEX_NAME}' already exists (created by another instance).")
+    else:
+      logger.error(f"Error creating index '{INDEX_NAME}': {e}")
+      raise e
+  except Exception as e:
+    logger.error(f"Unexpected error creating index '{INDEX_NAME}': {e}")
+    raise e
+
+
 try:
   get_or_create_index(client)
 except (ConnectionError, os_exceptions.ConnectionError, os_exceptions.TransportError) as e:
@@ -235,58 +287,6 @@ def process_record(record: SQSRecord):
   except Exception as e:
     logger.exception(f"Generic failure processing SQS record: {e}")
     raise e # Re-raise to signal failure
-
-
-@tracer.capture_method
-def get_or_create_index(client):
-  """Get or create the index."""
-  logger.warning(f"Index '{INDEX_NAME}' not found. Creating...")
-  index_body = {
-    "settings": {
-      "index": {
-        "knn": True,
-      },
-      "analysis": {
-        "analyzer": {
-          "nori_analyzer": {
-            "type": "custom",
-            "tokenizer": "nori_tokenizer",
-            "filter": ["nori_number", "nori_readingform", "lowercase"]
-          }
-        }
-      }
-    },
-    "mappings": {
-      "properties": {
-        "embedding_vector": {
-          "type": "knn_vector",
-          "dimension": 1024,
-          "method": {
-            "name": "hnsw",
-            "space_type": "cosinesimil",
-            "engine": "nmslib",
-          }
-        },
-        "text": {"type": "text", "analyzer": "nori_analyzer"},
-        "source_bucket": {"type": "keyword"},
-        "source_key": {"type": "keyword"}
-      }
-    }
-  }
-  try:
-    if not client.indices.exists(index=INDEX_NAME):
-      client.indices.create(index=INDEX_NAME, body=index_body)
-      logger.info(f"Index '{INDEX_NAME}' created successfully.")
-  except os_exceptions.RequestError as e:
-    # Handle potential race condition if another instance creates the index
-    if e.error == 'resource_already_exists_exception':
-      logger.warning(f"Index '{INDEX_NAME}' already exists (created by another instance).")
-    else:
-      logger.error(f"Error creating index '{INDEX_NAME}': {e}")
-      raise e
-  except Exception as e:
-    logger.error(f"Unexpected error creating index '{INDEX_NAME}': {e}")
-    raise e
 
 
 @logger.inject_lambda_context(log_event=True)

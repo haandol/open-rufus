@@ -120,6 +120,7 @@ export class KnowledgeSearchAPIStack extends cdk.Stack {
         INDEX_NAME: props.indexName,
         EMBEDDING_MODEL_ARN: props.embeddingModelArn,
       },
+      tracing: lambda.Tracing.ACTIVE,
       securityGroups: [props.osSecurityGroup],
       vpc: props.vpc,
       layers,

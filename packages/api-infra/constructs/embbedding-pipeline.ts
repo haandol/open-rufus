@@ -186,6 +186,7 @@ export class EmbeddingPipeline extends Construct {
         EMBEDDING_MODEL_ARN: props.embeddingModelArn,
       },
       securityGroups: [props.osSecurityGroup],
+      tracing: lambda.Tracing.ACTIVE,
       vpc: props.vpc,
       layers,
       role,

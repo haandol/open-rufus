@@ -126,6 +126,7 @@ export class ItemSearchAPIStack extends cdk.Stack {
         OPENSEARCH_HOST: `${osDomain.domainEndpoint}`,
         INDEX_NAME: indexName,
       },
+      tracing: lambda.Tracing.ACTIVE,
       securityGroups: [securityGroup],
       vpc,
       layers,
