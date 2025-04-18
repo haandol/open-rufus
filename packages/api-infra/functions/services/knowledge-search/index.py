@@ -16,17 +16,19 @@ from aws_lambda_powertools.event_handler.router import APIGatewayHttpRouter
 
 # Setup environment variables & validate
 OPENSEARCH_HOST = os.environ["OPENSEARCH_HOST"]
+assert OPENSEARCH_HOST, "OPENSEARCH_HOST environment variable not set"
 INDEX_NAME = os.environ["INDEX_NAME"]
-AWS_REGION = os.environ.get("AWS_REGION", "us-west-2")
+assert INDEX_NAME, "INDEX_NAME environment variable not set"
+EMBEDDING_MODEL_ARN = os.environ["EMBEDDING_MODEL_ARN"]
+assert EMBEDDING_MODEL_ARN, "EMBEDDING_MODEL_ARN environment variable not set"
+
 KEYWORD_WEIGHT = float(os.environ.get("KEYWORD_WEIGHT", 0.4))
 VECTOR_WEIGHT = float(os.environ.get("VECTOR_WEIGHT", 0.6))
-SCORE_THRESHOLD = float(os.environ.get("SCORE_THRESHOLD", 0.4))
-
-assert OPENSEARCH_HOST, "OPENSEARCH_HOST environment variable not set"
-assert INDEX_NAME, "INDEX_NAME environment variable not set"
 assert abs(KEYWORD_WEIGHT + VECTOR_WEIGHT - 1.0) < 1e-6, "Weights must sum to 1.0"
 
-# Constants
+AWS_REGION = os.environ.get("AWS_REGION", "us-west-2")
+SCORE_THRESHOLD = float(os.environ.get("SCORE_THRESHOLD", 0.4))
+
 SEARCH_PIPELINE_NAME = os.environ.get(
     "SEARCH_PIPELINE_NAME", "knowledge-search-pipeline"
 )
@@ -92,13 +94,14 @@ except Exception as e:
 def get_embedding(text):
     try:
         response = bedrock.invoke_model(
-            modelId="amazon.titan-embed-text-v2:0",
+            modelId=EMBEDDING_MODEL_ARN,
             body=json.dumps({"inputText": text}),
         )
         response_body = json.loads(response["body"].read())
         return response_body["embedding"]
     except Exception as e:
         logger.error(f"Error getting embedding: {str(e)}")
+        traceback.print_exc()
         return None
 
 

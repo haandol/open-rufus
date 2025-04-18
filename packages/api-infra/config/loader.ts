@@ -3,10 +3,6 @@ import * as path from "path";
 import * as joi from "joi";
 import * as toml from "toml";
 
-interface IExternalConfig {
-  indexName: string;
-}
-
 interface IConfig {
   app: {
     ns: string;
@@ -34,8 +30,13 @@ interface IConfig {
   };
   external: {
     apiKey: string;
-    itemSearch: IExternalConfig;
-    itemRecommend: IExternalConfig;
+    itemSearch: {
+      indexName: string;
+    };
+    knowledgeSearch: {
+      indexName: string;
+      embeddingModelArn: string;
+    };
   };
 }
 
@@ -88,8 +89,9 @@ const schema = joi
         itemSearch: joi.object({
           indexName: joi.string().required(),
         }),
-        itemRecommend: joi.object({
+        knowledgeSearch: joi.object({
           indexName: joi.string().required(),
+          embeddingModelArn: joi.string().required(),
         }),
       })
       .required(),

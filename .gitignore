@@ -60,3 +60,4 @@ vendor/
 *local-instance.db
 *local-instance.db-journal
 .bkp
+docs/.$architecture.drawio.bkp

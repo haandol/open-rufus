@@ -5,6 +5,7 @@ import { CommonAppStack } from "../stacks/common-app-stack";
 import { AuthStack } from "../stacks/auth-stack";
 import { ChatbotAppStack } from "../stacks/services/chatbot-app-stack";
 import { ItemSearchAPIStack } from "../stacks/services/item-search-api-stack";
+import { KnowledgeSearchAPIStack } from "../stacks/services/knowledge-search-api-stack";
 
 const app = new cdk.App({
   context: {
@@ -79,6 +80,25 @@ const itemSearchAPIStack = new ItemSearchAPIStack(
   }
 );
 itemSearchAPIStack.addDependency(commonAppStack);
+
+const knowledgeSearchAPIStack = new KnowledgeSearchAPIStack(
+  app,
+  `${Config.app.ns}KnowledgeSearchAPI`,
+  {
+    vpc: vpcStack.vpc,
+    osDomain: commonAppStack.opensearchCluster.domain,
+    osSecurityGroup: commonAppStack.opensearchCluster.securityGroup,
+    api: commonAppStack.externalApi.api,
+    authorizer: commonAppStack.externalApi.authorizer,
+    indexName: Config.external.knowledgeSearch.indexName,
+    embeddingModelArn: Config.external.knowledgeSearch.embeddingModelArn,
+    env: {
+      account: process.env.CDK_DEFAULT_ACCOUNT,
+      region: process.env.CDK_DEFAULT_REGION,
+    },
+  }
+);
+knowledgeSearchAPIStack.addDependency(commonAppStack);
 
 const tags = cdk.Tags.of(app);
 tags.add("namespace", Config.app.ns);

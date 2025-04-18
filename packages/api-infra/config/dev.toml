@@ -29,5 +29,6 @@ apiKey = "YOUR_API_KEY"
 [external.itemSearch]
 indexName = "item-search"
 
-[external.itemRecommend]
-indexName = "item-recommend"
+[external.knowledgeSearch]
+indexName = "knowledge-search"
+embeddingModelArn = "arn:aws:bedrock:us-west-2::foundation-model/amazon.titan-embed-text-v2:0" # us-west-2
