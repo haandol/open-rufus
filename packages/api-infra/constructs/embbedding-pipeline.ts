@@ -173,7 +173,7 @@ export class EmbeddingPipeline extends Construct {
 
     return new lambda.Function(this, "EmbedderFunction", {
       code: lambda.Code.fromAsset(
-        path.resolve(__dirname, "..", "..", "functions", "services", "embedder")
+        path.resolve(__dirname, "..", "functions", "services", "embedder")
       ),
       handler: "index.lambda_handler",
       runtime: lambda.Runtime.PYTHON_3_13,
