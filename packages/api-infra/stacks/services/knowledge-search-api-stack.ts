@@ -7,6 +7,7 @@ import * as lambda from "aws-cdk-lib/aws-lambda";
 import { HttpLambdaIntegration } from "aws-cdk-lib/aws-apigatewayv2-integrations";
 import * as opensearch from "aws-cdk-lib/aws-opensearchservice";
 import { Construct } from "constructs";
+import { EmbeddingPipeline } from "../../constructs/embbedding-pipeline";
 
 interface IProps extends cdk.StackProps {
   vpc: ec2.IVpc;
@@ -24,6 +25,14 @@ export class KnowledgeSearchAPIStack extends cdk.Stack {
 
     const fn = this.createKnowledgeSearchLambda(props);
     this.registerKnowledgeSearchRoutes(props.api, props.authorizer, fn);
+
+    new EmbeddingPipeline(this, "EmbeddingPipeline", {
+      vpc: props.vpc,
+      osDomain: props.osDomain,
+      osSecurityGroup: props.osSecurityGroup,
+      indexName: props.indexName,
+      embeddingModelArn: props.embeddingModelArn,
+    });
   }
 
   private createKnowledgeSearchLambda(props: IProps): lambda.IFunction {

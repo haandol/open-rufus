@@ -10,12 +10,12 @@ import * as lambda from "aws-cdk-lib/aws-lambda";
 import * as oss from "aws-cdk-lib/aws-opensearchservice";
 
 interface IProps extends cdk.StackProps {
-  vpc: ec2.IVpc;
-  osDomain: oss.IDomain;
-  osSecurityGroup: ec2.ISecurityGroup;
-  indexName: string;
-  api: apigw.IHttpApi;
-  authorizer: apigw.IHttpRouteAuthorizer;
+  readonly vpc: ec2.IVpc;
+  readonly osDomain: oss.IDomain;
+  readonly osSecurityGroup: ec2.ISecurityGroup;
+  readonly indexName: string;
+  readonly api: apigw.IHttpApi;
+  readonly authorizer: apigw.IHttpRouteAuthorizer;
 }
 
 export class ItemSearchAPIStack extends cdk.Stack {

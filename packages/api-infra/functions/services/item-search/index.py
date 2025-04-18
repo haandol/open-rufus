@@ -38,7 +38,10 @@ client = OpenSearch(
     connection_class=RequestsHttpConnection,
     pool_maxsize=10,
 )
-logger.info(f"Connected to OpenSearch using {client}")
+# Verify connection (optional, but good practice)
+if not client.ping():
+    raise ConnectionError("OpenSearch connection check failed")
+logger.info(f"Successfully connected to OpenSearch: {client.info()}")
 
 
 @router.get("/")
