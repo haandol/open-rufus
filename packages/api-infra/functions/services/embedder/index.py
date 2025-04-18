@@ -20,7 +20,9 @@ EMBEDDING_MODEL_ARN = os.environ["EMBEDDING_MODEL_ARN"]
 assert EMBEDDING_MODEL_ARN, "EMBEDDING_MODEL_ARN environment variable not set"
 
 AWS_REGION = os.environ.get("AWS_REGION", "us-west-2")
-CHUNK_SIZE = os.environ.get("CHUNK_SIZE", 500) # Define chunk size, default to 500 tokens/chars
+
+CHUNK_SIZE = int(os.environ.get("CHUNK_SIZE", 1000)) # Define chunk size, default to 1000 tokens/chars
+OVERLAP_SIZE = int(os.environ.get("OVERLAP_SIZE", 200)) # Define overlap size, default to 200 tokens/chars
 
 # Setup tracers and loggers
 tracer = Tracer(service="embedder")
@@ -177,10 +179,23 @@ def process_record(record: SQSRecord):
           logger.warning(f"No content extracted from s3://{bucket}/{key}. Skipping.")
           continue
 
-        # 2. Chunk content (Simple character-based chunking)
-        # TODO: Implement more sophisticated chunking (e.g., by sentences, paragraphs, or tokens) if needed.
-        chunks = [content[i:i + CHUNK_SIZE] for i in range(0, len(content), CHUNK_SIZE)]
-        logger.info(f"Content split into {len(chunks)} chunks for s3://{bucket}/{key}")
+        # 2. Chunk content with overlap
+        chunks = []
+        start = 0
+        while start < len(content):
+          end = start + CHUNK_SIZE
+          chunks.append(content[start:end])
+          start += CHUNK_SIZE - OVERLAP_SIZE
+          # Ensure we don't create an empty chunk at the end if content length is a multiple of stride
+          if start >= len(content) and len(content) % (CHUNK_SIZE - OVERLAP_SIZE) == 0:
+            break
+          # Prevent overlap if the last chunk is smaller than OVERLAP_SIZE
+          if end >= len(content):
+            break
+
+        # Original simple chunking logic:
+        # chunks = [content[i:i + CHUNK_SIZE] for i in range(0, len(content), CHUNK_SIZE)]
+        logger.info(f"Content split into {len(chunks)} chunks for s3://{bucket}/{key} with CHUNK_SIZE={CHUNK_SIZE}, OVERLAP_SIZE={OVERLAP_SIZE}")
 
         bulk_request_body = []
         for i, chunk_text in enumerate(chunks):
