@@ -14,8 +14,9 @@ Open Rufus Demo의 전체 시스템 아키텍처는 다음과 같습니다.
 
 - **Frontend:** Nuxt.js 기반의 정적 웹 페이지(`web`)가 S3에 저장되고 CloudFront를 통해 배포됩니다. CloudFront 앞단에는 WAF가 적용되어 보안을 강화합니다. 사용자 인증은 Cognito UserPool을 사용합니다.
 - **Chatbot Backend:** FastAPI로 구현된 실시간 스트리밍 서버(`app`)는 ECS 클러스터에서 실행됩니다. ALB를 통해 로드 밸런싱되며, WAF가 적용되어 있습니다. CloudFront를 통해서만 접근 가능하도록 제한됩니다. 채팅 데이터는 DynamoDB에 저장되고, Bedrock Converse API를 활용하여 지능적인 응답 생성을 지원합니다.
-- **Item & Knowledge Search APIs:** `api-infra` 패키지에 정의된 서버리스 API로 구현되어, API_KEY 방식으로 호출됩니다. API Gateway, Lambda Authorizer, Lambda 함수, 그리고 OpenSearch 인덱스를 사용합니다. 내부 검색 API는 임베딩을 위해 Amazon Titan Text Embeddings V2 model
- 모델을 사용하고 있습니다.
+- **Item & Knowledge Search APIs:** `api-infra` 패키지에 정의된 서버리스 API로 구현되어, API_KEY 방식으로 호출됩니다. API Gateway, Lambda Authorizer, Lambda 함수, 그리고 OpenSearch 인덱스를 사용합니다. 내부 검색 API는 임베딩을 위해 Amazon Titan Text Embeddings V2 model 모델을 사용하고 있습니다.
+  - **Item Search API:** 상품 검색을 위한 기능입니다. Nori 토크나이저를 통해 한글 정보를 토큰화하고, 토큰화된 정보를 OpenSearch 를 통해 일반적인 full-text 키워드 검색을 수행합니다.
+  - **Knowledge Search API:** RAG 기반의 내부 정보에 대한 질문/답변을 하는 기능입니다. 데이터 추가를 위해서는 지정된 버킷에 데이터를 업로드하면 람다 함수를 통해 인덱싱됩니다.
 
 ## Project Structure
 
