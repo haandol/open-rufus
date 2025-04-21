@@ -10,11 +10,11 @@ AWS 클라우드 서비스를 기반으로 구축되었으며, 컨테이너 기�
 
 Open Rufus Demo의 전체 시스템 아키텍처는 다음과 같습니다.
 
-![OpenRufus Architecture](/docs/architecture-ecs.png)
+![OpenRufus Architecture](/docs/architecture.png)
 
 *   **Frontend:** Nuxt.js 기반의 정적 웹 페이지(`web`)가 S3에 저장되고 CloudFront를 통해 배포됩니다. CloudFront 앞단에는 WAF가 적용되어 보안을 강화합니다. 사용자 인증은 Cognito UserPool을 사용합니다.
 *   **Chatbot Backend:** FastAPI로 구현된 실시간 스트리밍 서버(`app`)는 ECS 클러스터에서 실행됩니다. ALB를 통해 로드 밸런싱되며, WAF가 적용되어 있습니다. CloudFront를 통해서만 접근 가능하도록 제한됩니다. 채팅 데이터는 DynamoDB에 저장되고, Bedrock Converse API를 활용하여 지능적인 응답 생성을 지원합니다.
-*   **Search & Recommendation APIs:** (현재 `external-api-infra`로 계획 중) 상품 검색 및 추천 기능은 별도의 서버리스 API로 구현됩니다. API Gateway, Lambda Authorizer, Lambda 함수, 그리고 OpenSearch 인덱스를 사용합니다. 추천 API는 추가적으로 Bedrock Embedding 모델을 활용합니다.
+*   **Search & Recommendation APIs:** (현재 계획되지 않음) 상품 검색 및 추천 기능은 향후 별도의 서버리스 API로 구현될 수 있습니다. API Gateway, Lambda Authorizer, Lambda 함수, 그리고 OpenSearch 인덱스를 사용할 수 있습니다. 추천 API는 추가적으로 Bedrock Embedding 모델을 활용할 수 있습니다.
 
 ## Project Structure
 
@@ -24,8 +24,7 @@ Nx 워크스페이스는 여러 패키지로 구성됩니다:
 *   `packages/web-infra`: GitHub Actions를 사용한 `web` 패키지의 CloudFront 배포 인프라 코드.
 *   `packages/app`: FastAPI 기반의 백엔드 스트리밍 서버.
 *   `packages/api-infra`: ECS 클러스터, WAF 등을 포함한 `app` 패키지의 배포 인프라 코드.
-*   `packages/external-api-infra` (예정): 서버리스 검색 및 추천 API 인프라 코드.
 
 ## Deployment
 
-배포는 각 인프라 패키지(`web-infra`, `api-infra`, `external-api-infra`)에 정의된 절차를 따릅니다. `web-infra`는 GitHub Actions를 통해 자동화될 수 있습니다.
+배포는 각 인프라 패키지(`web-infra`, `api-infra`)에 정의된 절차를 따릅니다. `web-infra`는 GitHub Actions를 통해 자동화될 수 있습니다.

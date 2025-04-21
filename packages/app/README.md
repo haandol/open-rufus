@@ -1,18 +1,26 @@
-# Chatbot Backend (packages/app)
+# Open Rufus Chatbot API (packages/app)
 
-이 패키지는 OpenRufus 프로젝트의 백엔드 애플리케이션입니다.
+이 패키지는 OpenRufus 프로젝트의 챗봇 API 백엔드 애플리케이션입니다.
 
-- **프레임워크:** FastAPI
-- **주요 기능:**
-    - Server-Sent Events (SSE)를 이용한 실시간 채팅 스트리밍
-    - DynamoDB와 연동하여 채팅 데이터 저장 및 조회
-    - Bedrock Converse API를 활용한 챗봇 응답 생성
-- **배포:** AWS ECS 클러스터에서 컨테이너로 실행됩니다.
+**Goal:** Streaming/Invoke Chat API, Semantic Cache, Prompt Caching, Image multi-modal Chat, Opensearch RAG Q&A Chat, Healthcheck 기능을 제공하는 것을 목표로 합니다. 🎯
 
-## Features
+## Tech Stacks 💻
 
-- Use Amazon Bedrock Claude 3 Sonnet model
-- Support streaming response (Server-Sent Events)
+- **Language:** Python 3.13
+- **Framework:** FastAPI
+- **LLM Orchestration:** LangChain
+- **LLM Provider:** Amazon Bedrock (Claude 3 Sonnet, Cohere Embeddings v3)
+- **Vector Store:** Opensearch
+- **Dependency Management:** uv, pyproject.toml
+
+## Features ✨
+
+- Streaming/Invoke Chat API
+- Semantic Cache
+- Prompt Caching
+- Image multi-modal Chat (Amazon Bedrock Claude 3 Sonnet)
+- Opensearch RAG Q&A Chat
+- Healthcheck endpoint (`/health`)
 - Simple REST API interface
 - Provide a chat interface through a web page
 
@@ -20,7 +28,7 @@
 
 - Python 3.13 or higher
 - AWS account and related API access permissions
-- Required packages (automatically installed)
+- `uv` for dependency management (`pyproject.toml`)
 
 ## Installation
 
@@ -89,18 +97,17 @@ uv run -- uvicorn main:app --reload
 }
 ```
 
-## Directory Structure
+## Directory Structure 📁
 
 ```
 .
-├── src/                       # Source code directory
-│   ├── constant.py            # Constant definition
-│   ├── handlers/              # Request handlers
-│   │   └── chat_handler.py    # Chat request handler
-│   ├── services/              # Service logic
-│   │   └── llm_service.py     # LLM related service
-│   └── utils/                 # Utility functions
-│       ├── message_utils.py   # Message conversion utility
-│       └── models.py          # Pydantic model definition
-└── main.py                    # Application entry point
+├── src/                # Source code directory
+│   ├── services/       # Core business logic
+│   ├── handlers/       # Request handlers
+│   ├── utils/          # Utility functions
+│   ├── prompts/        # LLM prompt templates
+│   └── constant.py     # Global constants
+├── env/                # Env files
+├── .env                # Current Environment variables
+└── main.py             # Application entry point (if applicable, structure might vary)
 ```

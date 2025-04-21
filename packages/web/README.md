@@ -1,35 +1,40 @@
-# Web Frontend (packages/web)
+# Web Frontend (`packages/web`)
 
-이 패키지는 OpenRufus 프로젝트의 프론트엔드 웹 애플리케이션입니다.
+This package contains the frontend web application for the OpenRufus project, built with Nuxt 3.
 
-- **프레임워크:** Nuxt.js (SSG 모드)
-- **주요 기능:**
-    - 실시간 채팅 인터페이스
-    - 상품 검색 및 추천 결과 표시
-- **배포:** AWS S3에 정적 파일로 빌드되어 CloudFront를 통해 제공됩니다.
+## Tech Stack
 
-## 개발 서버 실행
+- **Framework:** [Nuxt 3](https://nuxt.com/) (Static Site Generation - SSG)
+- **Language:** [TypeScript](https://www.typescriptlang.org/)
+- **UI Framework:** [DaisyUI v5](https://daisyui.com/) (using [Tailwind CSS](https://tailwindcss.com/))
+- **Icons:** [PrimeIcons](https://primevue.org/icons/)
+- **State Management:** [Pinia](https://pinia.vuejs.org/)
+- **Utilities:** [Lodash](https://lodash.com/)
+- **Linting/Formatting:** ESLint
 
-```sh
-npx nx serve web
-```
+## Core Features
+
+- Real-time chat interface
+- Product search and recommendation display
+
+## Project Structure & Conventions
+
+This project follows specific conventions outlined in the development guidelines:
+
+- **Components:** PascalCase naming (`components/ui/BaseButton.vue` -> `<UiBaseButton />`), separation of layout (template) and visual (style tag) Tailwind classes.
+- **Composables:** `use[Name]` naming convention.
+- **State Management:** Pinia stores with `storeToRefs` for reactivity.
+- **Data Fetching:** `useFetch`, `$fetch`, `useAsyncData` based on the use case.
+- **Styling:** Primarily Tailwind CSS, with limited custom CSS in `<style>` tags.
 
 ## Setup
 
-Make sure to install dependencies:
+Ensure you have [Node.js](https://nodejs.org/) and [Yarn](https://yarnpkg.com/) installed.
+
+Install the dependencies:
 
 ```bash
-# npm
-npm install
-
-# pnpm
-pnpm install
-
-# yarn
 yarn install
-
-# bun
-bun install
 ```
 
 ## Development Server
@@ -37,51 +42,27 @@ bun install
 Start the development server on `http://localhost:3000`:
 
 ```bash
-# npm
-npm run dev
-
-# pnpm
-pnpm dev
-
-# yarn
 yarn dev
-
-# bun
-bun run dev
 ```
+
+The application utilizes Nuxt's auto-imports for components and composables.
 
 ## Production
 
-Build the application for production:
+Build the application for production (generates static files in `.output/public`):
 
 ```bash
-# npm
-npm run build
-
-# pnpm
-pnpm build
-
-# yarn
 yarn build
-
-# bun
-bun run build
 ```
 
-Locally preview production build:
+Locally preview the production build:
 
 ```bash
-# npm
-npm run preview
-
-# pnpm
-pnpm preview
-
-# yarn
 yarn preview
-
-# bun
-bun run preview
 ```
 
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+## Deployment
+
+The application is built as static files (SSG) and is intended for deployment on services like AWS S3 & CloudFront, Vercel, Netlify, or similar static hosting platforms.
+
+Refer to the [Nuxt Deployment Documentation](https://nuxt.com/docs/getting-started/deployment) for more details on deploying Nuxt applications.
