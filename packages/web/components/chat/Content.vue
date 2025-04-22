@@ -1,7 +1,7 @@
 <template>
   <div class="flex-1 overflow-y-auto px-4 py-2 bg-white" ref="chatContainer">
     <!-- Initial welcome message -->
-    <div v-if="messages.length === 0" class="flex items-start mb-4">
+    <div v-if="visibleMessages.length === 0" class="flex items-start mb-4">
       <div class="flex-shrink-0">
         <div class="w-6 h-6 rounded-full bg-orange-500 flex items-center justify-center">
           <img src="/img/chat-profile.png" alt="Chat profile" class="w-4 h-4" />
@@ -24,7 +24,7 @@
     </div>
 
     <!-- Chat messages -->
-    <div v-for="(message, index) in messages" :key="index" class="mb-4">
+    <div v-for="(message, index) in parsedMessages" :key="index" class="mb-4">
       <!-- User message -->
       <div v-if="message.role === 'user'" class="flex justify-end">
         <div class="bg-blue-500 text-white px-4 py-2 rounded-lg max-w-[80%]">
@@ -59,7 +59,7 @@
           </div>
         </div>
       </div>
-      
+
       <!-- Tool message with text -->
       <div v-else-if="message.role === 'tool' && message.content && message.content.text"
         class="flex items-start">
@@ -97,12 +97,46 @@ const md = markdownit()
 
 const chatStore = useChatStore();
 
-const { messages, isLoading, error } = storeToRefs(chatStore);
+const { visibleMessages, isLoading, error } = storeToRefs(chatStore);
+
+// Computed property to parse tool message content
+const parsedMessages = computed(() => {
+  return visibleMessages.value.map(message => {
+    if (message.role === 'tool' && typeof message.content === 'string') {
+      let parsedContent;
+      try {
+        parsedContent = JSON.parse(message.content);
+
+        // If parsed content is an array, assume it's products
+        // Wrap it in the structure the template expects: { json: { products: [...] } }
+        if (Array.isArray(parsedContent)) {
+          // Optional: Add a basic check if array items look like products
+          // if (parsedContent.length === 0 || (parsedContent[0] && typeof parsedContent[0].id !== 'undefined')) {
+             return { ...message, content: { json: { products: parsedContent } } };
+          // }
+        }
+
+        // If parsing succeeded but it's not a recognized product array,
+        // treat the original string content as text.
+        console.warn('Parsed tool content is not a product array, treating as text:', parsedContent);
+        return { ...message, content: { text: message.content } };
+
+      } catch (e) {
+        // If parsing fails, assume the original content was plain text
+        // Wrap it in the structure the template expects: { text: '...' }
+        console.log('Tool content could not be parsed, treating as text:', message.content);
+        return { ...message, content: { text: message.content } };
+      }
+    }
+    // Keep non-tool messages or already processed messages as is
+    return message;
+  });
+});
 
 const chatContainer = ref<HTMLElement | null>(null);
 
 // Auto scroll to bottom when messages change
-watch(() => messages.value, () => {
+watch(() => visibleMessages.value, () => {
   nextTick(() => {
     if (chatContainer.value) {
       chatContainer.value.scrollTop = chatContainer.value.scrollHeight;
@@ -143,7 +177,6 @@ const handleSuggestionSelect = (suggestion: Suggestion) => {
 }
 
 @keyframes pulse {
-
   0%,
   100% {
     opacity: 1;

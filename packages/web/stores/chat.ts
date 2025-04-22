@@ -15,6 +15,17 @@ export const useChatStore = defineStore("chat", () => {
   const isMinimized = ref(false);
   const showErrorModal = ref(false);
 
+  // 컨텐츠가 비어있지 않은 메시지만 필터링하는 계산된 속성
+  const visibleMessages = computed(() =>
+    messages.value.filter((msg) => {
+      // user와 tool 메시지는 항상 표시
+      if (msg.role === "user" || msg.role === "tool") return true;
+
+      // assistant 메시지는 content가 비어있지 않은 경우만 표시
+      return msg.role === "assistant" && msg.content !== "";
+    })
+  );
+
   async function sendMessage(content: string) {
     if (!content.trim()) return;
 
@@ -53,8 +64,6 @@ export const useChatStore = defineStore("chat", () => {
       messages.value.push({ role: "assistant", content: "" });
       let assistantIndex = messages.value.length - 1;
 
-      // when tool is used, new assistant message is created
-      let toolUsed = false;
       // check timeout until first token is received
       let firstTokenReceived = false;
       // assistant message content
@@ -84,20 +93,9 @@ export const useChatStore = defineStore("chat", () => {
 
               if (data.role === "assistant") {
                 if (data.content) {
-                  if (toolUsed) {
-                    // when tool is used, new assistant message is created
-                    messages.value.push({
-                      role: "assistant",
-                      content: data.content,
-                    });
-                    assistantIndex = messages.value.length - 1;
-                    assistantMessage = data.content;
-                    toolUsed = false;
-                  } else {
-                    // if tool is not used, update existing message block
-                    assistantMessage += data.content;
-                    messages.value[assistantIndex].content = assistantMessage;
-                  }
+                  // Update content of the latest assistant message
+                  assistantMessage += data.content;
+                  messages.value[assistantIndex].content = assistantMessage;
                 } else if (data.tool_calls) {
                   // receive tool_calls params for maintain ToolMessage
                   messages.value[assistantIndex].tool_calls = data.tool_calls;
@@ -105,37 +103,31 @@ export const useChatStore = defineStore("chat", () => {
                   console.error("Unknown assistant message:", data);
                 }
               } else if (data.role === "tool") {
-                // AWS Bedrock API 요구사항에 맞는 정확한 형식으로 변경
-                let formattedContent;
-
-                if (Array.isArray(data.content)) {
-                  // 배열인 경우 객체 배열로 변환
-                  formattedContent = {
-                    json: {
-                      products: data.content,
-                    },
-                  };
-                } else if (typeof data.content === "object") {
-                  // 이미 객체인 경우
-                  formattedContent = {
-                    json: data.content,
-                  };
+                let stringContent: string;
+                if (typeof data.content === "string") {
+                  stringContent = data.content;
                 } else {
-                  // 문자열이나 다른 타입인 경우
-                  formattedContent = {
-                    text: data.content?.toString() || "",
-                  };
+                  try {
+                    stringContent = JSON.stringify(data.content);
+                  } catch (e) {
+                    console.error("Failed to stringify tool content:", e);
+                    stringContent = "[Error formatting tool content]";
+                  }
                 }
 
                 // maintain ToolMessage
                 messages.value.push({
                   role: "tool",
-                  content: formattedContent,
+                  // Store stringified content
+                  content: stringContent,
                   tool_call_id: data.tool_call_id,
                   name: data.name,
                 });
 
-                toolUsed = true;
+                // Create a new assistant message to prepare for the next chunk
+                messages.value.push({ role: "assistant", content: "" });
+                assistantIndex = messages.value.length - 1;
+                assistantMessage = ""; // Reset the assistant message content
               } else {
                 console.error("Unknown message:", data);
               }
@@ -184,6 +176,7 @@ export const useChatStore = defineStore("chat", () => {
 
   return {
     messages,
+    visibleMessages,
     isLoading,
     error,
     isMinimized,
