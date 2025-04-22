@@ -47,15 +47,18 @@ export const useChatStore = defineStore("chat", () => {
 
       const reader = response.body!.getReader();
       const decoder = new TextDecoder();
-      let assistantMessage = "";
 
       // Create a temporary assistant message
       messages.value.push({ role: "user", content });
       messages.value.push({ role: "assistant", content: "" });
       let assistantIndex = messages.value.length - 1;
 
+      // when tool is used, new assistant message is created
+      let toolUsed = false;
+      // check timeout until first token is received
       let firstTokenReceived = false;
-
+      // assistant message content
+      let assistantMessage = "";
       while (true) {
         const { value, done } = await reader.read();
         if (done) break;
@@ -81,10 +84,22 @@ export const useChatStore = defineStore("chat", () => {
 
               if (data.role === "assistant") {
                 if (data.content) {
-                  assistantMessage += data.content;
-                  // Update the last message content
-                  messages.value[assistantIndex].content = assistantMessage;
+                  if (toolUsed) {
+                    // when tool is used, new assistant message is created
+                    messages.value.push({
+                      role: "assistant",
+                      content: data.content,
+                    });
+                    assistantIndex = messages.value.length - 1;
+                    assistantMessage = data.content;
+                    toolUsed = false;
+                  } else {
+                    // if tool is not used, update existing message block
+                    assistantMessage += data.content;
+                    messages.value[assistantIndex].content = assistantMessage;
+                  }
                 } else if (data.tool_calls) {
+                  // receive tool_calls params for maintain ToolMessage
                   messages.value[assistantIndex].tool_calls = data.tool_calls;
                 } else {
                   console.error("Unknown assistant message:", data);
@@ -112,6 +127,7 @@ export const useChatStore = defineStore("chat", () => {
                   };
                 }
 
+                // maintain ToolMessage
                 messages.value.push({
                   role: "tool",
                   content: formattedContent,
@@ -119,9 +135,7 @@ export const useChatStore = defineStore("chat", () => {
                   name: data.name,
                 });
 
-                messages.value.push({ role: "assistant", content: "" });
-                assistantIndex = messages.value.length - 1;
-                assistantMessage = "";
+                toolUsed = true;
               } else {
                 console.error("Unknown message:", data);
               }
@@ -146,8 +160,12 @@ export const useChatStore = defineStore("chat", () => {
       isLoading.value = false;
     }
 
-    // 마지막 메시지가 빈 문자열이면 제거
-    if (messages.value[messages.value.length - 1].content === "") {
+    // 마지막 메시지가 비어있는 assistant 메시지이면 제거
+    if (
+      messages.value.length > 0 &&
+      messages.value[messages.value.length - 1].role === "assistant" &&
+      messages.value[messages.value.length - 1].content === ""
+    ) {
       messages.value.pop();
     }
   }

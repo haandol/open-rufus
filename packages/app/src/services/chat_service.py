@@ -82,39 +82,50 @@ class ChatService:
             str: SSE format response data
         """
         try:
-            # 원래 대화에서 응답 생성
-            ai_message = None
-            
-            # 응답을 스트리밍하고 AI 메시지 구성
-            async for chunk in self.llm.astream(messages):
-                # 메시지 누적
-                if ai_message is None:
-                    ai_message = chunk
-                else:
-                    ai_message = ai_message + chunk
-                
-                # 컨텐츠가 있는 경우 전송
-                if chunk.content:
-                    content = ''
-                    if isinstance(chunk.content, list) and chunk.content:
-                        content_type = chunk.content[0].get('type')
-                        if content_type == 'text':
-                            content = chunk.content[0].get('text', '')
-                    elif isinstance(chunk.content, str):
-                        content = chunk.content
-                    elif isinstance(chunk.content, dict):
-                        content = chunk.content.get('text', '')
+            # 도구 호출을 처리하기 위해 무한 루프, 도구 호출이 없으면 탈출
+            while True:
+                # 응답을 스트리밍하고 AI 메시지 구성
+                ai_message = None
+                async for chunk in self.llm.astream(messages):
+                    # 메시지 누적
+                    if ai_message is None:
+                        ai_message = chunk
+                    else:
+                        ai_message = ai_message + chunk
                     
-                    if content:
-                        yield f"data: {json.dumps({'role': 'assistant', 'content': content})}\n\n"
-                        await asyncio.sleep(0)
-                
-            # 도구 호출이 있는 경우 처리
-            if ai_message and ai_message.tool_calls:
+                    # 컨텐츠가 있는 경우 전송
+                    if chunk.content:
+                        content = ''
+                        if isinstance(chunk.content, list) and chunk.content:
+                            content_type = chunk.content[0].get('type')
+                            if content_type == 'text':
+                                content = chunk.content[0].get('text', '')
+                        elif isinstance(chunk.content, str):
+                            content = chunk.content
+                        elif isinstance(chunk.content, dict):
+                            content = chunk.content.get('text', '')
+                        
+                        if content:
+                            yield f"data: {json.dumps({'role': 'assistant', 'content': content})}\n\n"
+                            await asyncio.sleep(0)
+                    
+                # If ai_message exists append it to messages
+                if ai_message:
+                    messages.append(ai_message)
+                # If ai_message does not exist, stop the process
+                else:
+                    return
+
+                # If there are no tool calls in the AI message, break the loop
+                if not (ai_message and ai_message.tool_calls):
+                    break
+
+                # 도구 호출이 있는 경우 처리
+                # 프론트엔드에서 블록을 렌더링하기 위해 도구 호출 정보 전송
                 yield f"data: {json.dumps({'role': 'assistant', 'tool_calls': ai_message.tool_calls})}\n\n"
+
                 # 대화에 AI 메시지 추가 (이미 스트리밍됨)
-                current_messages = messages + [ai_message]
-                
+                tool_messages: List[ToolMessage] = []
                 for tool_call in ai_message.tool_calls:
                     # 도구 호출 정보
                     tool_name = tool_call['name']
@@ -145,36 +156,18 @@ class ChatService:
                             tool_call_id=tool_call_id,
                             name=tool_name
                         )
-                        
                         # 도구 결과 메시지를 대화에 추가
-                        current_messages.append(tool_message)
+                        tool_messages.append(tool_message)
                         
                     except Exception as e:
                         # 도구 실행 오류
                         error_msg = f"Error executing {tool_name}: {str(e)}"
                         logger.error(error_msg)
                         yield f"data: {json.dumps({'error': error_msg})}\n\n"
-                
-                # 도구 결과를 고려한 최종 응답 생성
-                logger.info('Processing final results...')
-                
-                # 최종 응답 스트리밍
-                async for final_chunk in self.llm.astream(current_messages):
-                    if final_chunk.content:
-                        final_content = ''
-                        if isinstance(final_chunk.content, list) and final_chunk.content:
-                            content_type = final_chunk.content[0].get('type')
-                            if content_type == 'text':
-                                final_content = final_chunk.content[0].get('text', '')
-                        elif isinstance(final_chunk.content, str):
-                            final_content = final_chunk.content
-                        elif isinstance(final_chunk.content, dict):
-                            final_content = final_chunk.content.get('text', '')
-                        
-                        if final_content:
-                            yield f"data: {json.dumps({'role': 'assistant', 'content': final_content})}\n\n"
-                            await asyncio.sleep(0)
 
+                # 다음 메시지 처리를 위해 응답 메시지와 도구 메시지 저답
+                if tool_messages:
+                    messages.extend(tool_messages)
         except Exception as e:
             traceback.print_exc()
             yield f"data: {json.dumps({'error': str(e)})}\n\n"
