@@ -81,12 +81,13 @@ class ChatService:
         Yields:
             str: SSE format response data
         """
+        current_messages = []
         try:
             # 도구 호출을 처리하기 위해 무한 루프, 도구 호출이 없으면 탈출
             while True:
                 # 응답을 스트리밍하고 AI 메시지 구성
                 ai_message = None
-                async for chunk in self.llm.astream(messages):
+                async for chunk in self.llm.astream(messages + current_messages):
                     # 메시지 누적
                     if ai_message is None:
                         ai_message = chunk
@@ -111,14 +112,14 @@ class ChatService:
                     
                 # If ai_message exists append it to messages
                 if ai_message:
-                    messages.append(ai_message)
+                    current_messages.append(ai_message)
                 # If ai_message does not exist, stop the process
                 else:
                     return
 
                 # If there are no tool calls in the AI message, break the loop
                 if not (ai_message and ai_message.tool_calls):
-                    break
+                    return
 
                 # 도구 호출이 있는 경우 처리
                 # 프론트엔드에서 블록을 렌더링하기 위해 도구 호출 정보 전송
@@ -165,9 +166,9 @@ class ChatService:
                         logger.error(error_msg)
                         yield f"data: {json.dumps({'error': error_msg})}\n\n"
 
-                # 다음 메시지 처리를 위해 응답 메시지와 도구 메시지 저답
+                # 다음 메시지 처리를 위해 응답 메시지와 도구 메시지 저장
                 if tool_messages:
-                    messages.extend(tool_messages)
+                    current_messages.extend(tool_messages)
         except Exception as e:
             traceback.print_exc()
             yield f"data: {json.dumps({'error': str(e)})}\n\n"
