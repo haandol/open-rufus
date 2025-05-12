@@ -1,15 +1,10 @@
-import os
 import requests
 import traceback
 from pydantic import BaseModel, Field
 from langchain_core.tools import StructuredTool
 
+from src.config import config
 from src.utils.logger import logger
-
-ITEM_SEARCH_API_KEY = os.environ.get("ITEM_SEARCH_API_KEY", None)
-assert ITEM_SEARCH_API_KEY, "ITEM_SEARCH_API_KEY environment variable not set"
-ITEM_SEARCH_API_URL = os.environ.get("ITEM_SEARCH_API_URL", None)
-assert ITEM_SEARCH_API_URL, "ITEM_SEARCH_API_URL environment variable not set"
 
 
 class ItemSearchInput(BaseModel):
@@ -88,7 +83,7 @@ def item_search(name: str = "", category: str = "") -> list:
         - Wristbands
         - Vouchers
     """
-    headers = {"Authorization": ITEM_SEARCH_API_KEY}
+    headers = {"Authorization": config.item_search_api_key}
     logger.info(f"Item Searching for [name] {name}, [category] {category.upper()}")
     params = {
         "name": name,
@@ -96,7 +91,7 @@ def item_search(name: str = "", category: str = "") -> list:
         "limit": 3,
     }
     resp = requests.get(
-        f"{ITEM_SEARCH_API_URL}/v1/search/item/",
+        f"{config.item_search_api_url}/v1/search/item/",
         params=params,
         headers=headers,
         verify=False,

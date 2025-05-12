@@ -1,20 +1,13 @@
-import os
-
 from dotenv import load_dotenv
-load_dotenv()
+load_dotenv()  # noqa: E402
 
 from fastapi import FastAPI, Depends
 from fastapi.middleware.cors import CORSMiddleware
 
+from src.config import config
 from src.utils.models import ChatRequest
 from src.adapters.chat_controller import handle_chat_request
 from src.services.chat_service import ChatService
-from src.constant import MODEL_TEMPERATURE, MODEL_MAX_TOKENS
-from src.utils.logger import logger
-
-MODEL_NAME = os.getenv("MODEL_NAME")
-assert MODEL_NAME, "MODEL_NAME is not set"
-logger.info("Using model", model_name=MODEL_NAME)
 
 app = FastAPI(title="Open Rufus Chatbot API")
 
@@ -34,9 +27,9 @@ def get_chat_service():
         ChatService: chat service instance
     """
     return ChatService(
-        model=MODEL_NAME,
-        temperature=MODEL_TEMPERATURE,
-        max_tokens=MODEL_MAX_TOKENS,
+        model=config.model_id,
+        temperature=config.temperature,
+        max_tokens=config.max_tokens,
     )
 
 
